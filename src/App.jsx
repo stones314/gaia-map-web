@@ -16,15 +16,20 @@ import s07b from './img/s07b.png';
 
 
 class Sector extends React.Component {
+  getClassName(rot, col, b) {
+    var s = "map-sec"+
+        " rot"+rot+
+        " map-col-"+ col;
+    if (b)
+      s = s +" map-sec-border";
+    return s;
+  }
+  
   render() {
     return(
     <img
       src={this.props.sector}
-      className={
-        "map-sec"+
-        " rot"+this.props.rotation+
-        " map-col-"+ this.props.col
-        }
+      className={this.getClassName(this.props.rotation, this.props.col, false)}
       onClick={this.props.onClick}
 	  alt={this.props.sector}
     />

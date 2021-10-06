@@ -12,6 +12,12 @@ code {
     monospace;
 }
 
+:root {
+  --sec-height: 35vmin;
+  --sec-delta-x: calc(var(--sec-height) * 0.89);
+  --sec-delta-y: calc(var(--sec-height) * 0.1);
+}
+
 .rot0 { transform: rotate(0deg); }
 .rot60 { transform: rotate(60deg); }
 .rot120 { transform: rotate(120deg); }
@@ -22,37 +28,41 @@ code {
 .map-box {
   position: relative;
   width: 100vmin;
-  height: 75vmin;
-  border: 2px solid #231233;
+  height: 85vmin;
+/*  border: 2px solid #231233;*/
+}
+
+.map-sec {
+  position: absolute;
+  height: var(--sec-height);
+  width: auto;  
 }
 
 .map-row {
   position: absolute;
   width: 80vmin;
-  border: 2px solid #ff3344;
-  height: 26vmin;
+  /*border: 2px solid #ff3344;*/
+  height: var(--sec-height);
 }
 
 .map-row-1 {
   top: 0.5vmin;
-  left: 14.5vmin;
+  left: calc(var(--sec-height) * 0.55);
 }
 
 .map-row-2 {
-  top: 19.5vmin;
+  top: calc(var(--sec-height) * 0.74);
   left: 0.5vmin;
 }
 
 .map-row-3 {
-  top: 41.5vmin;
-  left: 9.5vmin;  
+  top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
+  left: calc(var(--sec-height) * 0.37);
 }
 
-.map-sec {
-  position: absolute;
-  height: 26vmin;
-  width: auto;  
-  border: 2px solid #23ff33;
+.map-sec-border {
+  border: 3px solid #23ff33;
+  border-radius: 100%;  
 }
 
 .map-col-1 {
@@ -61,73 +71,16 @@ code {
 }
 
 .map-col-2 {
-  top: 2.8vmin;
-  left: 23vmin;
+  top: var(--sec-delta-y);
+  left: var(--sec-delta-x);
 }
 
 .map-col-3 {
-  top: 5.6vmin;
-  left: 46vmin;  
+  top: calc(var(--sec-delta-y) * 2);
+  left: calc(var(--sec-delta-x) * 2);
 }
 
 .map-col-4 {
-  top: 8.4vmin;
-  left: 69vmin;  
+  top: calc(var(--sec-delta-y) * 3);
+  left: calc(var(--sec-delta-x) * 3);
 }
-
-
-/* px
-
-.map-box {
-  position: relative;
-  width: 800px;
-  height: 600px;
-}
-
-.map-row {
-  position: absolute;
-  width: 100%;  
-}
-
-.map-row-1 {
-  top: 0px;
-  left: 140px;  
-}
-
-.map-row-2 {
-  top: 145px;
-  left: 35px;
-}
-
-.map-row-3 {
-  top: 310px;
-  left: 105px;  
-}
-
-.map-sec {
-  position: absolute;
-  height: 200px;
-  width: auto;  
-}
-
-.map-col-1 {
-  top: 0px;
-  left: 5px;
-}
-
-.map-col-2 {
-  top: 20px;
-  left: 180px;
-}
-
-.map-col-3 {
-  top: 40px;
-  left: 355px;  
-}
-
-.map-col-4 {
-  top: 60px;
-  left: 530px;  
-}
-
-*/
