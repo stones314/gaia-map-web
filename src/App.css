@@ -12,75 +12,11 @@ code {
     monospace;
 }
 
-:root {
-  --sec-height: 35vmin;
-  --sec-delta-x: calc(var(--sec-height) * 0.89);
-  --sec-delta-y: calc(var(--sec-height) * 0.1);
+.App {
+  display: flex;
+  flex-direction: row
 }
 
-.rot0 { transform: rotate(0deg); }
-.rot60 { transform: rotate(60deg); }
-.rot120 { transform: rotate(120deg); }
-.rot180 { transform: rotate(180deg); }
-.rot240 { transform: rotate(240deg); }
-.rot300 { transform: rotate(300deg); }
-
-.map-box {
-  position: relative;
-  width: 100vmin;
-  height: 85vmin;
-/*  border: 2px solid #231233;*/
-}
-
-.map-sec {
-  position: absolute;
-  height: var(--sec-height);
-  width: auto;  
-}
-
-.map-row {
-  position: absolute;
-  width: 80vmin;
-  /*border: 2px solid #ff3344;*/
-  height: var(--sec-height);
-}
-
-.map-row-1 {
-  top: 0.5vmin;
-  left: calc(var(--sec-height) * 0.55);
-}
-
-.map-row-2 {
-  top: calc(var(--sec-height) * 0.74);
-  left: 0.5vmin;
-}
-
-.map-row-3 {
-  top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
-  left: calc(var(--sec-height) * 0.37);
-}
-
-.map-sec-border {
-  border: 3px solid #23ff33;
-  border-radius: 100%;  
-}
-
-.map-col-1 {
-  top: 0vmin;
-  left: 0vmin;
-}
-
-.map-col-2 {
-  top: var(--sec-delta-y);
-  left: var(--sec-delta-x);
-}
-
-.map-col-3 {
-  top: calc(var(--sec-delta-y) * 2);
-  left: calc(var(--sec-delta-x) * 2);
-}
-
-.map-col-4 {
-  top: calc(var(--sec-delta-y) * 3);
-  left: calc(var(--sec-delta-x) * 3);
+@media screen and (orientation:portrait) {
+  .App {flex-direction: column;}
 }
