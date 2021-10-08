@@ -33,16 +33,14 @@ code {
   font-size: var(--menu-font-size);
 }
 
-.menu-mode-move {
+.menu-mode-btn {
   font-size: var(--menu-font-size);
-  border: 2px solid #231233;
   /*
   background-color: #654321;
   font-color: #123456;
   */
 }
-.menu-mode-rot {
-  font-size: var(--menu-font-size);
+.menu-mode-sel {
   border: 2px solid #231233;
   /*
   background-color: #123456;
