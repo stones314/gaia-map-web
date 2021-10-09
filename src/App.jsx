@@ -15,6 +15,7 @@ import s06b from './img/s06b.png';
 import s07b from './img/s07b.png';
 import Map from './Map';
 import Menu from './Menu';
+import Settings from './Settings';
 
 function getSecOpt(numSec, optNum) {
     /*
@@ -66,10 +67,32 @@ function getSecOpt(numSec, optNum) {
     return [s01, s02, s03, s04, s05, s06, s07, s08, s09, s10];
 }
 
+class EditVsSettings extends React.Component {
+    render() {
+        var editMapClass = "menu-mode-btn";
+        var settingClass = "menu-mode-btn";
+        if (this.props.showSettings)
+            settingClass += " menu-mode-sel";
+        else
+            editMapClass += " menu-mode-sel";
+        return (
+                <div className="menu-row">
+                    <button className={editMapClass} onClick={this.props.onClickEditMap}>
+                        Edit Map
+                    </button>
+                    <button className={settingClass} onClick={this.props.onClickSettings}>
+                        Settings
+                    </button>
+                </div>
+        );
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showSettings: false,
             sectors: [s10, s01, s05, s09, s02, s03, s06, s08, s04, s07],
             rotation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             selected: -1,
@@ -106,6 +129,16 @@ class App extends React.Component {
                 this.setState({ rotation: rot });
             }
         }
+    }
+
+    onClickSettings() {
+        if (!this.state.showSettings)
+            this.setState({ showSettings: true });
+    }
+
+    onClickEditMap() {
+        if (this.state.showSettings)
+            this.setState({ showSettings: false });
     }
 
     onClickSwap() {
@@ -147,16 +180,15 @@ class App extends React.Component {
     onClickOpt4() {
         this.setState({ secOpt: 4, sectors: getSecOpt(this.state.numSect, 4) });
     }
-    render() {
-        return (
-            <div className="App">
-                <Map
-                    numSect={this.state.numSect}
-                    sectors={this.state.sectors}
-                    rotation={this.state.rotation}
-                    onClick={(i) => this.onClickSector(i)}
-                    selected={this.state.selected}
-                />
+
+    renderMenu() {
+        if (this.state.showSettings) {
+            return (
+                <Settings />
+            );
+        }
+        else {
+            return (
                 <Menu
                     onClickSwap={() => this.onClickSwap()}
                     onClickRot={() => this.onClickRot()}
@@ -173,6 +205,28 @@ class App extends React.Component {
                     onClickOpt4={() => this.onClickOpt4()}
                     secOpt={this.state.secOpt}
                 />
+            );
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <Map
+                    numSect={this.state.numSect}
+                    sectors={this.state.sectors}
+                    rotation={this.state.rotation}
+                    onClick={(i) => this.onClickSector(i)}
+                    selected={this.state.selected}
+                />
+                <div className="menu-box">
+                    <EditVsSettings
+                        onClickSettings={() => this.onClickSettings()}
+                        onClickEditMap={() => this.onClickEditMap()}
+                        showSettings={this.state.showSettings}
+                    />
+                    {this.renderMenu()}
+                </div>
             </div>
         )
     }
