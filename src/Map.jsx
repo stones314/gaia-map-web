@@ -74,7 +74,7 @@ class Map extends React.Component {
                     </div>
                 );
             }
-            if (numSect === 9 || numSect === 7) {
+            if (numSect === 9) {
                 return (
                     <div className="map-row map-row-2">
                         {this.renderSector(3, 1)}
@@ -83,22 +83,49 @@ class Map extends React.Component {
                     </div>
                 );
             }
+            if (numSect === 7) {
+                return (
+                    <div className="map-row map-row-2">
+                        {this.renderSector(2, 1)}
+                        {this.renderSector(3, 2)}
+                        {this.renderSector(4, 3)}
+                    </div>
+                );
+            }
             if (numSect === 8) {
                 return (
                     <div className="map-row map-row-2">
-                        {this.renderSector(4, 2)}
-                        {this.renderSector(5, 3)}
+                        {this.renderSector(3, 2)}
+                        {this.renderSector(4, 3)}
                     </div>
                 );
             }
         }
         if (row === 2) {
-            if (numSect > 7) {
+            if (numSect === 10) {
                 return (
                     <div className="map-row map-row-3">
                         {this.renderSector(7, 1)}
                         {this.renderSector(8, 2)}
                         {this.renderSector(9, 3)}
+                    </div>
+                );
+            }
+            if (numSect === 9) {
+                return (
+                    <div className="map-row map-row-3">
+                        {this.renderSector(6, 1)}
+                        {this.renderSector(7, 2)}
+                        {this.renderSector(8, 3)}
+                    </div>
+                );
+            }
+            if (numSect === 8) {
+                return (
+                    <div className="map-row map-row-3">
+                        {this.renderSector(5, 1)}
+                        {this.renderSector(6, 2)}
+                        {this.renderSector(7, 3)}
                     </div>
                 );
             }

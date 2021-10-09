@@ -33,17 +33,30 @@ code {
   font-size: var(--menu-font-size);
 }
 
+.menu-mode-lbl {
+    font-size: var(--menu-font-size);
+    flex: 1;
+    text-align: left;
+    border: 2px solid #231233;
+    background-color: #009999;
+    /*
+  background-color: #654321;
+  font-color: #123456;
+  */
+}
 .menu-mode-btn {
-  font-size: var(--menu-font-size);
-  /*
+    font-size: var(--menu-font-size);
+    flex: 1;
+    text-align: center;
+    border: 2px solid #231233;
+    /*
   background-color: #654321;
   font-color: #123456;
   */
 }
 .menu-mode-sel {
-  border: 2px solid #231233;
-  /*
-  background-color: #123456;
+    background-color: #009911;
+    /*
   font-color: #654321;
   */
 }

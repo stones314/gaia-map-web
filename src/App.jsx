@@ -16,6 +16,56 @@ import s07b from './img/s07b.png';
 import Map from './Map';
 import Menu from './Menu';
 
+function getSecOpt(numSec, optNum) {
+    /*
+        6 sector options:
+          type 0: 1, 2, 3, 4, 9, 10
+        7 sector options:
+          type 0: 1, 2, 3, 4, 5_, 6_, 7_
+          type 1: 1, 2, 3, 5_, 6, 7, 8
+          type 2: 2, 4, 5, 6, 7_, 8, 10
+          type 3: 1, 3, 4, 5, 6_, 7, 9
+          type 4: 1, 3, 4, 5, 7_, 9, 10
+          type 5: random between 0-4
+        8 sector options:
+          type 0: 1, 2, 3, 4, 5, 6, 7, 8
+        9 sector options:
+          type 0: 1, 2, 3, 4, 5_, 6_, 7_, 9, 10
+          type 1: 1, 2, 3, 5_, 6, 7, 8, 9, 10
+          type 2: random between type 0-1
+        10 sector options:
+          type 0: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    */
+    if (numSec == 7) {
+        var opt = optNum;
+        if (opt < 0 || opt > 4)
+            opt = Math.floor(5.0 * Math.random());
+        if (opt === 0)
+            return [s01, s02, s03, s04, s05b, s06b, s07b];
+        if (opt === 1)
+            return [s01, s02, s03, s05b, s06, s07, s08];
+        if (opt === 2)
+            return [s02, s04, s05, s06, s07b, s08, s10];
+        if (opt === 3)
+            return [s01, s03, s04, s05, s06b, s07, s09];
+        if (opt === 4)
+            return [s01, s03, s04, s05, s07b, s09, s10];
+    }
+    if (numSec == 8) {
+        return [s01, s02, s03, s04, s05, s06, s07, s08];
+    }
+    if (numSec == 9) {
+        var opt = optNum;
+        if (opt < 0 || opt > 1)
+            opt = Math.floor(2.0 * Math.random());
+        if (opt === 0)
+            return [s01, s02, s03, s04, s05b, s06b, s07b, s09, s10];
+        if (opt === 1)
+            return [s01, s02, s03, s05b, s06, s07, s08, s09, s10];
+    }
+    return [s01, s02, s03, s04, s05, s06, s07, s08, s09, s10];
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -25,6 +75,7 @@ class App extends React.Component {
             selected: -1,
             numSect: 10,
             swapMode: true,
+            secOpt: 0,
         };
         this.onClickSector = this.onClickSector.bind(this);
         //this.onClickModeBtn = this.onClickModeBtn.bind(this);
@@ -68,19 +119,34 @@ class App extends React.Component {
     }
 
     onClick10() {
-        this.setState({ numSect: 10 });
+        this.setState({ numSect: 10, sectors: getSecOpt(10, 0), secOpt: 0 });
     }
 
     onClick9() {
-        this.setState({ numSect: 9 });
+        this.setState({ numSect: 9, sectors: getSecOpt(9, 0), secOpt: 0 });
     }
     onClick8() {
-        this.setState({ numSect: 8 });
+        this.setState({ numSect: 8, sectors: getSecOpt(8, 0), secOpt: 0 });
     }
     onClick7() {
-        this.setState({ numSect: 7 });
+        this.setState({ numSect: 7, sectors: getSecOpt(7, 0), secOpt: 0 });
     }
 
+    onClickOpt0() {
+        this.setState({ secOpt: 0, sectors: getSecOpt(this.state.numSect, 0) });
+    }
+    onClickOpt1() {
+        this.setState({ secOpt: 1, sectors: getSecOpt(this.state.numSect, 1) });
+    }
+    onClickOpt2() {
+        this.setState({ secOpt: 2, sectors: getSecOpt(this.state.numSect, 2) });
+    }
+    onClickOpt3() {
+        this.setState({ secOpt: 3, sectors: getSecOpt(this.state.numSect, 3) });
+    }
+    onClickOpt4() {
+        this.setState({ secOpt: 4, sectors: getSecOpt(this.state.numSect, 4) });
+    }
     render() {
         return (
             <div className="App">
@@ -100,7 +166,12 @@ class App extends React.Component {
                     onClick8={() => this.onClick8()}
                     onClick7={() => this.onClick7()}
                     numSec={this.state.numSect}
-
+                    onClickOpt0={() => this.onClickOpt0()}
+                    onClickOpt1={() => this.onClickOpt1()}
+                    onClickOpt2={() => this.onClickOpt2()}
+                    onClickOpt3={() => this.onClickOpt3()}
+                    onClickOpt4={() => this.onClickOpt4()}
+                    secOpt={this.state.secOpt}
                 />
             </div>
         )

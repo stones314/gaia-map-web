@@ -1,106 +1,136 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 :root {
-  --sec-height: 35.5vmin;
-  --sec-width: 38.5vmin;
-  --sec-delta-x: calc(var(--sec-height) * 0.89);
-  --sec-delta-y: calc(var(--sec-height) * 0.1);
-  --menu-font-size: 5vmin;
+    --sec-height: 35.5vmin;
+    --sec-width: 38.5vmin;
+    --sec-delta-x: calc(var(--sec-height) * 0.89);
+    --sec-delta-y: calc(var(--sec-height) * 0.1);
+    --menu-font-size: 5vmin;
 }
 
-.rot0 { transform: rotate(0deg); }
-.rot60 { transform: rotate(60deg); }
-.rot120 { transform: rotate(120deg); }
-.rot180 { transform: rotate(180deg); }
-.rot240 { transform: rotate(240deg); }
-.rot300 { transform: rotate(300deg); }
+.rot0 {
+    transform: rotate(0deg);
+}
+
+.rot60 {
+    transform: rotate(60deg);
+}
+
+.rot120 {
+    transform: rotate(120deg);
+}
+
+.rot180 {
+    transform: rotate(180deg);
+}
+
+.rot240 {
+    transform: rotate(240deg);
+}
+
+.rot300 {
+    transform: rotate(300deg);
+}
 
 .map-box {
-  position: relative;
-  width: 130vmin;
-  height: 100vmin;
-/*  border: 2px solid #231233;*/
+    position: relative;
+    width: 130vmin;
+    height: 100vmin;
+    /*  border: 2px solid #231233;*/
 }
 
 .map-img {
-  width: auto;
-  height: 100%;
+    width: auto;
+    height: 100%;
 }
 
 .map-sec {
-  position: absolute;
-  height: var(--sec-height);
-  width: auto;
+    position: absolute;
+    height: var(--sec-height);
+    width: auto;
 }
 
 .map-sec-selected {
-  position: absolute;
+    position: absolute;
+    filter: brightness(300%);
+    height: var(--sec-height);
+    width: auto;
+    /*
   height: calc(var(--sec-height) * 0.96);
-  width: auto;  
+  width: auto;
+      */
 }
 
 .map-row {
-  position: absolute;
-  width: 80vmin;
-  /*border: 2px solid #ff3344;*/
-  height: var(--sec-height);
+    position: absolute;
+    width: 80vmin;
+    /*border: 2px solid #ff3344;*/
+    height: var(--sec-height);
 }
 
 .map-row-1 {
-  top: 0.5vmin;
-  left: calc(var(--sec-height) * 0.55);
+    top: 0.5vmin;
+    left: calc(var(--sec-height) * 0.55);
 }
 
 .map-row-2 {
-  top: calc(var(--sec-height) * 0.74);
-  left: 0.5vmin;
+    top: calc(var(--sec-height) * 0.74);
+    left: 0.5vmin;
 }
 
 .map-row-3 {
-  top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
-  left: calc(var(--sec-height) * 0.37);
+    top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
+    left: calc(var(--sec-height) * 0.37);
 }
 
 .map-sec-border {
-  border: 1vmin solid #ff0000;
-  border-radius: 100%;
-  overflow: visible;
+    border: 1vmin solid #ff0000;
+    border-radius: 100%;
+    overflow: visible;
 }
 
 .map-col-1 {
-  top: 0vmin;
-  left: 0vmin;
+    top: 0vmin;
+    left: 0vmin;
 }
 
 .map-col-2 {
-  top: var(--sec-delta-y);
-  left: var(--sec-delta-x);
+    top: var(--sec-delta-y);
+    left: var(--sec-delta-x);
 }
 
 .map-col-3 {
-  top: calc(var(--sec-delta-y) * 2);
-  left: calc(var(--sec-delta-x) * 2);
+    top: calc(var(--sec-delta-y) * 2);
+    left: calc(var(--sec-delta-x) * 2);
 }
 
 .map-col-4 {
-  top: calc(var(--sec-delta-y) * 3);
-  left: calc(var(--sec-delta-x) * 3);
+    top: calc(var(--sec-delta-y) * 3);
+    left: calc(var(--sec-delta-x) * 3);
 }
 
 @media screen and (orientation:portrait) {
-  :root {--sec-height: 27vmin; --sec-width: 29.28vmin;}
-  .map-box {width: 100vmin; height: 77vmin;}
-  .menu-box {height: calc(99vmax - 77vmin); width: 99vmin;}
+    :root {
+        --sec-height: 27vmin;
+        --sec-width: 29.28vmin;
+    }
+
+    .map-box {
+        width: 100vmin;
+        height: 77vmin;
+    }
+
+    .menu-box {
+        height: calc(99vmax - 77vmin);
+        width: 99vmin;
+    }
 }
