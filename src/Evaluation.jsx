@@ -1,50 +1,24 @@
 import React from 'react';
 import './Menu.css';
-
-class ModeSelect extends React.Component {
-
-    render() {
-        var swapBtnClass = "menu-mode-btn";
-        var rotBtnClass = "menu-mode-btn";
-        if (this.props.swapMode) {
-            swapBtnClass += " menu-mode-sel";
-        }
-        else {
-            rotBtnClass += " menu-mode-sel";
-        }
-        return (
-            <div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        <text>Edit map by</text>
-                    </div>
-                </div>
-                <div className="menu-row">
-                    <button className={swapBtnClass} onClick={this.props.onClickSwap}>
-                        Swap
-                    </button>
-                    <button className={rotBtnClass} onClick={this.props.onClickRot}>
-                        Rotate
-                    </button>
-                </div>
-            </div>
-        )
-    }
-}
+import './Evaluation.css';
 
 class PlanetStats extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        <text>Map Evaluation</text>
-                    </div>
+            <div className="planet-box">
+                <div className="planet-type">
+                    <text className="stat-txt">{this.props.planet}</text>
                 </div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        <text>Some Data</text>
+                <div className="planet-stats">
+                    <div className="stat-lbl">
+                        <text className="stat-txt">{this.props.exp}</text>
+                    </div>
+                    <div className="stat-lbl">
+                        <text className="stat-txt">{this.props.nbr}</text>
+                    </div>
+                    <div className="stat-lbl">
+                        <text className="stat-txt">{this.props.tot}</text>
                     </div>
                 </div>
             </div>
@@ -52,31 +26,30 @@ class PlanetStats extends React.Component {
     }
 }
 
-class  extends React.Component {
+class Evaluation extends React.Component {
     render() {
+        const planets = ["Stats", "Blue", "Red", "Orange", "Yellow", "Brown", "Black", "White"];
+        const expand = ["E", 14, 13, 12, 11, 10, 9, 8];
+        const neighbour = ["N", 13, 12, 11, 10, 8, 7, 5];
+        const planetData = [];
+        for (const [index, value] of planets.entries()) {
+            var total = "T";
+            if (index > 0) total = expand[index] + neighbour[index];
+            planetData.push(
+                <PlanetStats
+                    key={index}
+                    planet={value}
+                    exp={expand[index]}
+                    nbr={neighbour[index]}
+                    tot={total}
+                />);
+        }
         return (
-            <div className="menu-box">
-                <NumSectorSelect
-                    onClick10={() => this.props.onClick10()}
-                    onClick9={() => this.props.onClick9()}
-                    onClick8={() => this.props.onClick8()}
-                    onClick7={() => this.props.onClick7()}
-                    numSec={this.props.numSec}
-                    onClickOpt0={() => this.props.onClickOpt0()}
-                    onClickOpt1={() => this.props.onClickOpt1()}
-                    onClickOpt2={() => this.props.onClickOpt2()}
-                    onClickOpt3={() => this.props.onClickOpt3()}
-                    onClickOpt4={() => this.props.onClickOpt4()}
-                    secOpt={this.props.secOpt}
-                />
-                <ModeSelect
-                    onClickSwap={() => this.props.onClickSwap()}
-                    onClickRot={() => this.props.onClickRot()}
-                    swapMode={this.props.swapMode}
-                />
+            <div className="eval-box">
+                {planetData}
             </div>
         )
     }
 }
 
-export default Menu;
+export default Evaluation;

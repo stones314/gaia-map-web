@@ -5,7 +5,7 @@ import './Menu.css';
 class Settings extends React.Component {
     render() {
         return (
-            <div className="menu-box">
+            <div className="menu-box-2">
             </div>
         )
     }

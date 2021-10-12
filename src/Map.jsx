@@ -28,6 +28,13 @@ class Sector extends React.Component {
 }
 
 class Map extends React.Component {
+    fixSizes() {
+        var mr = document.querySelector('.map-row');
+        var cs = getComputedStyle(mr);
+        var mr_height = cs.getPropertyValue('--sec-height');
+        mr.style.setProperty('--sec-height', mr_height);
+    }
+
     renderSector(i, col) {
         return (
             <Sector
@@ -142,7 +149,7 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="map-box">
                 {this.renderRow(0, this.props.numSect)}
                 {this.renderRow(1, this.props.numSect)}
                 {this.renderRow(2, this.props.numSect)}

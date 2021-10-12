@@ -14,7 +14,11 @@ code {
 
 :root {
     --main-height: 100vmin;
-    --sec-height: 35.5vmin;
+    --menu-width: 25vmax;
+    --map-width: calc(100vmax - var(--menu-width));
+    --menu-height: 100vmin;
+    --map-height: 100vmin;
+    --sec-height: calc(var(--map-height) * 0.35 * 0.8);
     --sec-delta-x: calc(var(--sec-height) * 0.89);
     --sec-delta-y: calc(var(--sec-height) * 0.1);
 }
@@ -28,24 +32,59 @@ code {
 
 .menu-box {
     border: 2px solid #231233;
-    flex: 5;
+    width: var(--menu-width);
+    height: var(--menu-height);
     display: flex;
     flex-direction: column;
 }
 
-.map-box {
-    flex: 12;
+.menu-box-2 {
+    flex: 1;
+}
+
+.map-eval-box {
+    width: var(--map-width);
+    height: var(--map-height);
     border: 2px solid #ff0000;
+    display: flex;
+    flex-direction: row;
+}
+
+.map-box {
+    flex: 8;
+    border: 2px solid #ff00ff;
+}
+
+.eval-box {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #ff00ff;
 }
 
 @media screen and (orientation:portrait) {
     :root {
         --main-height: 100vmax;
-        --sec-height: 27vmin;
+        --menu-width: 100vmin;
+        --map-width: 100vmin;
+        --menu-height: 40vmax;
+        --map-height: calc(100vmax - var(--menu-height));
+        --sec-height: calc(var(--map-height) * 0.30);
     }
 
     .App {
         flex-direction: column;
     }
 
+    .menu-box {
+        flex-direction: row;
+    }
+
+    .map-eval-box {
+        flex-direction: column;
+    }
+
+    .eval-box {
+        flex-direction: row;
+    }
 }

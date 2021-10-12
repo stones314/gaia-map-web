@@ -16,6 +16,7 @@ import s07b from './img/s07b.png';
 import Map from './Map';
 import Menu from './Menu';
 import Settings from './Settings';
+import Evaluation from './Evaluation';
 
 function getSecOpt(numSec, optNum) {
     /*
@@ -76,6 +77,7 @@ class EditVsSettings extends React.Component {
         else
             editMapClass += " menu-mode-sel";
         return (
+            <div className="menu-box-2">
                 <div className="menu-row">
                     <button className={editMapClass} onClick={this.props.onClickEditMap}>
                         Edit Map
@@ -84,6 +86,7 @@ class EditVsSettings extends React.Component {
                         Settings
                     </button>
                 </div>
+            </div>
         );
     }
 }
@@ -151,68 +154,18 @@ class App extends React.Component {
             this.setState({ swapMode: false });
     }
 
-    onClick10() {
-        this.setState({ numSect: 10, sectors: getSecOpt(10, 0), secOpt: 0 });
+    onClick(numSec) {
+        this.setState({ numSect: numSec, sectors: getSecOpt(numSec, 0), secOpt: 0 });
     }
 
-    onClick9() {
-        this.setState({ numSect: 9, sectors: getSecOpt(9, 0), secOpt: 0 });
-    }
-    onClick8() {
-        this.setState({ numSect: 8, sectors: getSecOpt(8, 0), secOpt: 0 });
-    }
-    onClick7() {
-        this.setState({ numSect: 7, sectors: getSecOpt(7, 0), secOpt: 0 });
-    }
-
-    onClickOpt0() {
-        this.setState({ secOpt: 0, sectors: getSecOpt(this.state.numSect, 0) });
-    }
-    onClickOpt1() {
-        this.setState({ secOpt: 1, sectors: getSecOpt(this.state.numSect, 1) });
-    }
-    onClickOpt2() {
-        this.setState({ secOpt: 2, sectors: getSecOpt(this.state.numSect, 2) });
-    }
-    onClickOpt3() {
-        this.setState({ secOpt: 3, sectors: getSecOpt(this.state.numSect, 3) });
-    }
-    onClickOpt4() {
-        this.setState({ secOpt: 4, sectors: getSecOpt(this.state.numSect, 4) });
-    }
-
-    renderMenu() {
-        if (this.state.showSettings) {
-            return (
-                <Settings />
-            );
-        }
-        else {
-            return (
-                <Menu
-                    onClickSwap={() => this.onClickSwap()}
-                    onClickRot={() => this.onClickRot()}
-                    swapMode={this.state.swapMode}
-                    onClick10={() => this.onClick10()}
-                    onClick9={() => this.onClick9()}
-                    onClick8={() => this.onClick8()}
-                    onClick7={() => this.onClick7()}
-                    numSec={this.state.numSect}
-                    onClickOpt0={() => this.onClickOpt0()}
-                    onClickOpt1={() => this.onClickOpt1()}
-                    onClickOpt2={() => this.onClickOpt2()}
-                    onClickOpt3={() => this.onClickOpt3()}
-                    onClickOpt4={() => this.onClickOpt4()}
-                    secOpt={this.state.secOpt}
-                />
-            );
-        }
+    onClickOpt(variant) {
+        this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
     }
 
     render() {
         return (
             <div className="App">
-                <div className="map-box">
+                <div className="map-eval-box">
                     <Map
                         numSect={this.state.numSect}
                         sectors={this.state.sectors}
@@ -220,14 +173,19 @@ class App extends React.Component {
                         onClick={(i) => this.onClickSector(i)}
                         selected={this.state.selected}
                     />
+                    <Evaluation />
                 </div>
                 <div className="menu-box">
-                    <EditVsSettings
-                        onClickSettings={() => this.onClickSettings()}
-                        onClickEditMap={() => this.onClickEditMap()}
-                        showSettings={this.state.showSettings}
+                    <Menu
+                        onClickSwap={() => this.onClickSwap()}
+                        onClickRot={() => this.onClickRot()}
+                        swapMode={this.state.swapMode}
+                        onClick={(numSec) => this.onClick(numSec)}
+                        numSec={this.state.numSect}
+                        onClickOpt={(variant) => this.onClickOpt(variant)}
+                        secOpt={this.state.secOpt}
                     />
-                    {this.renderMenu()}
+                    <Settings />
                 </div>
             </div>
         )
