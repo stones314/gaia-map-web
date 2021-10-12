@@ -16,13 +16,6 @@ code {
   --menu-font-size: 4vmin;
 }
 
-.menu-box {
-  border: 2px solid #231233;
-  width: calc(100vmax - 130vmin);
-  display: flex;
-  flex-direction: column
-}
-
 .menu-row {
   display: flex;
   flex-direction: row;

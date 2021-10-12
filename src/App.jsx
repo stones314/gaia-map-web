@@ -212,13 +212,15 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <Map
-                    numSect={this.state.numSect}
-                    sectors={this.state.sectors}
-                    rotation={this.state.rotation}
-                    onClick={(i) => this.onClickSector(i)}
-                    selected={this.state.selected}
-                />
+                <div className="map-box">
+                    <Map
+                        numSect={this.state.numSect}
+                        sectors={this.state.sectors}
+                        rotation={this.state.rotation}
+                        onClick={(i) => this.onClickSector(i)}
+                        selected={this.state.selected}
+                    />
+                </div>
                 <div className="menu-box">
                     <EditVsSettings
                         onClickSettings={() => this.onClickSettings()}

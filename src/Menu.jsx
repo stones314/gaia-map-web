@@ -57,7 +57,7 @@ class NumSectorSelect extends React.Component {
                 <div>
                     <div className="menu-row">
                         <div className="menu-mode-lbl">
-                            <text>Select variant</text>
+                            <text>Variant</text>
                         </div>
                     </div>
                     <div className="menu-row">

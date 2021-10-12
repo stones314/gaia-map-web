@@ -142,7 +142,7 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div className="map-box">
+            <div>
                 {this.renderRow(0, this.props.numSect)}
                 {this.renderRow(1, this.props.numSect)}
                 {this.renderRow(2, this.props.numSect)}

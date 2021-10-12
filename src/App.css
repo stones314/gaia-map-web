@@ -12,11 +12,40 @@ code {
     monospace;
 }
 
+:root {
+    --main-height: 100vmin;
+    --sec-height: 35.5vmin;
+    --sec-delta-x: calc(var(--sec-height) * 0.89);
+    --sec-delta-y: calc(var(--sec-height) * 0.1);
+}
+
 .App {
-  display: flex;
-  flex-direction: row
+    display: flex;
+    flex-direction: row;
+    border: 2px solid #ffff00;
+    height: var(--main-height);
+}
+
+.menu-box {
+    border: 2px solid #231233;
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-box {
+    flex: 12;
+    border: 2px solid #ff0000;
 }
 
 @media screen and (orientation:portrait) {
-  .App {flex-direction: column;}
+    :root {
+        --main-height: 100vmax;
+        --sec-height: 27vmin;
+    }
+
+    .App {
+        flex-direction: column;
+    }
+
 }
