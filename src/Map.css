@@ -34,19 +34,19 @@
     height: var(--sec-height);
 }
 
-.map-row-1 {
+.map-row-0 {
     top: 0.5vmin;
-    left: calc(var(--sec-height) * 0.55);
-}
-
-.map-row-2 {
-    top: calc(var(--sec-height) * 0.74);
     left: 0.5vmin;
 }
 
-.map-row-3 {
-    top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
+.map-row-1 {
+    top: calc(var(--sec-height) * 0.74);
     left: calc(var(--sec-height) * 0.37);
+}
+
+.map-row-2 {
+    top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
+    left: calc(var(--sec-height) * 0.37 * 2);
 }
 
 .map-sec-border {
@@ -55,22 +55,22 @@
     overflow: visible;
 }
 
-.map-col-1 {
+.map-col-0 {
     top: 0vmin;
     left: 0vmin;
 }
 
-.map-col-2 {
+.map-col-1 {
     top: var(--sec-delta-y);
     left: var(--sec-delta-x);
 }
 
-.map-col-3 {
+.map-col-2 {
     top: calc(var(--sec-delta-y) * 2);
     left: calc(var(--sec-delta-x) * 2);
 }
 
-.map-col-4 {
+.map-col-3 {
     top: calc(var(--sec-delta-y) * 3);
     left: calc(var(--sec-delta-x) * 3);
 }

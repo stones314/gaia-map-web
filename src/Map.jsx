@@ -1,7 +1,7 @@
 import React from 'react';
 import './Map.css';
 
-class Sector extends React.Component {
+class SectorView extends React.Component {
     getClassName(rot, col, sel, b) {
         var s = "rot" + rot +
             " map-col-" + col +
@@ -27,17 +27,11 @@ class Sector extends React.Component {
     }
 }
 
-class Map extends React.Component {
-    fixSizes() {
-        var mr = document.querySelector('.map-row');
-        var cs = getComputedStyle(mr);
-        var mr_height = cs.getPropertyValue('--sec-height');
-        mr.style.setProperty('--sec-height', mr_height);
-    }
+class MapView extends React.Component {
 
     renderSector(i, col) {
         return (
-            <Sector
+            <SectorView
                 key={i}
                 sid={i}
                 numSect={this.props.numSect}
@@ -50,112 +44,27 @@ class Map extends React.Component {
         );
     }
 
-    renderRow(row, numSect) {
-        if (row === 0) {
-            if (numSect > 7) {
-                return (
-                    <div className="map-row map-row-1">
-                        {this.renderSector(0, 1)}
-                        {this.renderSector(1, 2)}
-                        {this.renderSector(2, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 7) {
-                return (
-                    <div className="map-row map-row-1">
-                        {this.renderSector(0, 1)}
-                        {this.renderSector(1, 2)}
-                    </div>
-                );
-            }
-        }
-        if (row === 1) {
-            if (numSect === 10) {
-                return (
-                    <div className="map-row map-row-2">
-                        {this.renderSector(3, 1)}
-                        {this.renderSector(4, 2)}
-                        {this.renderSector(5, 3)}
-                        {this.renderSector(6, 4)}
-                    </div>
-                );
-            }
-            if (numSect === 9) {
-                return (
-                    <div className="map-row map-row-2">
-                        {this.renderSector(3, 1)}
-                        {this.renderSector(4, 2)}
-                        {this.renderSector(5, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 7) {
-                return (
-                    <div className="map-row map-row-2">
-                        {this.renderSector(2, 1)}
-                        {this.renderSector(3, 2)}
-                        {this.renderSector(4, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 8) {
-                return (
-                    <div className="map-row map-row-2">
-                        {this.renderSector(3, 2)}
-                        {this.renderSector(4, 3)}
-                    </div>
-                );
-            }
-        }
-        if (row === 2) {
-            if (numSect === 10) {
-                return (
-                    <div className="map-row map-row-3">
-                        {this.renderSector(7, 1)}
-                        {this.renderSector(8, 2)}
-                        {this.renderSector(9, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 9) {
-                return (
-                    <div className="map-row map-row-3">
-                        {this.renderSector(6, 1)}
-                        {this.renderSector(7, 2)}
-                        {this.renderSector(8, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 8) {
-                return (
-                    <div className="map-row map-row-3">
-                        {this.renderSector(5, 1)}
-                        {this.renderSector(6, 2)}
-                        {this.renderSector(7, 3)}
-                    </div>
-                );
-            }
-            if (numSect === 7) {
-                return (
-                    <div className="map-row map-row-3">
-                        {this.renderSector(5, 1)}
-                        {this.renderSector(6, 2)}
-                    </div>
-                );
-            }
-        }
+    renderRow(row) {
+        var rowClass = "map-row map-row-" + row;
+        return (
+            <div className={rowClass}>
+                {this.renderSector(row * 4 + 0, 0)}
+                {this.renderSector(row * 4 + 1, 1)}
+                {this.renderSector(row * 4 + 2, 2)}
+                {this.renderSector(row * 4 + 3, 3)}
+            </div>
+        );
     }
 
     render() {
         return (
             <div className="map-box">
-                {this.renderRow(0, this.props.numSect)}
-                {this.renderRow(1, this.props.numSect)}
-                {this.renderRow(2, this.props.numSect)}
+                {this.renderRow(0)}
+                {this.renderRow(1)}
+                {this.renderRow(2)}
             </div>
         )
     }
 }
 
-export default Map;
+export default MapView;
