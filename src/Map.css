@@ -1,9 +1,9 @@
 .rot0 { transform: rotate(0deg); }
-.rot60 { transform: rotate(60deg); }
-.rot120 { transform: rotate(120deg); }
-.rot180 { transform: rotate(180deg); }
-.rot240 { transform: rotate(240deg); }
-.rot300 { transform: rotate(300deg); }
+.rot1 { transform: rotate(60deg); }
+.rot2 { transform: rotate(120deg); }
+.rot3 { transform: rotate(180deg); }
+.rot4 { transform: rotate(240deg); }
+.rot5 { transform: rotate(300deg); }
 
 .map-img {
     width: auto;
@@ -40,13 +40,13 @@
 }
 
 .map-row-1 {
-    top: calc(var(--sec-height) * 0.74);
+    top: calc(var(--sec-height) * 0.83);
     left: calc(var(--sec-height) * 0.37);
 }
 
 .map-row-2 {
-    top: calc(var(--sec-height) * 0.74 + var(--sec-height) * 0.82);
-    left: calc(var(--sec-height) * 0.37 * 2);
+    top: calc(var(--sec-height) * 0.82 + var(--sec-height) * 0.82);
+    left: calc(var(--sec-height) * 0.36 * 2);
 }
 
 .map-sec-border {

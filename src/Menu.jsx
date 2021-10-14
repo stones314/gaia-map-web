@@ -16,7 +16,7 @@ class ModeSelect extends React.Component {
             <div>
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
-                        <text>Edit map by</text>
+                        Edit map by
                     </div>
                 </div>
                 <div className="menu-row">
@@ -34,7 +34,6 @@ class ModeSelect extends React.Component {
 
 class NumSectorSelect extends React.Component {
     renderOpts(secId) {
-        const numVars = [5, 1, 2, 1];
         const vars = [
             ['A', 'B', 'C', 'D', 'E'],
             ['A'],
@@ -47,7 +46,7 @@ class NumSectorSelect extends React.Component {
         var rows = [];
         for (const [index, value] of vars[this.props.numSec - 7].entries()) {
             rows.push(
-                <button className={varClass[index]} onClick={() => this.props.onClickOpt(index)}>
+                <button key={index} className={varClass[index]} onClick={() => this.props.onClickOpt(index)}>
                     {value}
                 </button>
             );
@@ -56,7 +55,7 @@ class NumSectorSelect extends React.Component {
             <div>
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
-                        <text>Variant</text>
+                        Variant
                     </div>
                 </div>
                 <div className="menu-row">
@@ -75,7 +74,7 @@ class NumSectorSelect extends React.Component {
         var rows = [];
         for (const [index, value] of nSecs.entries()) {
             rows.push(
-                <button className={nSecClass[index]} onClick={() => this.props.onClick(value)}>
+                <button key={index} className={nSecClass[index]} onClick={() => this.props.onClick(value)}>
                     {value}
                 </button>
             );
@@ -85,7 +84,7 @@ class NumSectorSelect extends React.Component {
             <div>
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
-                        <text>Number of sectors</text>
+                        Number of sectors
                     </div>
                 </div>
                 <div className="menu-row">

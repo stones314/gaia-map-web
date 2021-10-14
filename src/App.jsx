@@ -4,7 +4,27 @@ import MapView from './Map';
 import Menu from './Menu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
-import { Map, getSecOpt, getSectorArray } from './Defs';
+import { makeHexMap, getSecOpt } from './Defs';
+
+class HexMapView extends React.Component {
+    render() {
+        var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
+        var rows = [];
+        for (const [row, hexes] of hexMap.entries()) {
+            var planets = [];
+            for (const [col, planet] of hexes.entries()) {
+                planets.push(<div className={"hex-col-"+col+" hex-"+planet} key={col}></div>);
+            }
+            rows.push(<div className={"hex-row-"+row} key={row}>{planets}</div>);
+        }
+        return (
+            <div className="hex-map">
+                {rows}
+            </div>
+        )
+    }
+
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -36,7 +56,7 @@ class App extends React.Component {
             }
         }
         else {
-            rot[i] = (rot[i] + 60) % 360;
+            rot[i] = (rot[i] + 1) % 6;
             this.setState({ rotations: rot });
         }
     }
@@ -59,9 +79,19 @@ class App extends React.Component {
         this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
     }
 
-    render() {
-        return (
-            <div className="App">
+    renderMap(doHexMap) {
+        if (doHexMap) {
+            return (
+                <div className="map-eval-box">
+                    <HexMapView
+                        sectors={this.state.sectors}
+                        rotations={this.state.rotations}
+                    />
+                </div>
+            );
+        }
+        else {
+            return (
                 <div className="map-eval-box">
                     <MapView
                         numSect={this.state.numSect}
@@ -72,6 +102,14 @@ class App extends React.Component {
                     />
                     <Evaluation />
                 </div>
+            );
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
+                {this.renderMap(this.state.swapMode)};
                 <div className="menu-box">
                     <Menu
                         onClickSwap={() => this.onClickSwap()}

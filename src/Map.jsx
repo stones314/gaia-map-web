@@ -39,7 +39,7 @@ class MapView extends React.Component {
                 rotation={this.props.rotation[i]}
                 col={col}
                 onClick={() => this.props.onClick(i)}
-                selected={this.props.selected == i}
+                selected={this.props.selected === i}
             />
         );
     }
