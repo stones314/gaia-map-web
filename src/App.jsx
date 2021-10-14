@@ -2,18 +2,29 @@ import React from 'react';
 import './App.css';
 import MapView from './Map';
 import Menu from './Menu';
+import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
 import { makeHexMap, getSecOpt } from './Defs';
+import { makeInfoMap } from './Evaluator';
 
 class HexMapView extends React.Component {
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
+        var infoMap = makeInfoMap(hexMap);
         var rows = [];
         for (const [row, hexes] of hexMap.entries()) {
             var planets = [];
             for (const [col, planet] of hexes.entries()) {
-                planets.push(<div className={"hex-col-"+col+" hex-"+planet} key={col}></div>);
+                if (col < 13 || row < 13) {
+                    planets.push(
+                        <div
+                            className={"hex-col-" + col + " hex-" + planet}
+                            key={col}
+                            onClick={() => this.props.onClickHex(infoMap[row][col])}>
+                        </div>
+                    );
+                }
             }
             rows.push(<div className={"hex-row-"+row} key={row}>{planets}</div>);
         }
@@ -26,56 +37,35 @@ class HexMapView extends React.Component {
 
 }
 
-class ModeSelect extends React.Component {
-
+class HexInfoView extends React.Component {
     render() {
-        var swapBtnClass = "menu-mode-btn";
-        var rotBtnClass = "menu-mode-btn";
-        if (this.props.swapMode) {
-            swapBtnClass += " menu-mode-sel";
-        }
-        else {
-            rotBtnClass += " menu-mode-sel";
+        var keys = [
+            "Visited",
+            "Re",
+            "Bl",
+            "Wh",
+            "Bk",
+            "Br",
+            "Ye",
+            "Or",
+            "Ga",
+            "Tr",
+            "Em",
+            "Edges",
+        ]
+        var rows = [];
+        for (const [i, key] of keys.entries()) {
+            rows.push(
+                <div>
+                    {key + ": " + this.props.hexInfo[key]}
+                </div>
+            );
         }
         return (
-            <div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        Edit map by
-                    </div>
-                </div>
-                <div className="menu-row">
-                    <button className={swapBtnClass} onClick={this.props.onClickSwap}>
-                        Swap
-                    </button>
-                    <button className={rotBtnClass} onClick={this.props.onClickRot}>
-                        Rotate
-                    </button>
-                </div>
+            <div className="hex-info">
+                {rows}
             </div>
-        )
-    }
-}
-
-class FixedMenu extends React.Component {
-    render() {
-        var menuText = "Show Settings";
-        if (this.props.showMenu)
-            menuText = "Hide Settings";
-        return (
-            <div className="menu-fixed">
-                <ModeSelect
-                    onClickSwap={() => this.props.onClickSwap()}
-                    onClickRot={() => this.props.onClickRot()}
-                    swapMode={this.props.swapMode}
-                />
-                <div className="menu-row">
-                    <button className="menu-show" onClick={this.props.onClickShowMenu}>
-                        {menuText}
-                    </button>
-                </div>
-            </div>
-        )
+        );
     }
 }
 
@@ -89,8 +79,22 @@ class App extends React.Component {
             swapMode: true,
             numSect: 10,
             secOpt: 0,
-            showMenu: false,
+            showSettings: false,
             showDebug: false,
+            hexInfo: {
+                "Visited": false,
+                "Re": 7,
+                "Bl": 7,
+                "Wh": 7,
+                "Bk": 7,
+                "Br": 7,
+                "Ye": 7,
+                "Or": 7,
+                "Ga": 7,
+                "Tr": 7,
+                "Em": 0,
+                "Edges": 0.0,
+            },
         };
         this.onClickSector = this.onClickSector.bind(this);
         //this.onClickModeBtn = this.onClickModeBtn.bind(this);
@@ -116,6 +120,10 @@ class App extends React.Component {
         }
     }
 
+    onClickHex(hexInfo) {
+        this.setState({ hexInfo: hexInfo });
+    }
+
     onClickSwap() {
         if (!this.state.swapMode)
             this.setState({ swapMode: true });
@@ -134,8 +142,8 @@ class App extends React.Component {
         this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
     }
 
-    onClickShowMenu() {
-        this.setState({ showMenu: !this.state.showMenu });
+    onClickShowSettings() {
+        this.setState({ showSettings: !this.state.showSettings });
     }
 
     onClickDebug() {
@@ -149,6 +157,10 @@ class App extends React.Component {
                     <HexMapView
                         sectors={this.state.sectors}
                         rotations={this.state.rotations}
+                        onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
+                    />
+                    <HexInfoView
+                        hexInfo={this.state.hexInfo}
                     />
                 </div>
             );
@@ -169,8 +181,8 @@ class App extends React.Component {
         }
     }
 
-    renderMenu() {
-        if (this.state.showMenu) {
+    renderSettings() {
+        if (this.state.showSettings) {
             return (
                 <div className="menu-box">
                     <Menu
@@ -191,17 +203,17 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {this.renderMap(this.state.showMenu)};
-                <div className="menu-box">
+                {this.renderMap(this.state.showSettings)};
+                <div className="fixed-menu-box">
                     <FixedMenu
                         onClickSwap={() => this.onClickSwap()}
                         onClickRot={() => this.onClickRot()}
                         swapMode={this.state.swapMode}
-                        onClickShowMenu={() => this.onClickShowMenu()}
-                        showMenu={this.state.showMenu}
+                        onClickShowSettings={() => this.onClickShowSettings()}
+                        showSettings={this.state.showSettings}
                     />
-                    {this.renderMenu()}
                 </div>
+                {this.renderSettings()}
             </div>
         )
     }

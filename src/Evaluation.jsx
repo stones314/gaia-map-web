@@ -8,17 +8,17 @@ class PlanetStats extends React.Component {
         return (
             <div className="planet-box">
                 <div className="planet-type">
-                    <text className="stat-txt">{this.props.planet}</text>
+                    <div className="stat-txt">{this.props.planet}</div>
                 </div>
                 <div className="planet-stats">
                     <div className="stat-lbl">
-                        <text className="stat-txt">{this.props.exp}</text>
+                        <div className="stat-txt">{this.props.exp}</div>
                     </div>
                     <div className="stat-lbl">
-                        <text className="stat-txt">{this.props.nbr}</text>
+                        <div className="stat-txt">{this.props.nbr}</div>
                     </div>
                     <div className="stat-lbl">
-                        <text className="stat-txt">{this.props.tot}</text>
+                        <div className="stat-txt">{this.props.tot}</div>
                     </div>
                 </div>
             </div>
