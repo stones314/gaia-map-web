@@ -31,16 +31,16 @@ code {
 .App {
     display: flex;
     flex-direction: row;
-    border: 2px solid #ffff00;
-    height: var(--main-height);
+    border: 2px solid #ffffff;
 }
 
 .menu-box {
-    border: 2px solid #231233;
+    border: 2px solid #00ff00;
     width: var(--menu-width);
-    height: var(--menu-height);
+    height: auto;
     display: flex;
     flex-direction: column;
+    z-index: 2;
 }
 
 .menu-box-2 {
@@ -49,7 +49,6 @@ code {
 
 .map-eval-box {
     width: var(--map-width);
-    height: var(--map-height);
     border: 2px solid #ff0000;
     display: flex;
     flex-direction: row;
@@ -58,6 +57,7 @@ code {
 .map-box {
     flex: 8;
     border: 2px solid #ff00ff;
+    z-index: 1;
 }
 
 .eval-box {
@@ -65,12 +65,14 @@ code {
     display: flex;
     flex-direction: column;
     border: 2px solid #ff00ff;
+    z-index: 2;
 }
 
 .hex-map {
     position: absolute;
     top: calc(0vmin - 6 * var(--hex-height));
     left: 0.5vmin;
+    z-index: 1;
 }
 
 .hex-Em { background-color: darkblue; }

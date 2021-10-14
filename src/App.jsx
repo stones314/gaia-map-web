@@ -26,6 +26,59 @@ class HexMapView extends React.Component {
 
 }
 
+class ModeSelect extends React.Component {
+
+    render() {
+        var swapBtnClass = "menu-mode-btn";
+        var rotBtnClass = "menu-mode-btn";
+        if (this.props.swapMode) {
+            swapBtnClass += " menu-mode-sel";
+        }
+        else {
+            rotBtnClass += " menu-mode-sel";
+        }
+        return (
+            <div>
+                <div className="menu-row">
+                    <div className="menu-mode-lbl">
+                        Edit map by
+                    </div>
+                </div>
+                <div className="menu-row">
+                    <button className={swapBtnClass} onClick={this.props.onClickSwap}>
+                        Swap
+                    </button>
+                    <button className={rotBtnClass} onClick={this.props.onClickRot}>
+                        Rotate
+                    </button>
+                </div>
+            </div>
+        )
+    }
+}
+
+class FixedMenu extends React.Component {
+    render() {
+        var menuText = "Show Settings";
+        if (this.props.showMenu)
+            menuText = "Hide Settings";
+        return (
+            <div className="menu-fixed">
+                <ModeSelect
+                    onClickSwap={() => this.props.onClickSwap()}
+                    onClickRot={() => this.props.onClickRot()}
+                    swapMode={this.props.swapMode}
+                />
+                <div className="menu-row">
+                    <button className="menu-show" onClick={this.props.onClickShowMenu}>
+                        {menuText}
+                    </button>
+                </div>
+            </div>
+        )
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +89,8 @@ class App extends React.Component {
             swapMode: true,
             numSect: 10,
             secOpt: 0,
+            showMenu: false,
+            showDebug: false,
         };
         this.onClickSector = this.onClickSector.bind(this);
         //this.onClickModeBtn = this.onClickModeBtn.bind(this);
@@ -79,6 +134,14 @@ class App extends React.Component {
         this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
     }
 
+    onClickShowMenu() {
+        this.setState({ showMenu: !this.state.showMenu });
+    }
+
+    onClickDebug() {
+        this.setState({ showDebug: !this.state.showDebug });
+    }
+
     renderMap(doHexMap) {
         if (doHexMap) {
             return (
@@ -106,21 +169,38 @@ class App extends React.Component {
         }
     }
 
-    render() {
-        return (
-            <div className="App">
-                {this.renderMap(this.state.swapMode)};
+    renderMenu() {
+        if (this.state.showMenu) {
+            return (
                 <div className="menu-box">
                     <Menu
-                        onClickSwap={() => this.onClickSwap()}
-                        onClickRot={() => this.onClickRot()}
-                        swapMode={this.state.swapMode}
                         onClick={(numSec) => this.onClick(numSec)}
                         numSec={this.state.numSect}
                         onClickOpt={(variant) => this.onClickOpt(variant)}
                         secOpt={this.state.secOpt}
                     />
                     <Settings />
+                </div>
+            );
+        }
+        else {
+            return;
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
+                {this.renderMap(this.state.showMenu)};
+                <div className="menu-box">
+                    <FixedMenu
+                        onClickSwap={() => this.onClickSwap()}
+                        onClickRot={() => this.onClickRot()}
+                        swapMode={this.state.swapMode}
+                        onClickShowMenu={() => this.onClickShowMenu()}
+                        showMenu={this.state.showMenu}
+                    />
+                    {this.renderMenu()}
                 </div>
             </div>
         )

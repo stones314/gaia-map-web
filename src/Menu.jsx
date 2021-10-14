@@ -1,37 +1,6 @@
 import React from 'react';
 import './Menu.css';
 
-class ModeSelect extends React.Component {
-
-    render() {
-        var swapBtnClass = "menu-mode-btn";
-        var rotBtnClass = "menu-mode-btn";
-        if (this.props.swapMode) {
-            swapBtnClass += " menu-mode-sel";
-        }
-        else {
-            rotBtnClass += " menu-mode-sel";
-        }
-        return (
-            <div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        Edit map by
-                    </div>
-                </div>
-                <div className="menu-row">
-                    <button className={swapBtnClass} onClick={this.props.onClickSwap}>
-                        Swap
-                    </button>
-                    <button className={rotBtnClass} onClick={this.props.onClickRot}>
-                        Rotate
-                    </button>
-                </div>
-            </div>
-        )
-    }
-}
-
 class NumSectorSelect extends React.Component {
     renderOpts(secId) {
         const vars = [
@@ -105,11 +74,6 @@ class Menu extends React.Component {
                     numSec={this.props.numSec}
                     onClickOpt={(variant) => this.props.onClickOpt(variant)}
                     secOpt={this.props.secOpt}
-                />
-                <ModeSelect
-                    onClickSwap={() => this.props.onClickSwap()}
-                    onClickRot={() => this.props.onClickRot()}
-                    swapMode={this.props.swapMode}
                 />
             </div>
         )
