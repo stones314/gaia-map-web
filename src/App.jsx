@@ -6,7 +6,7 @@ import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
 import { makeHexMap, getSecOpt } from './Defs';
-import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
+import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats } from './Evaluator';
 
 class HexMapView extends React.Component {
     render() {
@@ -43,7 +43,6 @@ class HexMapView extends React.Component {
 class HexInfoView extends React.Component {
     render() {
         var keys = [
-            "Visited",
             "Re",
             "Bl",
             "Wh",
@@ -84,6 +83,7 @@ class App extends React.Component {
             secOpt: 0,
             showSettings: false,
             showDebug: false,
+            illegal: false,
             hexInfo: {
                 "Visited": false,
                 "Re": 7,
@@ -98,20 +98,30 @@ class App extends React.Component {
                 "Em": 0,
                 "Edges": 0.0,
             },
+            balanceStats: {
+                "Re": [0.0, 0.0],
+                "Bl": [0.0, 0.0],
+                "Wh": [0.0, 0.0],
+                "Bk": [0.0, 0.0],
+                "Br": [0.0, 0.0],
+                "Ye": [0.0, 0.0],
+                "Or": [0.0, 0.0],
+            }
         };
         this.onClickSector = this.onClickSector.bind(this);
         //this.onClickModeBtn = this.onClickModeBtn.bind(this);
+        this.evaluateMap(this.state.sectors, this.state.rotations);
     }
 
     onClickSector(i) {
         var rot = this.state.rotations.slice();
+        var sec = this.state.sectors.slice();
         if (this.state.swapMode) {
             if (this.state.selected < 0) {
                 this.setState({ selected: i});
             } else if (this.state.selected === i) {
                 this.setState({ selected: -1 });
             } else {
-                var sec = this.state.sectors.slice();
                 [sec[i], sec[this.state.selected]] = [sec[this.state.selected], sec[i]];
                 [rot[i], rot[this.state.selected]] = [rot[this.state.selected], rot[i]];
                 this.setState({ selected: -1, sectors: sec, rotations: rot });
@@ -121,6 +131,7 @@ class App extends React.Component {
             rot[i] = (rot[i] + 1) % 6;
             this.setState({ rotations: rot });
         }
+        this.evaluateMap(sec,rot);
     }
 
     onClickHex(hexInfo) {
@@ -139,10 +150,12 @@ class App extends React.Component {
 
     onClick(numSec) {
         this.setState({ numSect: numSec, sectors: getSecOpt(numSec, 0), secOpt: 0 });
+        this.evaluateMap(getSecOpt(numSec, 0), this.state.rotations);
     }
 
     onClickOpt(variant) {
         this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
+        this.evaluateMap(getSecOpt(this.state.numSect, variant), this.state.rotations);
     }
 
     onClickShowSettings() {
@@ -151,6 +164,18 @@ class App extends React.Component {
 
     onClickDebug() {
         this.setState({ showDebug: !this.state.showDebug });
+    }
+
+    evaluateMap(sectors, rotations) {
+        var hexMap = makeHexMap(sectors, rotations);
+        var infoMap = makeInfoMap(hexMap);
+        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
+        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+        var balance = getExpNbrStats(nbrMat);
+        this.setState({
+            illegal: hasEqNbr,
+            balanceStats: balance
+        });
     }
 
     renderMap(doHexMap) {
@@ -177,8 +202,9 @@ class App extends React.Component {
                         rotation={this.state.rotations}
                         onClick={(i) => this.onClickSector(i)}
                         selected={this.state.selected}
+                        illegal={this.state.illegal}
                     />
-                    <Evaluation />
+                    <Evaluation balance={this.state.balanceStats} />
                 </div>
             );
         }

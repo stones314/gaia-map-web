@@ -138,7 +138,7 @@ export function getSecOpt(numSec, optNum) {
     if (numSec === 8) {
         return [
             s00, s01, s02, s03,
-            s04, s05, s00, s00,
+            s00, s04, s05, s00,
             s06, s07, s08, s00
         ];
     }
@@ -150,7 +150,7 @@ export function getSecOpt(numSec, optNum) {
             return [
                 s00, s01, s02, s03,
                 s00, s04, s05b, s06b,
-                s07b, s09, s10, s00
+                s00, s07b, s09, s10
             ];
         if (opt === 1)
             return [

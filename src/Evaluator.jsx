@@ -2,8 +2,9 @@ import React from 'react';
 import './Menu.css';
 import { getRingCoord } from './Defs';
 
-const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
-const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
+export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+
 const expWgt = {
     "T0": 1.0,
     "T1": 0.8,
@@ -12,7 +13,7 @@ const expWgt = {
     "Ga": 1.0,
     "Tr": 0.2,
 };
-const leechWgt = {
+const nbrWgt = {
     "T0": 0.0,
     "T1": 0.2,
     "T2": 0.6,
@@ -20,6 +21,8 @@ const leechWgt = {
     "Ga": 0.3,
     "Tr": 0.0,
 };
+
+const distWgt = [1.0, 0.75, 0.5];
 
 function colorDist(p1, p2) {
     if (p1 === p2)
@@ -148,4 +151,39 @@ export function hasEqualNeighbour(nbrMat, minEqDist) {
         }
     }
     return false;
+}
+
+export function getExpNbrStats(nbrMat) {
+    var expNbrStats = {};
+    var exp = 0;
+    var nbr = 1;
+    for (const [i, planet] of colorWheel.entries()) {
+        expNbrStats[planet] = {
+            "T0": [0.0, 0.0],
+            "T1": [0.0, 0.0],
+            "T2": [0.0, 0.0],
+            "T3": [0.0, 0.0],
+            "Ga": [0.0, 0.0],
+            "Tr": [0.0, 0.0],
+            "Su": [0.0, 0.0]
+        };
+        for (const [j, neighbour] of planets.entries()) {
+            var nbrType = "T" + colorDist(planet, neighbour);
+            if (neighbour === "Ga" || neighbour === "Tr") {
+                nbrType = neighbour;
+            }
+            for (const [r, count] of nbrMat[planet][neighbour].entries()) {
+                expNbrStats[planet][nbrType][exp] += count * expWgt[nbrType] * distWgt[r];
+                if (r < 2)
+                    expNbrStats[planet][nbrType][nbr] += count * nbrWgt[nbrType];
+            }
+            expNbrStats[planet]["Su"][exp] += expNbrStats[planet][nbrType][exp];
+            expNbrStats[planet]["Su"][nbr] += expNbrStats[planet][nbrType][nbr];
+        }
+    }
+    var balance = {}
+    for (const [i, planet] of colorWheel.entries())
+        balance[planet] = expNbrStats[planet]["Su"];
+
+    return balance;
 }

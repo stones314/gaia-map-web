@@ -59,11 +59,7 @@ class MapView extends React.Component {
     }
 
     render() {
-        var hexMap = makeHexMap(this.props.sectors, this.props.rotation);
-        var infoMap = makeInfoMap(hexMap);
-        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
-        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
-        var illegalClass = hasEqNbr ? " illegal" : "";
+        var illegalClass = this.props.illegal ? " illegal" : "";
         return (
             <div className={"map-box" + illegalClass}>
                 {this.renderRow(0)}

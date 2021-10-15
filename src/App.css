@@ -31,11 +31,15 @@ code {
 .App {
     display: flex;
     flex-direction: row;
-    border: 2px solid #ffffff;
+    /*
+    border: 2px solid #ff00ff;
+    */
 }
 
 .fixed-menu-box {
-    border: 2px solid #00ff00;
+    /*
+    border: 2px solid #ff00ff;
+    */
     width: var(--menu-width);
     height: var(--menu-height);
     display: flex;
@@ -47,7 +51,9 @@ code {
 }
 
 .menu-box {
-    border: 2px solid #00ff00;
+    /*
+    border: 2px solid #ff00ff;
+    */
     width: var(--menu-width);
     height: auto;
     display: flex;
@@ -81,13 +87,17 @@ code {
 .map-eval-box {
     width: var(--map-width);
     height: var(--map-height);
-    border: 2px solid #ff0000;
+    /*
+    border: 2px solid #ff00ff;
+    */
 }
 
 .map-box {
     width: var(--map-width);
     height: var(--map-height);
+    /*
     border: 2px solid #ff00ff;
+    */
     z-index: 1;
 }
 
@@ -95,7 +105,9 @@ code {
     position: absolute;
     display: flex;
     flex-direction: row;
+    /*
     border: 2px solid #ff00ff;
+    */
     z-index: 2;
     bottom: 0;
     left: 0;
@@ -108,17 +120,19 @@ code {
     height: var(--map-height);
     width: var(--map-width);
     z-index: 1;
+    /*
     border: 2px solid #ff00ff;
+    */
 }
 
-.hex-Em { background-color: darkblue; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Bk { background-color: black; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Bl { background-color: dodgerblue; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Wh { background-color: white; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Ye { background-color: yellow; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Or { background-color: orange; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Re { background-color: red; border: 1px solid #ff0000; border-radius: 100%; }
-.hex-Br { background-color: saddlebrown; border: 1px solid #ff0000; border-radius: 100%; }
+.hex-Em { background-color: darkblue; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bk { background-color: black; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bl { background-color: dodgerblue; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Wh { background-color: white; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Ye { background-color: yellow; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Or { background-color: orange; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Re { background-color: red; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Br { background-color: saddlebrown; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
 .hex-Ga { background-color: forestgreen; border: 1px solid #ff0000; border-radius: 100%; }
 .hex-Tr { background-color: purple; border: 1px solid #ff0000; border-radius: 100%; }
 .hex-No { /*overflow: hidden; background-color: grey; border: 1px solid #ff0000; border-radius: 100%;*/ }

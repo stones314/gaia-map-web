@@ -1,6 +1,8 @@
 import React from 'react';
 import './Menu.css';
+import './App.css';
 import './Evaluation.css';
+import { colorWheel } from './Evaluator';
 
 class PlanetStats extends React.Component {
 
@@ -8,7 +10,7 @@ class PlanetStats extends React.Component {
         return (
             <div className="planet-box">
                 <div className="planet-type">
-                    <div className="stat-txt">{this.props.planet}</div>
+                    <div className={"stat-txt hex-" + this.props.planet}>{this.props.planet}</div>
                 </div>
                 <div className="planet-stats">
                     <div className="stat-lbl">
@@ -28,20 +30,25 @@ class PlanetStats extends React.Component {
 
 class Evaluation extends React.Component {
     render() {
-        const planets = ["Stats", "Blue", "Red", "Orange", "Yellow", "Brown", "Black", "White"];
-        const expand = ["E", 14, 13, 12, 11, 10, 9, 8];
-        const neighbour = ["N", 13, 12, 11, 10, 8, 7, 5];
+        const planets = ["Stats"];
+        const expand = ["Expand"];
+        const neighbour = ["Leech"];
+        const total = ["Total"];
+        for (const [i, p] of colorWheel.entries()) {
+            planets.push(p);
+            expand.push(this.props.balance[p][0].toFixed(1));
+            neighbour.push(this.props.balance[p][1].toFixed(1));
+            total.push((this.props.balance[p][0] + this.props.balance[p][1]).toFixed(1));
+        }
         const planetData = [];
         for (const [index, value] of planets.entries()) {
-            var total = "T";
-            if (index > 0) total = expand[index] + neighbour[index];
             planetData.push(
                 <PlanetStats
                     key={index}
                     planet={value}
                     exp={expand[index]}
                     nbr={neighbour[index]}
-                    tot={total}
+                    tot={total[index]}
                 />);
         }
         return (
