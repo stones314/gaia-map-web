@@ -5,6 +5,10 @@
 .rot4 { transform: rotate(240deg); }
 .rot5 { transform: rotate(300deg); }
 
+.illegal {
+    background-color: palevioletred;
+}
+
 .map-img {
     width: auto;
     height: 100%;

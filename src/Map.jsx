@@ -1,5 +1,7 @@
 import React from 'react';
 import './Map.css';
+import { makeHexMap, getSecOpt } from './Defs';
+import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 
 class SectorView extends React.Component {
     getClassName(rot, col, sel, b) {
@@ -57,8 +59,13 @@ class MapView extends React.Component {
     }
 
     render() {
+        var hexMap = makeHexMap(this.props.sectors, this.props.rotation);
+        var infoMap = makeInfoMap(hexMap);
+        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
+        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+        var illegalClass = hasEqNbr ? " illegal" : "";
         return (
-            <div className="map-box">
+            <div className={"map-box" + illegalClass}>
                 {this.renderRow(0)}
                 {this.renderRow(1)}
                 {this.renderRow(2)}

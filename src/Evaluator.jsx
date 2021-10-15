@@ -78,8 +78,8 @@ export function makeInfoMap(hexMap) {
                 "Or": 7,
                 "Ga": 7,
                 "Tr": 7,
-                "Em": 0,
-                "Edges": 0.0,
+                "Em": [0, 0, 0],
+                "Edges": [0, 0, 0],
             });
         }
     }
@@ -91,12 +91,12 @@ export function makeInfoMap(hexMap) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
                         if (neighbour == "No") {
-                            infoMap[row][col]["Edges"] += 1.0;
+                            infoMap[row][col]["Edges"][rad - 1]++;
                         }
                         else if (neighbour == "Em") {
-                            infoMap[row][col]["Em"] += 1.0;
+                            infoMap[row][col]["Em"][rad - 1]++;
                         }
-                        else if (infoMap[row][col][neighbour] > rad) {
+                        else if (infoMap[row][col][neighbour] > rad){
                             infoMap[row][col][neighbour] = rad;
                         }
                     }
@@ -108,25 +108,44 @@ export function makeInfoMap(hexMap) {
     return infoMap;
 }
 
-export function evaluateMap(hexMap) {
+export function getNeighbourMatrix(infoMap, hexMap) {
+    var nbrMat = {
+        "Re": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Bl": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Wh": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Bk": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Br": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Ye": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Or": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Ga": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+        "Tr": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
+    };
 
-    const nId = 0; //index of neighbour score
-    const eEd = 1; //index of expansion score
-    var scores = {};
-    for (const [i, p] of colorWheel.entries())
-        scores[p] = [0, 0];
-
-    var info = makeInfoMap(hexMap);
-
-    for (const [row, hexes] of hexMap.entries()) {
-        for (const [col, planet] of hexes.entries()) {
-            if (info[row][col]["Visited"])
-                continue;
-            if (planet === "No" || planet === "Em" || planet === "Ga") {
-                info[row][col]["Visited"] = true;
-                continue;
+    for (const [row, hexes] of infoMap.entries()) {
+        for (const [col, hexInfo] of hexes.entries()) {
+            var planet = hexMap[row][col];
+            for (const [i, neighbour] of planets.entries()) {
+                var nbrDist = hexInfo[neighbour];
+                if (nbrDist < 7)
+                    nbrMat[neighbour][planet][nbrDist - 1]++;
             }
-            
         }
     }
+    return nbrMat;
+}
+
+export function hasEqualNeighbour(nbrMat, minEqDist) {
+    for (const [i, planet] of planets.entries()) {
+        if (planet === "Tr")
+            continue;
+        if (nbrMat[planet][planet][0] > 0)
+            return true;
+        if (planet === "Ga")
+            continue;
+        for (var rad = 2; rad < minEqDist; rad++) {
+            if (nbrMat[planet][planet][rad-1] > 0)
+                return true;
+        }
+    }
+    return false;
 }

@@ -6,12 +6,15 @@ import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
 import { makeHexMap, getSecOpt } from './Defs';
-import { makeInfoMap } from './Evaluator';
+import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 
 class HexMapView extends React.Component {
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
         var infoMap = makeInfoMap(hexMap);
+        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
+        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+        var illegalClass = hasEqNbr ? " illegal" : "";
         var rows = [];
         for (const [row, hexes] of hexMap.entries()) {
             var planets = [];
@@ -29,7 +32,7 @@ class HexMapView extends React.Component {
             rows.push(<div className={"hex-row-"+row} key={row}>{planets}</div>);
         }
         return (
-            <div className="hex-map">
+            <div className={"hex-map" + illegalClass}>
                 {rows}
             </div>
         )
@@ -203,13 +206,14 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {this.renderMap(this.state.showSettings)};
+                {this.renderMap(this.state.showDebug)};
                 <div className="fixed-menu-box">
                     <FixedMenu
                         onClickSwap={() => this.onClickSwap()}
                         onClickRot={() => this.onClickRot()}
                         swapMode={this.state.swapMode}
                         onClickShowSettings={() => this.onClickShowSettings()}
+                        onClickDebug={() => this.onClickDebug()}
                         showSettings={this.state.showSettings}
                     />
                 </div>

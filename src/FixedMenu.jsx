@@ -48,6 +48,9 @@ class FixedMenu extends React.Component {
                     <button className="menu-show" onClick={this.props.onClickShowSettings}>
                         {menuText}
                     </button>
+                    <button className="menu-show" onClick={this.props.onClickDebug}>
+                        Debug
+                    </button>
                 </div>
             </div>
         )
