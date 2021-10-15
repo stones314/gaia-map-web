@@ -6,7 +6,7 @@ import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
 import { makeHexMap, getSecOpt } from './Defs';
-import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats } from './Evaluator';
+import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats, hexTypes } from './Evaluator';
 
 class HexMapView extends React.Component {
     render() {
@@ -42,21 +42,8 @@ class HexMapView extends React.Component {
 
 class HexInfoView extends React.Component {
     render() {
-        var keys = [
-            "Re",
-            "Bl",
-            "Wh",
-            "Bk",
-            "Br",
-            "Ye",
-            "Or",
-            "Ga",
-            "Tr",
-            "Em",
-            "Edges",
-        ]
         var rows = [];
-        for (const [i, key] of keys.entries()) {
+        for (const [i, key] of hexTypes.entries()) {
             rows.push(
                 <div>
                     {key + ": " + this.props.hexInfo[key]}
@@ -96,7 +83,7 @@ class App extends React.Component {
                 "Ga": 7,
                 "Tr": 7,
                 "Em": 0,
-                "Edges": 0.0,
+                "No": 0.0,
             },
             balanceStats: {
                 "Re": [0.0, 0.0],
@@ -109,7 +96,9 @@ class App extends React.Component {
             }
         };
         this.onClickSector = this.onClickSector.bind(this);
-        //this.onClickModeBtn = this.onClickModeBtn.bind(this);
+    }
+
+    componentDidMount() {
         this.evaluateMap(this.state.sectors, this.state.rotations);
     }
 

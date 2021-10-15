@@ -33,6 +33,20 @@ class ModeSelect extends React.Component {
 }
 
 class FixedMenu extends React.Component {
+
+    renderDebug(doIt) {
+        if (doIt) {
+            return (
+                <button className="menu-toggle-btn" onClick={this.props.onClickDebug}>
+                    Debug
+                </button>
+            );
+        }
+        else {
+            return;
+        }
+    }
+
     render() {
         var menuText = "Show Settings";
         if (this.props.showSettings)
@@ -45,12 +59,10 @@ class FixedMenu extends React.Component {
                     swapMode={this.props.swapMode}
                 />
                 <div className="menu-row">
-                    <button className="menu-show" onClick={this.props.onClickShowSettings}>
-                        {menuText}
+                    <button className="menu-toggle-btn" onClick={this.props.onClickShowSettings}>
+                        Settings
                     </button>
-                    <button className="menu-show" onClick={this.props.onClickDebug}>
-                        Debug
-                    </button>
+                    {this.renderDebug(false)}                    
                 </div>
             </div>
         )

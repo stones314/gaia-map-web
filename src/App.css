@@ -93,10 +93,13 @@ code {
 }
 
 .map-box {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: var(--map-width);
     height: var(--map-height);
     /*
-    border: 2px solid #ff00ff;
+    border: 2px solid #00ffff;
     */
     z-index: 1;
 }
@@ -117,7 +120,7 @@ code {
     position: absolute;
     top: calc(0vmin - 6 * var(--hex-height));
     left: 0.5vmin;
-    height: var(--map-height);
+    height: calc(var(--map-height) + 6 * var(--hex-height));
     width: var(--map-width);
     z-index: 1;
     /*

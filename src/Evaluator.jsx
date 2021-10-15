@@ -2,21 +2,22 @@ import React from 'react';
 import './Menu.css';
 import { getRingCoord } from './Defs';
 
+export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
 export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
 
 const expWgt = {
     "T0": 1.0,
-    "T1": 0.8,
-    "T2": 0.2,
+    "T1": 0.7,
+    "T2": 0.1,
     "T3": 0.0,
     "Ga": 1.0,
     "Tr": 0.2,
 };
 const nbrWgt = {
     "T0": 0.0,
-    "T1": 0.2,
-    "T2": 0.6,
+    "T1": 0.0,
+    "T2": 0.8,
     "T3": 1.0,
     "Ga": 0.3,
     "Tr": 0.0,
@@ -82,7 +83,7 @@ export function makeInfoMap(hexMap) {
                 "Ga": 7,
                 "Tr": 7,
                 "Em": [0, 0, 0],
-                "Edges": [0, 0, 0],
+                "No": [0, 0, 0],
             });
         }
     }
@@ -93,11 +94,8 @@ export function makeInfoMap(hexMap) {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
-                        if (neighbour == "No") {
-                            infoMap[row][col]["Edges"][rad - 1]++;
-                        }
-                        else if (neighbour == "Em") {
-                            infoMap[row][col]["Em"][rad - 1]++;
+                        if (neighbour == "No" || neighbour === "Em") {
+                            infoMap[row][col][neighbour][rad - 1]++;
                         }
                         else if (infoMap[row][col][neighbour] > rad){
                             infoMap[row][col][neighbour] = rad;
@@ -112,25 +110,21 @@ export function makeInfoMap(hexMap) {
 }
 
 export function getNeighbourMatrix(infoMap, hexMap) {
-    var nbrMat = {
-        "Re": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Bl": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Wh": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Bk": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Br": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Ye": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Or": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Ga": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-        "Tr": {"Re": [0,0,0],"Bl": [0,0,0],"Wh": [0,0,0],"Bk": [0,0,0],"Br": [0,0,0],"Ye": [0,0,0],"Or": [0,0,0],"Ga": [0,0,0],"Tr": [0,0,0]},
-    };
+    var nbrMat = {};
+    for (const [i, planet] of planets.entries()) {
+        nbrMat[planet] = {};
+        for (const [j, neighbour] of hexTypes.entries()) {
+            nbrMat[planet][neighbour] = [0, 0, 0];
+        }
+    }
 
     for (const [row, hexes] of infoMap.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
-            var planet = hexMap[row][col];
-            for (const [i, neighbour] of planets.entries()) {
-                var nbrDist = hexInfo[neighbour];
+            var neighbour = hexMap[row][col];
+            for (const [i, planet] of planets.entries()) {
+                var nbrDist = hexInfo[planet];
                 if (nbrDist < 7)
-                    nbrMat[neighbour][planet][nbrDist - 1]++;
+                    nbrMat[planet][neighbour][nbrDist - 1]++;
             }
         }
     }
