@@ -84,12 +84,18 @@ export function makeInfoMap(hexMap) {
                 "Tr": 7,
                 "Em": [0, 0, 0],
                 "No": [0, 0, 0],
+                "Row": 0,
+                "Col": 0,
+                "Type": "No",
             });
         }
     }
 
     for (const [row, hexes] of hexMap.entries()) {
         for (const [col, planet] of hexes.entries()) {
+            infoMap[row][col]["Row"] = row;
+            infoMap[row][col]["Col"] = col;
+            infoMap[row][col]["Type"] = planet;
             if (planet != "No" && planet != "Em") {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);

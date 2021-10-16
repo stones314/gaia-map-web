@@ -16,9 +16,15 @@ export class HexMapView extends React.Component {
             var planets = [];
             for (const [col, planet] of hexes.entries()) {
                 if (col < 13 || row < 13) {
+                    var hexClass = "hex-col-" + col + " hex-" + planet;
+                    if (planet != "No" && planet != "Em") {
+                        if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
+                            hexClass += "-sel";
+                        }
+                    }
                     planets.push(
                         <div
-                            className={"hex-col-" + col + " hex-" + planet}
+                            className={hexClass}
                             key={col}
                             onMouseOver={() => this.props.onClickHex(infoMap[row][col])}>
                         </div>
@@ -117,6 +123,7 @@ export class MapView extends React.Component {
                         sectors={this.props.sectors}
                         rotations={this.props.rotations}
                         onClickHex={(hexInfo) => this.props.onClickHex(hexInfo)}
+                        hexInfo={this.props.hexInfo}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}

@@ -83,3 +83,86 @@
     left: calc(var(--sec-delta-x) * 3);
 }
 
+.hex-selected {
+    filter: brightness(200%);
+}
+
+.hex-map {
+    position: absolute;
+    top: calc(0vmin - 7 * var(--hr-dy));
+    left: 0.5vmin;
+    height: calc(var(--map-height) + 6 * var(--hex-height));
+    width: var(--map-width);
+    z-index: 1;
+    /*
+    border: 2px solid #ff00ff;
+    */
+}
+
+.hex-Em { background-color: darkblue; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bk { background-color: black; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bl { background-color: dodgerblue; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Wh { background-color: white; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Ye { background-color: yellow; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Or { background-color: orange; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Re { background-color: red; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Br { background-color: saddlebrown; border: 1px solid #ff0000; border-radius: 100%; width: var(--hex-dx);}
+.hex-Ga { background-color: forestgreen; border: 1px solid #ff0000; border-radius: 100%; }
+.hex-Tr { background-color: purple; border: 1px solid #ff0000; border-radius: 100%; }
+.hex-No { /*overflow: hidden; background-color: grey; border: 1px solid #ff0000; border-radius: 100%;*/ }
+
+.hex-Em-sel { background-color: darkblue; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bk-sel { background-color: black; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Bl-sel { background-color: dodgerblue; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Wh-sel { background-color: white; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Ye-sel { background-color: yellow; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Or-sel { background-color: orange; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Re-sel { background-color: red; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Br-sel { background-color: saddlebrown; border: 2px solid #00ff00; border-radius: 100%; width: var(--hex-dx);}
+.hex-Ga-sel { background-color: forestgreen; border: 2px solid #00ff00; border-radius: 100%; }
+.hex-Tr-sel { background-color: purple; border: 2px solid #00ff00; border-radius: 100%; }
+.hex-No-sel { /*overflow: hidden; background-color: grey; border: 1px solid #00ff00; border-radius: 100%;*/ }
+
+.hex-row-0  { top: calc(var(--hr-dy) *   0); left: calc(var(--hr-dx) *  0); position: absolute; }
+.hex-row-1  { top: calc(var(--hr-dy) *   1); left: calc(var(--hr-dx) *  1); position: absolute; }
+.hex-row-2  { top: calc(var(--hr-dy) *   2); left: calc(var(--hr-dx) *  2); position: absolute; }
+.hex-row-3  { top: calc(var(--hr-dy) *   3); left: calc(var(--hr-dx) *  3); position: absolute; }
+.hex-row-4  { top: calc(var(--hr-dy) *   4); left: calc(var(--hr-dx) *  4); position: absolute; }
+.hex-row-5  { top: calc(var(--hr-dy) *   5); left: calc(var(--hr-dx) *  5); position: absolute; }
+.hex-row-6  { top: calc(var(--hr-dy) *   6); left: calc(var(--hr-dx) *  6); position: absolute; }
+.hex-row-7  { top: calc(var(--hr-dy) *   7); left: calc(var(--hr-dx) *  7); position: absolute; }
+.hex-row-8  { top: calc(var(--hr-dy) *   8); left: calc(var(--hr-dx) *  8); position: absolute; }
+.hex-row-9  { top: calc(var(--hr-dy) *   9); left: calc(var(--hr-dx) *  9); position: absolute; }
+.hex-row-10 { top: calc(var(--hr-dy) *  10); left: calc(var(--hr-dx) * 10); position: absolute; }
+.hex-row-11 { top: calc(var(--hr-dy) *  11); left: calc(var(--hr-dx) * 11); position: absolute; }
+.hex-row-12 { top: calc(var(--hr-dy) *  12); left: calc(var(--hr-dx) * 12); position: absolute; }
+.hex-row-13 { top: calc(var(--hr-dy) *  13); left: calc(var(--hr-dx) * 13); position: absolute; }
+.hex-row-14 { top: calc(var(--hr-dy) *  14); left: calc(var(--hr-dx) * 14); position: absolute; }
+.hex-row-15 { top: calc(var(--hr-dy) *  15); left: calc(var(--hr-dx) * 15); position: absolute; }
+.hex-row-16 { top: calc(var(--hr-dy) *  16); left: calc(var(--hr-dx) * 16); position: absolute; }
+.hex-row-17 { top: calc(var(--hr-dy) *  17); left: calc(var(--hr-dx) * 17); position: absolute; }
+
+.hex-col-0  { top: calc(var(--hex-dy) *  0); left: calc(var(--hex-dx) * 0); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-1  { top: calc(var(--hex-dy) *  1); left: calc(var(--hex-dx) * 1); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-2  { top: calc(var(--hex-dy) *  2); left: calc(var(--hex-dx) * 2); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-3  { top: calc(var(--hex-dy) *  3); left: calc(var(--hex-dx) * 3); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-4  { top: calc(var(--hex-dy) *  4); left: calc(var(--hex-dx) * 4); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-5  { top: calc(var(--hex-dy) *  5); left: calc(var(--hex-dx) * 5); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-6  { top: calc(var(--hex-dy) *  6); left: calc(var(--hex-dx) * 6); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-7  { top: calc(var(--hex-dy) *  7); left: calc(var(--hex-dx) * 7); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-8  { top: calc(var(--hex-dy) *  8); left: calc(var(--hex-dx) * 8); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-9  { top: calc(var(--hex-dy) *  9); left: calc(var(--hex-dx) * 9); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-10 { top: calc(var(--hex-dy) * 10); left: calc(var(--hex-dx) * 10); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-11 { top: calc(var(--hex-dy) * 11); left: calc(var(--hex-dx) * 11); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-12 { top: calc(var(--hex-dy) * 12); left: calc(var(--hex-dx) * 12); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-13 { top: calc(var(--hex-dy) * 13); left: calc(var(--hex-dx) * 13); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-14 { top: calc(var(--hex-dy) * 14); left: calc(var(--hex-dx) * 14); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-15 { top: calc(var(--hex-dy) * 15); left: calc(var(--hex-dx) * 15); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-16 { top: calc(var(--hex-dy) * 16); left: calc(var(--hex-dx) * 16); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-17 { top: calc(var(--hex-dy) * 17); left: calc(var(--hex-dx) * 17); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-18 { top: calc(var(--hex-dy) * 18); left: calc(var(--hex-dx) * 18); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-19 { top: calc(var(--hex-dy) * 19); left: calc(var(--hex-dx) * 19); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-20 { top: calc(var(--hex-dy) * 20); left: calc(var(--hex-dx) * 20); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-21 { top: calc(var(--hex-dy) * 21); left: calc(var(--hex-dx) * 21); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-22 { top: calc(var(--hex-dy) * 22); left: calc(var(--hex-dx) * 22); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+.hex-col-23 { top: calc(var(--hex-dy) * 23); left: calc(var(--hex-dx) * 23); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }

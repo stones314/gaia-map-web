@@ -35,6 +35,9 @@ class App extends React.Component {
                 "Tr": 7,
                 "Em": 0,
                 "No": 0.0,
+                "Row": 0,
+                "Col": 0,
+                "Type": "No",
             },
             balanceStats: {
                 "Re": [0.0, 0.0],
