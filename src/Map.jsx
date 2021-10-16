@@ -17,7 +17,7 @@ export class HexMapView extends React.Component {
             for (const [col, planet] of hexes.entries()) {
                 if (col < 13 || row < 13) {
                     var hexClass = "hex-col-" + col + " hex-" + planet;
-                    if (planet != "No" && planet != "Em") {
+                    if (planet != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
                             hexClass += "-sel";
                         }
