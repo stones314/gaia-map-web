@@ -62,7 +62,7 @@ class FixedMenu extends React.Component {
                     <button className="menu-toggle-btn" onClick={this.props.onClickShowSettings}>
                         Settings
                     </button>
-                    {this.renderDebug(false)}                    
+                    {this.renderDebug(true)}
                 </div>
             </div>
         )

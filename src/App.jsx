@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import MapView from './Map';
+import { MapView, HexMapView, HexInfoView } from './Map';
 import Menu from './Menu';
 import FixedMenu from './FixedMenu';
 import Settings from './Settings';
@@ -8,55 +8,6 @@ import Evaluation from './Evaluation';
 import { makeHexMap, getSecOpt } from './Defs';
 import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats, hexTypes } from './Evaluator';
 
-class HexMapView extends React.Component {
-    render() {
-        var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
-        var infoMap = makeInfoMap(hexMap);
-        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
-        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
-        var illegalClass = hasEqNbr ? " illegal" : "";
-        var rows = [];
-        for (const [row, hexes] of hexMap.entries()) {
-            var planets = [];
-            for (const [col, planet] of hexes.entries()) {
-                if (col < 13 || row < 13) {
-                    planets.push(
-                        <div
-                            className={"hex-col-" + col + " hex-" + planet}
-                            key={col}
-                            onClick={() => this.props.onClickHex(infoMap[row][col])}>
-                        </div>
-                    );
-                }
-            }
-            rows.push(<div className={"hex-row-"+row} key={row}>{planets}</div>);
-        }
-        return (
-            <div className={"hex-map" + illegalClass}>
-                {rows}
-            </div>
-        )
-    }
-
-}
-
-class HexInfoView extends React.Component {
-    render() {
-        var rows = [];
-        for (const [i, key] of hexTypes.entries()) {
-            rows.push(
-                <div>
-                    {key + ": " + this.props.hexInfo[key]}
-                </div>
-            );
-        }
-        return (
-            <div className="hex-info">
-                {rows}
-            </div>
-        );
-    }
-}
 
 class App extends React.Component {
     constructor(props) {
@@ -167,37 +118,6 @@ class App extends React.Component {
         });
     }
 
-    renderMap(doHexMap) {
-        if (doHexMap) {
-            return (
-                <div className="map-eval-box">
-                    <HexMapView
-                        sectors={this.state.sectors}
-                        rotations={this.state.rotations}
-                        onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
-                    />
-                    <HexInfoView
-                        hexInfo={this.state.hexInfo}
-                    />
-                </div>
-            );
-        }
-        else {
-            return (
-                <div className="map-eval-box">
-                    <MapView
-                        numSect={this.state.numSect}
-                        sectors={this.state.sectors}
-                        rotation={this.state.rotations}
-                        onClick={(i) => this.onClickSector(i)}
-                        selected={this.state.selected}
-                        illegal={this.state.illegal}
-                    />
-                    <Evaluation balance={this.state.balanceStats} />
-                </div>
-            );
-        }
-    }
 
     renderSettings() {
         if (this.state.showSettings) {
@@ -221,7 +141,18 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {this.renderMap(this.state.showDebug)};
+                <MapView
+                    numSect={this.state.numSect}
+                    sectors={this.state.sectors}
+                    rotations={this.state.rotations}
+                    onClick={(i) => this.onClickSector(i)}
+                    selected={this.state.selected}
+                    illegal={this.state.illegal}
+                    showDebug={this.state.showDebug}
+                    onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
+                    balanceStats={this.state.balanceStats}
+                    hexInfo={this.state.hexInfo}
+                />;
                 <div className="fixed-menu-box">
                     <FixedMenu
                         onClickSwap={() => this.onClickSwap()}

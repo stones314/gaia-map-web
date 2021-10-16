@@ -23,9 +23,9 @@ code {
     --sec-delta-y: calc(var(--sec-height) * 0.1);
     --hex-height: 5vmin;
     --hex-dx: calc(var(--hex-height) * 1.0);
-    --hex-dy: calc(var(--hex-height) * 0.5);
+    --hex-dy: calc(var(--hex-height) * 0.55);
     --hr-dx: calc(var(--hex-height) * 0.0);
-    --hr-dy: calc(var(--hex-height) * 1.0);
+    --hr-dy: calc(var(--hex-height) * 1.1);
 }
 
 .App {
@@ -65,7 +65,7 @@ code {
 }
 
 .hex-info {
-    border: 2px solid #00ff00;
+    border: 2px solid darkblue;
     width: calc(var(--menu-width) / 2);
     height: auto;
     display: flex;
@@ -74,10 +74,6 @@ code {
     position: fixed;
     right: var(--menu-width);
     bottom: 2vmin;
-}
-
-.illegal {
-    background-color: palevioletred;
 }
 
 .menu-box-2 {
@@ -118,7 +114,7 @@ code {
 
 .hex-map {
     position: absolute;
-    top: calc(0vmin - 6 * var(--hex-height));
+    top: calc(0vmin - 7 * var(--hr-dy));
     left: 0.5vmin;
     height: calc(var(--map-height) + 6 * var(--hex-height));
     width: var(--map-width);
