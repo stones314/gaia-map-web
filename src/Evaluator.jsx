@@ -1,6 +1,6 @@
 import React from 'react';
 import './Menu.css';
-import { getRingCoord } from './Defs';
+import { getRingCoord, sectorCenter } from './Defs';
 
 export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
@@ -60,7 +60,7 @@ function getRingPlanets(row, col, rad, hexMap) {
             ringPlanets.push("No");
         }
         else {
-            ringPlanets.push(hexMap[r][c]);
+            ringPlanets.push(hexMap[r][c]["Type"]);
         }
     }
     return ringPlanets;
@@ -87,6 +87,7 @@ export function makeInfoMap(hexMap) {
                 "Row": 0,
                 "Col": 0,
                 "Type": "No",
+                "Sec": "s00", 
             });
         }
     }
@@ -95,8 +96,9 @@ export function makeInfoMap(hexMap) {
         for (const [col, planet] of hexes.entries()) {
             infoMap[row][col]["Row"] = row;
             infoMap[row][col]["Col"] = col;
-            infoMap[row][col]["Type"] = planet;
-            if (planet != "No" && planet != "Em") {
+            infoMap[row][col]["Type"] = planet["Type"];
+            infoMap[row][col]["Sec"] = hexMap[row][col]["Sec"];
+            if (planet["Type"] != "No" && planet["Type"] != "Em") {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
@@ -126,7 +128,7 @@ export function getNeighbourMatrix(infoMap, hexMap) {
 
     for (const [row, hexes] of infoMap.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
-            var neighbour = hexMap[row][col];
+            var neighbour = hexMap[row][col]["Type"];
             for (const [i, planet] of planets.entries()) {
                 var nbrDist = hexInfo[planet];
                 if (nbrDist < 7)

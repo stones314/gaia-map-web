@@ -16,16 +16,6 @@ code {
     --main-height: 100vmin;
     --menu-width: 20vmax;
     --menu-height: 20vmin;
-    --map-height: 98vmin;
-    --map-width: calc(100vmax - var(--menu-width));
-    --sec-height: calc(var(--map-height) * 0.35 * 0.8);
-    --sec-delta-x: calc(var(--sec-height) * 0.89);
-    --sec-delta-y: calc(var(--sec-height) * 0.1);
-    --hex-height: 5vmin;
-    --hex-dx: calc(var(--hex-height) * 1.0);
-    --hex-dy: calc(var(--hex-height) * 0.55);
-    --hr-dx: calc(var(--hex-height) * 0.0);
-    --hr-dy: calc(var(--hex-height) * 1.1);
 }
 
 .App {

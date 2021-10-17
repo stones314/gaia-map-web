@@ -1,6 +1,6 @@
 import React from 'react';
 import './Map.css';
-import { makeHexMap, getSecOpt } from './Defs';
+import { makeHexMap, images } from './Defs';
 import { hexTypes, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 import Evaluation from './Evaluation';
 
@@ -16,19 +16,25 @@ export class HexMapView extends React.Component {
             var planets = [];
             for (const [col, planet] of hexes.entries()) {
                 if (col < 13 || row < 13) {
-                    var hexClass = "hex-col-" + col + " hex-" + planet;
-                    if (planet != "No") {
+                    var imgClass = "hex-img";
+                    if (planet["Type"] != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
-                            hexClass += "-sel";
+                            imgClass += " hex-selected";
                         }
+                        planets.push(
+                            <div
+                                className={"hex-col-" + col}
+                                key={col}
+                            >
+                                <img
+                                    className={imgClass}
+                                    src={images[planet["Type"]]}
+                                    onMouseOver={() => this.props.onClickHex(infoMap[row][col])}
+                                    alt={planet["Type"]}
+                                />
+                            </div>
+                        );
                     }
-                    planets.push(
-                        <div
-                            className={hexClass}
-                            key={col}
-                            onMouseOver={() => this.props.onClickHex(infoMap[row][col])}>
-                        </div>
-                    );
                 }
             }
             rows.push(<div className={"hex-row-" + row} key={row}>{planets}</div>);
@@ -76,7 +82,7 @@ class SectorView extends React.Component {
         return (
             <div className={this.getClassName(this.props.rotation, this.props.col, this.props.selected, false)}>
                 <img
-                    src={this.props.sector}
+                    src={images[this.props.sector]}
                     className="map-img"
                     onClick={this.props.onClick}
                     alt={this.props.sector}
