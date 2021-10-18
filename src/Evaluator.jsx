@@ -306,18 +306,57 @@ export function randomizeMap(sectors, rotations, withSwap) {
     }
 }
 
+function getScalarBalance(balance) {
+    var max = 0.0;
+    var min = 100000.0;
+    for (const [i, planet] of colorWheel.entries()) {
+        var tot = balance[planet][0] + balance[planet][1];
+        if (tot > max)
+            max = tot;
+        else if (tot < min)
+            min = tot;
+    }
+    return max - min;
+}
+
 export function evaluateMap(sectors, rotations) {
     var hexMap = makeHexMap(sectors, rotations);
     makeInfoMap(hexMap);
     var nbrMat = getNeighbourMatrix(hexMap);
-    var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+    if (hasEqualNeighbour(nbrMat, 2))
+        return -1.0;
     var balance = getExpNbrStats(nbrMat);
+    var score = getScalarBalance(balance);
+    return score;
 }
 
 export function optimizeMap(sectors, rotations, withSwap) {
-    var tryCount = 100;
+    var tryCount = 1000;
+    var bestScore = 1000.0;
+    var bestSec = sectors.slice();
+    var bestRot = rotations.slice();
+    var totEval = 0;
     for (var t = 0; t < tryCount; t++) {
+        var illegal = 0;
         randomizeMap(sectors, rotations, withSwap);
-
+        var score = evaluateMap(sectors, rotations);
+        totEval++;
+        while (score < 0.0 && illegal < 1000) {
+            illegal++;
+            randomizeMap(sectors, rotations, withSwap);
+            score = evaluateMap(sectors, rotations);
+            totEval++;
+        }
+        if (illegal < 1000) {
+            if (score < bestScore) {
+                bestScore = score;
+                bestSec = sectors.slice();
+                bestRot = rotations.slice();
+            }
+        }
     }
+    sectors = bestSec;
+    rotations = bestRot;
+    console.error("iterations: " + totEval);
+    return bestScore;
 }

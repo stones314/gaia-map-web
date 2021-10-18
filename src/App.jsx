@@ -6,7 +6,15 @@ import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
 import { getSecOpt } from './Defs';
-import { makeHexMap, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats, randomizeMap } from './Evaluator';
+import {
+    makeHexMap,
+    makeInfoMap,
+    getNeighbourMatrix,
+    hasEqualNeighbour,
+    getExpNbrStats,
+    randomizeMap,
+    optimizeMap
+} from './Evaluator';
 
 
 class App extends React.Component {
@@ -112,9 +120,10 @@ class App extends React.Component {
     onClickRandom() {
         var sec = this.state.sectors.slice();
         var rot = this.state.rotations.slice();
-        randomizeMap(sec, rot, true);
+        var score = optimizeMap(sec, rot, false);
         this.setState({ sectors: sec, rotations: rot });
         this.evaluateMap(sec, rot);
+        console.error("score: " + score);
     }
 
     evaluateMap(sectors, rotations) {
