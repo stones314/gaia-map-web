@@ -199,8 +199,11 @@ export function makeInfoMap(hexMap) {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
-                        if (neighbour == "No" || neighbour === "Em" || neighbour === "Fr") {
+                        if (neighbour === "Em") {
                             hexMap[row][col][neighbour][rad - 1]++;
+                        }
+                        else if (neighbour == "No" || neighbour === "Fr") {
+                            hexMap[row][col]["No"][rad - 1]++;
                         }
                         else if (hexMap[row][col][neighbour] > rad){
                             hexMap[row][col][neighbour] = rad;
@@ -310,7 +313,7 @@ function getScalarBalance(balance) {
     var max = 0.0;
     var min = 100000.0;
     for (const [i, planet] of colorWheel.entries()) {
-        var tot = balance[planet][0] + balance[planet][1];
+        var tot = balance[planet][0] + balance[planet][1] - (Math.abs(balance[planet][0] - balance[planet][1]));
         if (tot > max)
             max = tot;
         else if (tot < min)
@@ -319,7 +322,7 @@ function getScalarBalance(balance) {
     return max - min;
 }
 
-export function evaluateMap(sectors, rotations) {
+export function evaluateMap(sectors, rotations, debug) {
     var hexMap = makeHexMap(sectors, rotations);
     makeInfoMap(hexMap);
     var nbrMat = getNeighbourMatrix(hexMap);
@@ -339,12 +342,12 @@ export function optimizeMap(sectors, rotations, withSwap) {
     for (var t = 0; t < tryCount; t++) {
         var illegal = 0;
         randomizeMap(sectors, rotations, withSwap);
-        var score = evaluateMap(sectors, rotations);
+        var score = evaluateMap(sectors, rotations, false);
         totEval++;
         while (score < 0.0 && illegal < 1000) {
             illegal++;
             randomizeMap(sectors, rotations, withSwap);
-            score = evaluateMap(sectors, rotations);
+            score = evaluateMap(sectors, rotations, false);
             totEval++;
         }
         if (illegal < 1000) {
@@ -355,8 +358,12 @@ export function optimizeMap(sectors, rotations, withSwap) {
             }
         }
     }
-    sectors = bestSec;
-    rotations = bestRot;
+    for (var i = 0; i < sectors.length; i++) {
+        sectors[i] = bestSec[i];
+        rotations[i] = bestRot[i];
+    }
     console.error("iterations: " + totEval);
+
+    evaluateMap(sectors, rotations, true);
     return bestScore;
 }

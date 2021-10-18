@@ -123,7 +123,6 @@ class App extends React.Component {
         var score = optimizeMap(sec, rot, false);
         this.setState({ sectors: sec, rotations: rot });
         this.evaluateMap(sec, rot);
-        console.error("score: " + score);
     }
 
     evaluateMap(sectors, rotations) {
