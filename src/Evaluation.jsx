@@ -2,7 +2,7 @@ import React from 'react';
 import './Menu.css';
 import './App.css';
 import './Evaluation.css';
-import { colorWheel } from './Evaluator';
+import { colorWheel } from './Defs';
 
 class PlanetStats extends React.Component {
 

@@ -75,6 +75,9 @@ class Menu extends React.Component {
                     onClickOpt={(variant) => this.props.onClickOpt(variant)}
                     secOpt={this.props.secOpt}
                 />
+                <div className="menu-row">
+                    <button onClick={this.props.onClickRandom}>Randomize</button>
+                </div>
             </div>
         )
     }

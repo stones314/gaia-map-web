@@ -1,14 +1,14 @@
 import React from 'react';
 import './Map.css';
-import { makeHexMap, images, sectorCenter, getCenterRef } from './Defs';
-import { hexTypes, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
+import { images, sectorCenter, getCenterRef } from './Defs';
+import { makeHexMap, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 import Evaluation from './Evaluation';
 
 export class HexMapView extends React.Component {
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
-        var infoMap = makeInfoMap(hexMap);
-        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
+        makeInfoMap(hexMap);
+        var nbrMat = getNeighbourMatrix(hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
         var illegalClass = hasEqNbr ? " illegal" : " legal";
         var rows = [];
@@ -18,7 +18,7 @@ export class HexMapView extends React.Component {
                 if (col < 13 || row < 13) {
                     var imgClass = "hex-img";
                     var imgRef = planet["Type"];
-                    var divClass = "hex-col-" + col + " rot" + infoMap[row][col]["Rot"];
+                    var divClass = "hex-col-" + col + " rot" + hexMap[row][col]["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
                             imgClass += " hex-selected";
@@ -28,8 +28,7 @@ export class HexMapView extends React.Component {
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
-                                imgRef = getCenterRef[infoMap[row][col]["Sec"]];
-                                console.error("imgClass: " + imgClass);
+                                imgRef = getCenterRef[hexMap[row][col]["Sec"]];
                             }
                         }
                         planets.push(
@@ -40,7 +39,7 @@ export class HexMapView extends React.Component {
                                 <img
                                     className={imgClass}
                                     src={images[imgRef]}
-                                    onMouseOver={() => this.props.onClickHex(infoMap[row][col])}
+                                    onMouseOver={() => this.props.onClickHex(hexMap[row][col])}
                                     alt={planet["Type"]}
                                     onClick={() => this.props.onClick(hexMap[row][col]["Slot"])}
                                 />

@@ -42,6 +42,12 @@ export const images = {
     "Rot": "https://rygg-gaard.no/gaia/img/RotateSec.png",
 };
 
+
+export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
+export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
+export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+
+
 export const sectorCenter = [
     [8, 2], [6, 7], [4, 12], [2, 17],
     [11, 4], [9, 9], [7, 14], [5, 19],
@@ -217,115 +223,3 @@ export function getSecOpt(numSec, optNum) {
     ];
 }
 
-export class Coord {
-    constructor(row, col) {
-        this.row = row;
-        this.col = col;
-    }
-}
-
-function rotate(ring, radius, n) {
-    const rotated = ring.splice();
-    for (const [index, planet] of ring.entries()) {
-        rotated[(index + radius * n) % (radius * 6)] = planet;
-    }
-    return rotated;
-}
-
-export function dist(r1, c1, r2, c2) {
-    return Math.max([
-        Math.abs(r1 - r2),
-        Math.abs(c1 - c2),
-        Math.abs(-r1 - c1 - r2 + c2)]);
-}
-
-export function getRingCoord(row, col, radius) {
-    if (radius === 0) {         
-        return [[row, col]];
-    }
-    if (radius === 1) {
-        return [
-            [row - 1, col    ],
-            [row - 1, col + 1],
-            [row    , col + 1],
-            [row + 1, col    ],
-            [row + 1, col - 1],
-            [row    , col - 1]];
-    }
-    if (radius === 2) {
-        return [
-            [row - 2, col    ],
-            [row - 2, col + 1],
-            [row - 2, col + 2],
-            [row - 1, col + 2],
-            [row    , col + 2],
-            [row + 1, col + 1],
-            [row + 2, col    ],
-            [row + 2, col - 1],
-            [row + 2, col - 2],
-            [row + 1, col - 2],
-            [row    , col - 2],
-            [row - 1, col - 1]];
-    }
-    if (radius === 3) {
-        return [
-            [row - 3, col    ],
-            [row - 3, col + 1],
-            [row - 3, col + 2],
-            [row - 3, col + 3],
-            [row - 2, col + 3],
-            [row - 1, col + 3],
-            [row    , col + 3],
-            [row + 1, col + 2],
-            [row + 2, col + 1],
-            [row + 3, col    ],
-            [row + 3, col - 1],
-            [row + 3, col - 2],
-            [row + 3, col - 3],
-            [row + 2, col - 3],
-            [row + 1, col - 3],
-            [row    , col - 3],
-            [row - 1, col - 2],
-            [row - 2, col - 1]];
-    }
-    return []
-}
-
-export function makeHexMap(sectors, rotations) {
-    var hexMap = [];
-    for (var i = 0; i < 17; i++) {
-        hexMap.push([]);
-        for (var j = 0; j < 24; j++) {
-            hexMap[i].push({
-                "Type": "No",
-                "Sec": "s00",
-                "Rot": 0,
-                "Slot": 0,
-            });
-        }
-    }
-
-    for (const [index, sector] of sectors.entries()) {
-        var hexes = getSectorArray(sector);
-        var row = sectorCenter[index][0];
-        var col = sectorCenter[index][1];
-        var rad = 0;
-        hexMap[row][col]["Type"] = hexes[rad][0];
-        hexMap[row][col]["Sec"] = sector;
-        hexMap[row][col]["Rot"] = rotations[index];
-        hexMap[row][col]["Slot"] = index;
-
-        for (rad = 1; rad < 3; rad++) {
-            var ringCoords = getRingCoord(row, col, rad);
-            var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
-            for (const [ringId, [r, c]] of ringCoords.entries()) {
-                hexMap[r][c]["Type"] = ringPlanets[ringId];
-                hexMap[r][c]["Sec"] = sector;
-                hexMap[r][c]["Rot"] = rotations[index];
-                hexMap[r][c]["Slot"] = index;
-            }
-        }
-    }
-
-    return hexMap;
-}

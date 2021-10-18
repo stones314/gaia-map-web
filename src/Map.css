@@ -97,6 +97,7 @@
 }
 
 .hex-selected {
+    filter: brightness(200%);
     border: 2px solid #00ff00;
     border-radius: 100%;
     z-index: 3;

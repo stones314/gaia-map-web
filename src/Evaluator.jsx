@@ -1,10 +1,6 @@
 import React from 'react';
 import './Menu.css';
-import { getRingCoord, sectorCenter } from './Defs';
-
-export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
-export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
-export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+import { planets, colorWheel, hexTypes, getSectorArray, sectorCenter } from './Defs';
 
 const expWgt = {
     "T0": 1.0,
@@ -24,6 +20,74 @@ const nbrWgt = {
 };
 
 const distWgt = [1.0, 0.75, 0.5];
+
+
+function rotate(ring, radius, n) {
+    const rotated = ring.splice();
+    for (const [index, planet] of ring.entries()) {
+        rotated[(index + radius * n) % (radius * 6)] = planet;
+    }
+    return rotated;
+}
+
+export function dist(r1, c1, r2, c2) {
+    return Math.max([
+        Math.abs(r1 - r2),
+        Math.abs(c1 - c2),
+        Math.abs(-r1 - c1 - r2 + c2)]);
+}
+
+export function getRingCoord(row, col, radius) {
+    if (radius === 0) {
+        return [[row, col]];
+    }
+    if (radius === 1) {
+        return [
+            [row - 1, col],
+            [row - 1, col + 1],
+            [row, col + 1],
+            [row + 1, col],
+            [row + 1, col - 1],
+            [row, col - 1]];
+    }
+    if (radius === 2) {
+        return [
+            [row - 2, col],
+            [row - 2, col + 1],
+            [row - 2, col + 2],
+            [row - 1, col + 2],
+            [row, col + 2],
+            [row + 1, col + 1],
+            [row + 2, col],
+            [row + 2, col - 1],
+            [row + 2, col - 2],
+            [row + 1, col - 2],
+            [row, col - 2],
+            [row - 1, col - 1]];
+    }
+    if (radius === 3) {
+        return [
+            [row - 3, col],
+            [row - 3, col + 1],
+            [row - 3, col + 2],
+            [row - 3, col + 3],
+            [row - 2, col + 3],
+            [row - 1, col + 3],
+            [row, col + 3],
+            [row + 1, col + 2],
+            [row + 2, col + 1],
+            [row + 3, col],
+            [row + 3, col - 1],
+            [row + 3, col - 2],
+            [row + 3, col - 3],
+            [row + 2, col - 3],
+            [row + 1, col - 3],
+            [row, col - 3],
+            [row - 1, col - 2],
+            [row - 2, col - 1]];
+    }
+    return []
+}
 
 function colorDist(p1, p2) {
     if (p1 === p2)
@@ -66,12 +130,12 @@ function getRingPlanets(row, col, rad, hexMap) {
     return ringPlanets;
 }
 
-export function makeInfoMap(hexMap) {
-    var infoMap = [];
+export function makeHexMap(sectors, rotations) {
+    var hexMap = [];
     for (var i = 0; i < 17; i++) {
-        infoMap.push([]);
+        hexMap.push([]);
         for (var j = 0; j < 24; j++) {
-            infoMap[i].push({
+            hexMap[i].push({
                 "Visited": 0,
                 "Re": 7,
                 "Bl": 7,
@@ -95,34 +159,60 @@ export function makeInfoMap(hexMap) {
         }
     }
 
+    for (const [index, sector] of sectors.entries()) {
+        var hexes = getSectorArray(sector);
+        var row = sectorCenter[index][0];
+        var col = sectorCenter[index][1];
+        var rad = 0;
+        hexMap[row][col]["Type"] = hexes[rad][0];
+        hexMap[row][col]["Sec"] = sector;
+        hexMap[row][col]["Rot"] = rotations[index];
+        hexMap[row][col]["Slot"] = index;
+
+        for (rad = 1; rad < 3; rad++) {
+            var ringCoords = getRingCoord(row, col, rad);
+            var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
+            for (const [ringId, [r, c]] of ringCoords.entries()) {
+                hexMap[r][c]["Type"] = ringPlanets[ringId];
+                hexMap[r][c]["Sec"] = sector;
+                hexMap[r][c]["Rot"] = rotations[index];
+                hexMap[r][c]["Slot"] = index;
+            }
+        }
+    }
+
+    return hexMap;
+}
+
+
+export function makeInfoMap(hexMap) {
+ 
     for (const [row, hexes] of hexMap.entries()) {
         for (const [col, planet] of hexes.entries()) {
-            infoMap[row][col]["Row"] = row;
-            infoMap[row][col]["Col"] = col;
-            infoMap[row][col]["Type"] = planet["Type"];
-            infoMap[row][col]["Sec"] = hexMap[row][col]["Sec"];
-            infoMap[row][col]["Rot"] = hexMap[row][col]["Rot"];
-            infoMap[row][col]["Slot"] = hexMap[row][col]["Slot"];
+            hexMap[row][col]["Row"] = row;
+            hexMap[row][col]["Col"] = col;
+            hexMap[row][col]["Type"] = planet["Type"];
+            hexMap[row][col]["Sec"] = hexMap[row][col]["Sec"];
+            hexMap[row][col]["Rot"] = hexMap[row][col]["Rot"];
+            hexMap[row][col]["Slot"] = hexMap[row][col]["Slot"];
             if (planet["Type"] != "No" && planet["Type"] != "Em" && planet["Type"] != "Fr") {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
                         if (neighbour == "No" || neighbour === "Em" || neighbour === "Fr") {
-                            infoMap[row][col][neighbour][rad - 1]++;
+                            hexMap[row][col][neighbour][rad - 1]++;
                         }
-                        else if (infoMap[row][col][neighbour] > rad){
-                            infoMap[row][col][neighbour] = rad;
+                        else if (hexMap[row][col][neighbour] > rad){
+                            hexMap[row][col][neighbour] = rad;
                         }
                     }
                 }
             }
         }
     }
-
-    return infoMap;
 }
 
-export function getNeighbourMatrix(infoMap, hexMap) {
+export function getNeighbourMatrix(hexMap) {
     var nbrMat = {};
     for (const [i, planet] of planets.entries()) {
         nbrMat[planet] = {};
@@ -131,7 +221,7 @@ export function getNeighbourMatrix(infoMap, hexMap) {
         }
     }
 
-    for (const [row, hexes] of infoMap.entries()) {
+    for (const [row, hexes] of hexMap.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
             var neighbour = hexMap[row][col]["Type"];
             for (const [i, planet] of planets.entries()) {
@@ -193,4 +283,41 @@ export function getExpNbrStats(nbrMat) {
         balance[planet] = expNbrStats[planet]["Su"];
 
     return balance;
+}
+
+export function randomizeMap(sectors, rotations, withSwap) {
+    var n = sectors.length;
+    if (withSwap) {
+        for (var i = 0; i < n; i++) {
+            if (sectors[i] !== "s00") {
+                var j = Math.floor(Math.random() * n);
+                while (sectors[j] === "s00") {
+                    j = Math.floor(Math.random() * n);
+                }
+                [sectors[i], sectors[j]] = [sectors[j], sectors[i]];
+            }
+        }
+    }
+    for (var i = 0; i < n; i++) {
+        if (sectors[i] !== "s00") {
+            var r = Math.floor(Math.random() * 6);
+            rotations[i] = r;
+        }
+    }
+}
+
+export function evaluateMap(sectors, rotations) {
+    var hexMap = makeHexMap(sectors, rotations);
+    makeInfoMap(hexMap);
+    var nbrMat = getNeighbourMatrix(hexMap);
+    var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+    var balance = getExpNbrStats(nbrMat);
+}
+
+export function optimizeMap(sectors, rotations, withSwap) {
+    var tryCount = 100;
+    for (var t = 0; t < tryCount; t++) {
+        randomizeMap(sectors, rotations, withSwap);
+
+    }
 }

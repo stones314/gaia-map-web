@@ -5,8 +5,8 @@ import Menu from './Menu';
 import FixedMenu from './FixedMenu';
 import Settings from './Settings';
 import Evaluation from './Evaluation';
-import { makeHexMap, getSecOpt } from './Defs';
-import { makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats, hexTypes } from './Evaluator';
+import { getSecOpt } from './Defs';
+import { makeHexMap, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour, getExpNbrStats, randomizeMap } from './Evaluator';
 
 
 class App extends React.Component {
@@ -109,10 +109,18 @@ class App extends React.Component {
         this.setState({ showDebug: !this.state.showDebug });
     }
 
+    onClickRandom() {
+        var sec = this.state.sectors.slice();
+        var rot = this.state.rotations.slice();
+        randomizeMap(sec, rot, true);
+        this.setState({ sectors: sec, rotations: rot });
+        this.evaluateMap(sec, rot);
+    }
+
     evaluateMap(sectors, rotations) {
         var hexMap = makeHexMap(sectors, rotations);
-        var infoMap = makeInfoMap(hexMap);
-        var nbrMat = getNeighbourMatrix(infoMap, hexMap);
+        makeInfoMap(hexMap);
+        var nbrMat = getNeighbourMatrix(hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
         var balance = getExpNbrStats(nbrMat);
         this.setState({
@@ -131,6 +139,7 @@ class App extends React.Component {
                         numSec={this.state.numSect}
                         onClickOpt={(variant) => this.onClickOpt(variant)}
                         secOpt={this.state.secOpt}
+                        onClickRandom={() => this.onClickRandom()}
                     />
                     <Settings />
                 </div>
