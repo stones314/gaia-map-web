@@ -1,6 +1,6 @@
 import React from 'react';
 import './Map.css';
-import { makeHexMap, images } from './Defs';
+import { makeHexMap, images, sectorCenter, getCenterRef } from './Defs';
 import { hexTypes, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 import Evaluation from './Evaluation';
 
@@ -17,20 +17,32 @@ export class HexMapView extends React.Component {
             for (const [col, planet] of hexes.entries()) {
                 if (col < 13 || row < 13) {
                     var imgClass = "hex-img";
-                    if (planet["Type"] != "No") {
+                    var imgRef = planet["Type"];
+                    var divClass = "hex-col-" + col + " rot" + infoMap[row][col]["Rot"];
+                    if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
                             imgClass += " hex-selected";
                         }
+                        else if (this.props.hexInfo["Slot"] === planet["Slot"]) {
+                            imgClass += " hex-sec-selected";
+                        }
+                        for (const [i, [r, c]] of sectorCenter.entries()) {
+                            if (row === r && col === c) {
+                                imgRef = getCenterRef[infoMap[row][col]["Sec"]];
+                                console.error("imgClass: " + imgClass);
+                            }
+                        }
                         planets.push(
                             <div
-                                className={"hex-col-" + col}
+                                className={divClass}
                                 key={col}
                             >
                                 <img
                                     className={imgClass}
-                                    src={images[planet["Type"]]}
+                                    src={images[imgRef]}
                                     onMouseOver={() => this.props.onClickHex(infoMap[row][col])}
                                     alt={planet["Type"]}
+                                    onClick={() => this.props.onClick(hexMap[row][col]["Slot"])}
                                 />
                             </div>
                         );
@@ -50,8 +62,9 @@ export class HexMapView extends React.Component {
 
 export class HexInfoView extends React.Component {
     render() {
+        var keys = ["Sec", "Type", "Rot","Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No", "Slot"];
         var rows = [];
-        for (const [i, key] of hexTypes.entries()) {
+        for (const [i, key] of keys.entries()) {
             rows.push(
                 <div>
                     {key + ": " + this.props.hexInfo[key]}
@@ -130,6 +143,7 @@ export class MapView extends React.Component {
                         rotations={this.props.rotations}
                         onClickHex={(hexInfo) => this.props.onClickHex(hexInfo)}
                         hexInfo={this.props.hexInfo}
+                        onClick={(i) => this.props.onClick(i)}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}

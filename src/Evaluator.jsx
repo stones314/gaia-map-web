@@ -84,10 +84,13 @@ export function makeInfoMap(hexMap) {
                 "Tr": 7,
                 "Em": [0, 0, 0],
                 "No": [0, 0, 0],
+                "Fr": [0, 0, 0],
                 "Row": 0,
                 "Col": 0,
                 "Type": "No",
-                "Sec": "s00", 
+                "Sec": "s00",
+                "Rot": 0,
+                "Slot": 0,
             });
         }
     }
@@ -98,11 +101,13 @@ export function makeInfoMap(hexMap) {
             infoMap[row][col]["Col"] = col;
             infoMap[row][col]["Type"] = planet["Type"];
             infoMap[row][col]["Sec"] = hexMap[row][col]["Sec"];
-            if (planet["Type"] != "No" && planet["Type"] != "Em") {
+            infoMap[row][col]["Rot"] = hexMap[row][col]["Rot"];
+            infoMap[row][col]["Slot"] = hexMap[row][col]["Slot"];
+            if (planet["Type"] != "No" && planet["Type"] != "Em" && planet["Type"] != "Fr") {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
-                        if (neighbour == "No" || neighbour === "Em") {
+                        if (neighbour == "No" || neighbour === "Em" || neighbour === "Fr") {
                             infoMap[row][col][neighbour][rad - 1]++;
                         }
                         else if (infoMap[row][col][neighbour] > rad){

@@ -11,7 +11,6 @@
     --hr-dy: calc(var(--hex-height) * 1.1);
 }
 
-
 .rot0 { transform: rotate(0deg); }
 .rot1 { transform: rotate(60deg); }
 .rot2 { transform: rotate(120deg); }
@@ -98,8 +97,26 @@
 }
 
 .hex-selected {
-    filter: brightness(300%);
+    border: 2px solid #00ff00;
+    border-radius: 100%;
+    z-index: 3;
 }
+.hex-sec-selected {
+    filter: brightness(200%);
+}
+
+/*
+.hex-s01 {filter: brightness(100%);}
+.hex-s02 {filter: brightness(102%);}
+.hex-s03 {filter: brightness(104%);}
+.hex-s04 {filter: brightness(106%);}
+.hex-s05, .hex-s05b {filter: brightness(108%);}
+.hex-s06, .hex-s05b {filter: brightness(110%);}
+.hex-s07, .hex-s05b {filter: brightness(112%);}
+.hex-s07 {filter: brightness(214%);}
+.hex-s09 {filter: brightness(116%);}
+.hex-s10 {filter: brightness(118%);}
+*/
 
 .hex-map {
     position: absolute;

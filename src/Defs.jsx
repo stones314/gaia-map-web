@@ -11,6 +11,7 @@ export const images = {
     "Ga": "https://rygg-gaard.no/gaia/img/GaiaHex.png",
     "Tr": "https://rygg-gaard.no/gaia/img/TransdimHex.png",
     "Em": "https://rygg-gaard.no/gaia/img/EmptyHex.png",
+    "Fr": "https://rygg-gaard.no/gaia/img/FreeHex.png",
     "s00": "https://rygg-gaard.no/gaia/img/s00.png",
     "s01": "https://rygg-gaard.no/gaia/img/s01.png",
     "s02": "https://rygg-gaard.no/gaia/img/s02.png",
@@ -25,19 +26,19 @@ export const images = {
     "s08": "https://rygg-gaard.no/gaia/img/s08.png",
     "s09": "https://rygg-gaard.no/gaia/img/s09.png",
     "s10": "https://rygg-gaard.no/gaia/img/s10.png",
-    "c01": "https://rygg-gaard.no/gaia/img/CenterHex01.png",
-    "c02": "https://rygg-gaard.no/gaia/img/CenterHex02.png",
-    "c03": "https://rygg-gaard.no/gaia/img/CenterHex03.png",
-    "c04": "https://rygg-gaard.no/gaia/img/CenterHex04.png",
-    "c05": "https://rygg-gaard.no/gaia/img/CenterHex05.png",
-    "c05b": "https://rygg-gaard.no/gaia/img/CenterHex05b.png",
-    "c06": "https://rygg-gaard.no/gaia/img/CenterHex06.png",
-    "c06b": "https://rygg-gaard.no/gaia/img/CenterHex06b.png",
-    "c07": "https://rygg-gaard.no/gaia/img/CenterHex07.png",
-    "c07b": "https://rygg-gaard.no/gaia/img/CenterHex07b.png",
-    "c08": "https://rygg-gaard.no/gaia/img/CenterHex08.png",
-    "c09": "https://rygg-gaard.no/gaia/img/CenterHex09.png",
-    "c10": "https://rygg-gaard.no/gaia/img/CenterHex10.png",
+    "c01": "https://rygg-gaard.no/gaia/img/HexCenter01.png",
+    "c02": "https://rygg-gaard.no/gaia/img/HexCenter02.png",
+    "c03": "https://rygg-gaard.no/gaia/img/HexCenter03.png",
+    "c04": "https://rygg-gaard.no/gaia/img/HexCenter04.png",
+    "c05": "https://rygg-gaard.no/gaia/img/HexCenter05.png",
+    "c05b": "https://rygg-gaard.no/gaia/img/HexCenter05b.png",
+    "c06": "https://rygg-gaard.no/gaia/img/HexCenter06.png",
+    "c06b": "https://rygg-gaard.no/gaia/img/HexCenter06b.png",
+    "c07": "https://rygg-gaard.no/gaia/img/HexCenter07.png",
+    "c07b": "https://rygg-gaard.no/gaia/img/HexCenter07b.png",
+    "c08": "https://rygg-gaard.no/gaia/img/HexCenter08.png",
+    "c09": "https://rygg-gaard.no/gaia/img/HexCenter09.png",
+    "c10": "https://rygg-gaard.no/gaia/img/HexCenter10.png",
     "Rot": "https://rygg-gaard.no/gaia/img/RotateSec.png",
 };
 
@@ -46,6 +47,23 @@ export const sectorCenter = [
     [11, 4], [9, 9], [7, 14], [5, 19],
     [14, 6], [12, 11], [10, 16], [8, 21]
 ];
+
+export const getCenterRef = {
+    "s00": "Fr",
+    "s01": "c01",
+    "s02": "c02",
+    "s03": "c03",
+    "s04": "c04",
+    "s05": "c05",
+    "s05b": "c05b",
+    "s06": "c06",
+    "s06b": "c06b",
+    "s07": "c07",
+    "s07b": "c07b",
+    "s08": "c08",
+    "s09": "c09",
+    "s10": "c10",
+};
 
 export function getSectorArray(id) {
     if (id === "s01") {
@@ -127,9 +145,9 @@ export function getSectorArray(id) {
             ["Em", "Em", "Em", "Em", "Em", "Em", "Bk", "Em", "Em", "Em", "Tr", "Em"]];
     }
     return [
-        ["No"],
-        ["No", "No", "No", "No", "No", "No"],
-        ["No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No"]];
+        ["Fr"],
+        ["Fr", "Fr", "Fr", "Fr", "Fr", "Fr"],
+        ["Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr", "Fr"]];
 }
 
 export function getSecOpt(numSec, optNum) {
@@ -281,6 +299,8 @@ export function makeHexMap(sectors, rotations) {
             hexMap[i].push({
                 "Type": "No",
                 "Sec": "s00",
+                "Rot": 0,
+                "Slot": 0,
             });
         }
     }
@@ -292,12 +312,17 @@ export function makeHexMap(sectors, rotations) {
         var rad = 0;
         hexMap[row][col]["Type"] = hexes[rad][0];
         hexMap[row][col]["Sec"] = sector;
+        hexMap[row][col]["Rot"] = rotations[index];
+        hexMap[row][col]["Slot"] = index;
+
         for (rad = 1; rad < 3; rad++) {
             var ringCoords = getRingCoord(row, col, rad);
             var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
             for (const [ringId, [r, c]] of ringCoords.entries()) {
                 hexMap[r][c]["Type"] = ringPlanets[ringId];
                 hexMap[r][c]["Sec"] = sector;
+                hexMap[r][c]["Rot"] = rotations[index];
+                hexMap[r][c]["Slot"] = index;
             }
         }
     }
