@@ -18,6 +18,26 @@
 .rot4 { transform: rotate(240deg); }
 .rot5 { transform: rotate(300deg); }
 
+.map-eval-box {
+    width: var(--map-width);
+    height: var(--map-height);
+    /*
+    border: 2px solid #ff00ff;
+    */
+}
+
+.map-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--map-width);
+    height: var(--map-height);
+    /*
+    border: 2px solid #00ffff;
+    */
+    z-index: 1;
+}
+
 .illegal {
     background-color: palevioletred;
 }
@@ -94,6 +114,18 @@
 .map-col-3 {
     top: calc(var(--sec-delta-y) * 3);
     left: calc(var(--sec-delta-x) * 3);
+}
+
+.hex-info {
+    border: 2px solid darkblue;
+    width: calc(var(--menu-width) / 2);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    position: fixed;
+    right: var(--menu-width);
+    bottom: 2vmin;
 }
 
 .hex-selected {
@@ -183,3 +215,11 @@
 .hex-col-21 { top: calc(var(--hex-dy) * 21); left: calc(var(--hex-dx) * 21); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
 .hex-col-22 { top: calc(var(--hex-dy) * 22); left: calc(var(--hex-dx) * 22); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
 .hex-col-23 { top: calc(var(--hex-dy) * 23); left: calc(var(--hex-dx) * 23); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
+
+
+@media screen and (orientation:portrait) {
+
+    .map-eval-box {
+        flex-direction: column;
+    }
+}

@@ -14,8 +14,12 @@ code {
 
 :root {
     --main-height: 100vmin;
-    --menu-width: 20vmax;
-    --menu-height: 20vmin;
+    --menu-width: 50vmax;
+    --menu-height: 90vmin;
+    /*Button stuff:*/
+    --img-btn-back: darkgrey;
+    --img-btn-border: black;
+    --img-btn-sel-back: green;
 }
 
 .App {
@@ -52,42 +56,7 @@ code {
     position: fixed;
     right: 0;
     top: var(--menu-height);
-}
-
-.hex-info {
-    border: 2px solid darkblue;
-    width: calc(var(--menu-width) / 2);
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    z-index: 2;
-    position: fixed;
-    right: var(--menu-width);
-    bottom: 2vmin;
-}
-
-.menu-box-2 {
-    flex: 1;
-}
-
-.map-eval-box {
-    width: var(--map-width);
-    height: var(--map-height);
-    /*
-    border: 2px solid #ff00ff;
-    */
-}
-
-.map-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--map-width);
-    height: var(--map-height);
-    /*
-    border: 2px solid #00ffff;
-    */
-    z-index: 1;
+    background-color: white;
 }
 
 .eval-box {
@@ -120,11 +89,6 @@ code {
     .menu-box {
         flex-direction: row;
     }
-
-    .map-eval-box {
-        flex-direction: column;
-    }
-
     .eval-box {
         flex-direction: row;
     }

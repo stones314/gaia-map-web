@@ -181,6 +181,7 @@ class App extends React.Component {
                         onClickShowSettings={() => this.onClickShowSettings()}
                         onClickDebug={() => this.onClickDebug()}
                         showSettings={this.state.showSettings}
+                        showDebug={this.state.showDebug}
                     />
                 </div>
                 {this.renderSettings()}

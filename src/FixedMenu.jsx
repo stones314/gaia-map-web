@@ -1,69 +1,62 @@
 import React from 'react';
 import './Menu.css';
+import { images } from './Defs';
 
-class ModeSelect extends React.Component {
-
+class FixedImgButton extends React.Component {
     render() {
-        var swapBtnClass = "menu-mode-btn";
-        var rotBtnClass = "menu-mode-btn";
-        if (this.props.swapMode) {
-            swapBtnClass += " menu-mode-sel";
-        }
-        else {
-            rotBtnClass += " menu-mode-sel";
+        var btnClass = "img-btn "+ this.props.btnClass;
+        if (this.props.isSelected) {
+            btnClass += " img-btn-sel";
         }
         return (
-            <div>
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        Edit map by
-                    </div>
-                </div>
-                <div className="menu-row">
-                    <button className={swapBtnClass} onClick={this.props.onClickSwap}>
-                        Swap
-                    </button>
-                    <button className={rotBtnClass} onClick={this.props.onClickRot}>
-                        Rotate
-                    </button>
-                </div>
+            <div className={btnClass}>
+                <img
+                    className={this.props.imgClass}
+                    src={images[this.props.imgRef]}
+                    alt={this.props.imgAlt}
+                    onClick={this.props.onClick}
+                />
             </div>
         )
     }
 }
 
 class FixedMenu extends React.Component {
-
-    renderDebug(doIt) {
-        if (doIt) {
-            return (
-                <button className="menu-toggle-btn" onClick={this.props.onClickDebug}>
-                    Debug
-                </button>
-            );
-        }
-        else {
-            return;
-        }
-    }
-
     render() {
-        var menuText = "Show Settings";
-        if (this.props.showSettings)
-            menuText = "Hide Settings";
         return (
             <div className="menu-fixed">
-                <ModeSelect
-                    onClickSwap={() => this.props.onClickSwap()}
-                    onClickRot={() => this.props.onClickRot()}
-                    swapMode={this.props.swapMode}
+                <FixedImgButton
+                    isSelected={this.props.showSettings}
+                    onClick={this.props.onClickShowSettings}
+                    btnClass="menu-btn"
+                    imgClass="menu-btn-img"
+                    imgRef="Cog"
+                    imgAlt="Menu"
                 />
-                <div className="menu-row">
-                    <button className="menu-toggle-btn" onClick={this.props.onClickShowSettings}>
-                        Settings
-                    </button>
-                    {this.renderDebug(true)}
-                </div>
+                <FixedImgButton
+                    onClick={() => this.props.onClickRot()}
+                    isSelected={!this.props.swapMode}
+                    btnClass="rot-btn"
+                    imgClass="rot-btn-img"
+                    imgRef="Rot"
+                    imgAlt="Rotate"
+                />
+                <FixedImgButton
+                    onClick={() => this.props.onClickSwap()}
+                    isSelected={this.props.swapMode}
+                    btnClass="swap-btn"
+                    imgClass="swap-btn-img"
+                    imgRef="Swap"
+                    imgAlt="Swap"
+                />
+                <FixedImgButton
+                    onClick={() => this.props.onClickDebug()}
+                    isSelected={this.props.showDebug}
+                    btnClass="hex-btn"
+                    imgClass="hex-btn-img"
+                    imgRef="HM"
+                    imgAlt="HexMap"
+                />
             </div>
         )
     }

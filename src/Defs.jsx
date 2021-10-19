@@ -40,6 +40,9 @@ export const images = {
     "c09": "https://rygg-gaard.no/gaia/img/HexCenter09.png",
     "c10": "https://rygg-gaard.no/gaia/img/HexCenter10.png",
     "Rot": "https://rygg-gaard.no/gaia/img/RotateSec.png",
+    "Swap": "https://rygg-gaard.no/gaia/img/SwapSec.png",
+    "Cog": "https://rygg-gaard.no/gaia/img/Cog.png",
+    "HM": "https://rygg-gaard.no/gaia/img/HexMap.png",
 };
 
 
