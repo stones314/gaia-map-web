@@ -12,6 +12,7 @@ export const images = {
     "Tr": "https://rygg-gaard.no/gaia/img/TransdimHex.png",
     "Em": "https://rygg-gaard.no/gaia/img/EmptyHex.png",
     "Fr": "https://rygg-gaard.no/gaia/img/FreeHex.png",
+    "No": "https://rygg-gaard.no/gaia/img/FreeHex.png",
     "s00": "https://rygg-gaard.no/gaia/img/s00.png",
     "s01": "https://rygg-gaard.no/gaia/img/s01.png",
     "s02": "https://rygg-gaard.no/gaia/img/s02.png",
@@ -210,15 +211,15 @@ export function getSecOpt(numSec, optNum) {
             opt = Math.floor(2.0 * Math.random());
         if (opt === 0)
             return [
-               "s00", "s01", "s02", "s03",
-               "s00", "s04", "s05b", "s06b",
-               "s00", "s07b", "s09", "s10"
+                "s01", "s02", "s03", "s00", 
+                "s04", "s05b", "s06b", "s00", 
+                "s07b", "s09", "s10", "s00", 
             ];
         if (opt === 1)
             return [
-               "s00", "s01", "s02", "s03",
-               "s00", "s05b", "s06", "s07",
-               "s00", "s08", "s09", "s10"
+                "s01", "s02", "s03", "s00",
+                "s05b", "s06", "s07", "s00",
+                "s08", "s09", "s10", "s00",
             ];
     }
     return [

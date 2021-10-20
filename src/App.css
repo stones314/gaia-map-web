@@ -53,11 +53,6 @@ code {
 @media screen and (orientation:portrait) {
     :root {
         --main-height: 100vmax;
-        --menu-width: 30vmin;
-        --map-width: 100vmin;
-        --menu-height: 40vmax;
-        --map-height: calc(100vmax - var(--menu-height));
-        --sec-height: calc(var(--map-height) * 0.30);
     }
 
     .App {

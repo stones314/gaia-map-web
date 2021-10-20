@@ -1,7 +1,7 @@
 import React from 'react';
 import './Map.css';
 import { images, sectorCenter, getCenterRef } from './Defs';
-import { makeHexMap, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
+import { makeHexMap, getNeighbourInfo, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
 import Evaluation from './Evaluation';
 
 export class HexMapView extends React.Component {
@@ -20,18 +20,25 @@ export class HexMapView extends React.Component {
     }
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
-        makeInfoMap(hexMap);
+        getNeighbourInfo(hexMap);
         var nbrMat = getNeighbourMatrix(hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
         var illegalClass = hasEqNbr ? " illegal" : " legal";
         var rows = [];
         for (const [row, hexes] of hexMap.entries()) {
             var planets = [];
-            for (const [col, planet] of hexes.entries()) {
-                if (col < 13 || row < 13) {
+            for (const [col, hex] of hexes.entries()) {
+                var ignored = (row > 12 && col > 12)
+                    || (row > 9 && col > 21)
+                    || (row > 10 && col > 17)
+                    || (row > 14 && col > 7)
+                    || (hex["Sec"] === "s00")
+                    ;
+
+                if (!ignored) {
                     var showRing = false;
                     var imgClass = "hex-img";
-                    var imgRef = planet["Type"];
+                    var imgRef = hex["Type"];
                     var divClass = "hex-col-" + col + " rot" + hexMap[row][col]["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
@@ -40,7 +47,7 @@ export class HexMapView extends React.Component {
                             else
                                 showRing = true;
                         }
-                        else if (this.props.hexInfo["Slot"] === planet["Slot"]) {
+                        else if (this.props.hexInfo["Slot"] === hex["Slot"]) {
                             imgClass += " hex-sec-selected";
                         }
                         if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr") {
@@ -55,15 +62,13 @@ export class HexMapView extends React.Component {
                             <div
                                 className={divClass}
                                 key={col}
-                                onClick={() => this.props.onClick(hexMap[row][col]["Slot"])}
                             >
                                 {this.renderSelHexImg(showRing)}
                                 <img
                                     className={imgClass}
                                     src={images[imgRef]}
                                     onMouseOver={() => this.props.onClickHex(hexMap[row][col])}
-                                    alt={planet["Type"]}
-                                    onClick={() => this.props.onClick(hexMap[row][col]["Slot"])}
+                                    alt={hex["Type"]}
                                 />
                             </div>
                         );
@@ -83,15 +88,57 @@ export class HexMapView extends React.Component {
 
 export class HexInfoView extends React.Component {
     render() {
-        var keys = ["Sec", "Type", "Rot","Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No", "Slot"];
+        var keys = [
+            "Sec",
+            "Type",
+            "Rot",
+            "Slot",
+            "Row",
+            "Col",
+            "Re",
+            "Bl",
+            "Wh",
+            "Bk",
+            "Br",
+            "Ye",
+            "Or",
+            "Ga",
+            "Tr",
+            "T0",
+            "T1",
+            "T2",
+            "T3",
+            "Em",
+            "No",
+            "Nbr",
+        ];
+        if (!this.props.hexInfo["No"])
+            return null;
         var rows = [];
         for (const [i, key] of keys.entries()) {
+            var sum = "";
+            if (key === "Nbr")
+                sum += "("+(this.props.hexInfo[key][0]
+                    + this.props.hexInfo[key][1]
+                    + this.props.hexInfo[key][2])+")";
             rows.push(
-                <div>
-                    {key + ": " + this.props.hexInfo[key]}
+                <div key={key}>
+                    {key + ": " + this.props.hexInfo[key] + sum}
                 </div>
             );
         }
+        var a = 6 - this.props.hexInfo["Nbr"][0];
+        var b = 12 - this.props.hexInfo["Nbr"][1];
+        var c = 18 - this.props.hexInfo["Nbr"][2]
+        rows.push(
+            <div key="---">
+                {"---: [" + a
+                    + ", " + b
+                    + ", " + c
+                    + "]("+(a+b+c) + ")"
+                }
+            </div>
+        );
         return (
             <div className="hex-info">
                 {rows}
@@ -129,6 +176,9 @@ class SectorView extends React.Component {
 export class MapView extends React.Component {
 
     renderSector(i, col) {
+        var ignored = (i === 11)
+            || (i === 0 && this.props.numSect !== 9);
+        if (ignored) return null;
         return (
             <SectorView
                 key={i}
@@ -165,6 +215,7 @@ export class MapView extends React.Component {
                         onClickHex={(hexInfo) => this.props.onClickHex(hexInfo)}
                         hexInfo={this.props.hexInfo}
                         onClick={(i) => this.props.onClick(i)}
+                        numSect={this.props.numSect}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}
@@ -177,8 +228,7 @@ export class MapView extends React.Component {
                 <div className="map-eval-box">
                     {this.renderRow(0)}
                     {this.renderRow(1)}
-                    {this.renderRow(2)}
-                    <Evaluation balance={this.props.balanceStats} />
+                    {this.renderRow(2)}                    
                 </div>
             );
         }

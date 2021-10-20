@@ -5,6 +5,7 @@
     --sec-delta-x: calc(var(--sec-height) * 0.89);
     --sec-delta-y: calc(var(--sec-height) * 0.1);
     --hex-height: 5vmin;
+    --hex-img-height: calc(var(--hex-height) * 1.1);
     --hex-dx: calc(var(--hex-height) * 0.98);
     --hex-dy: calc(var(--hex-height) * 0.55);
     --hr-dx: calc(var(--hex-height) * 0.0);
@@ -19,8 +20,7 @@
 .rot5 { transform: rotate(300deg); }
 
 .map-eval-box {
-    width: var(--map-width);
-    height: var(--map-height);
+    width: 99.5%;
     /*
     border: 2px solid #ff00ff;
     */
@@ -30,8 +30,7 @@
     position: absolute;
     top: 11.7vmin;
     left: 0;
-    width: var(--map-width);
-    height: var(--map-height);
+    width: 99.5%;
     /*
     border: 2px solid #00ffff;
     */
@@ -110,14 +109,14 @@
 
 .hex-info {
     border: 2px solid darkblue;
-    width: calc(var(--menu-width) / 2);
-    height: auto;
+    width: 10vmax;
     display: flex;
     flex-direction: column;
     z-index: 2;
     position: fixed;
-    right: var(--menu-width);
+    right: 0;
     bottom: 2vmin;
+    background-color: darkgray;
 }
 
 .hex-selected {
@@ -144,8 +143,7 @@
     position: absolute;
     top: calc(0vmin - 7 * var(--hr-dy));
     left: 0.5vmin;
-    height: calc(var(--map-height) + 6 * var(--hex-height));
-    width: var(--map-width);
+    width: 99.5%;
     z-index: 1;
     /*
     border: 2px solid #ff00ff;
@@ -153,7 +151,7 @@
 }
 
 .hex-img {
-    height: calc(var(--hex-height) * 1.1);
+    height: var(--hex-img-height);
     margin: 0;
     position: absolute;
     top: 50%;
@@ -161,7 +159,7 @@
     transform: translate(-50%, -50%);
 }
 .hex-img-over {
-    height: calc(var(--hex-height) * 1.1);
+    height: var(--hex-img-height);
     margin: 0;
     position: absolute;
     top: 50%;

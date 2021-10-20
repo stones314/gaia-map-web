@@ -136,25 +136,29 @@ export function makeHexMap(sectors, rotations) {
         hexMap.push([]);
         for (var j = 0; j < 24; j++) {
             hexMap[i].push({
-                "Visited": 0,
-                "Re": 7,
-                "Bl": 7,
-                "Wh": 7,
-                "Bk": 7,
-                "Br": 7,
-                "Ye": 7,
-                "Or": 7,
-                "Ga": 7,
-                "Tr": 7,
-                "Em": [0, 0, 0],
-                "No": [0, 0, 0],
-                "Fr": [0, 0, 0],
                 "Row": 0,
                 "Col": 0,
                 "Type": "No",
                 "Sec": "s00",
                 "Rot": 0,
                 "Slot": 0,
+                "Re": [0, 0, 0],
+                "Bl": [0, 0, 0],
+                "Wh": [0, 0, 0],
+                "Bk": [0, 0, 0],
+                "Br": [0, 0, 0],
+                "Ye": [0, 0, 0],
+                "Or": [0, 0, 0],
+                "Ga": [0, 0, 0],
+                "Tr": [0, 0, 0],
+                "Em": [0, 0, 0],
+                "No": [0, 0, 0],
+                "T0": [0, 0, 0],
+                "T1": [0, 0, 0],
+                "T2": [0, 0, 0],
+                "T3": [0, 0, 0],
+                "Nbr": [0, 0, 0],
+                "Visited": 0,
             });
         }
     }
@@ -168,6 +172,8 @@ export function makeHexMap(sectors, rotations) {
         hexMap[row][col]["Sec"] = sector;
         hexMap[row][col]["Rot"] = rotations[index];
         hexMap[row][col]["Slot"] = index;
+        hexMap[row][col]["Row"] = row;
+        hexMap[row][col]["Col"] = col;
 
         for (rad = 1; rad < 3; rad++) {
             var ringCoords = getRingCoord(row, col, rad);
@@ -177,6 +183,8 @@ export function makeHexMap(sectors, rotations) {
                 hexMap[r][c]["Sec"] = sector;
                 hexMap[r][c]["Rot"] = rotations[index];
                 hexMap[r][c]["Slot"] = index;
+                hexMap[r][c]["Row"] = r;
+                hexMap[r][c]["Col"] = c;
             }
         }
     }
@@ -184,35 +192,53 @@ export function makeHexMap(sectors, rotations) {
     return hexMap;
 }
 
+function isOutsideMap(hexType) {
+    return (hexType === "No" || hexType === "Fr");
+}
 
-export function makeInfoMap(hexMap) {
+function isPlanet(hexType) {
+    return (hexType !== "No" && hexType !== "Fr" && hexType !== "Em")
+}
+
+function isTerraformable(hexType) {
+    return (isPlanet(hexType) && hexType !== "Tr" && hexType != "Ga")
+}
+
+export function getNeighbourInfo(hexMap) {
  
     for (const [row, hexes] of hexMap.entries()) {
-        for (const [col, planet] of hexes.entries()) {
-            hexMap[row][col]["Row"] = row;
-            hexMap[row][col]["Col"] = col;
-            hexMap[row][col]["Type"] = planet["Type"];
-            hexMap[row][col]["Sec"] = hexMap[row][col]["Sec"];
-            hexMap[row][col]["Rot"] = hexMap[row][col]["Rot"];
-            hexMap[row][col]["Slot"] = hexMap[row][col]["Slot"];
-            if (planet["Type"] != "No" && planet["Type"] != "Em" && planet["Type"] != "Fr") {
+        for (const [col, hex] of hexes.entries()) {
+            if (isPlanet(hex["Type"])) {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringPlanets = getRingPlanets(row, col, rad, hexMap);
                     for (const [i, neighbour] of ringPlanets.entries()) {
-                        if (neighbour === "Em") {
-                            hexMap[row][col][neighbour][rad - 1]++;
+                        if (isOutsideMap(neighbour)) {
+                            hex["No"][rad - 1]++;
                         }
-                        else if (neighbour == "No" || neighbour === "Fr") {
-                            hexMap[row][col]["No"][rad - 1]++;
+                        else {
+                            hex[neighbour][rad - 1]++;
+                            if (neighbour != "Em")
+                                hex["Nbr"][rad - 1]++;
                         }
-                        else if (hexMap[row][col][neighbour] > rad){
-                            hexMap[row][col][neighbour] = rad;
+                        if (isTerraformable(hex["Type"]) && isTerraformable(neighbour)) {
+                            var terraCost = "T" + colorDist(hex["Type"], neighbour);
+                            hex[terraCost][rad - 1]++;
                         }
                     }
                 }
             }
         }
     }
+}
+
+function evaluatePlanetHappiness(hexMap) {
+
+    for (const [row, hexes] of hexMap.entries()) {
+        for (const [col, hex] of hexes.entries()) {
+
+        }
+    }
+    return hexMap;
 }
 
 export function getNeighbourMatrix(hexMap) {
@@ -226,11 +252,13 @@ export function getNeighbourMatrix(hexMap) {
 
     for (const [row, hexes] of hexMap.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
-            var neighbour = hexMap[row][col]["Type"];
+            var neighbour = hexInfo["Type"];
+            if (neighbour === "Fr")
+                neighbour = "No";
             for (const [i, planet] of planets.entries()) {
-                var nbrDist = hexInfo[planet];
-                if (nbrDist < 7)
-                    nbrMat[planet][neighbour][nbrDist - 1]++;
+                nbrMat[planet][neighbour][0] += hexInfo[planet][0];
+                nbrMat[planet][neighbour][1] += hexInfo[planet][1];
+                nbrMat[planet][neighbour][2] += hexInfo[planet][2];
             }
         }
     }
@@ -324,7 +352,7 @@ function getScalarBalance(balance) {
 
 export function evaluateMap(sectors, rotations, debug) {
     var hexMap = makeHexMap(sectors, rotations);
-    makeInfoMap(hexMap);
+    getNeighbourInfo(hexMap);
     var nbrMat = getNeighbourMatrix(hexMap);
     if (hasEqualNeighbour(nbrMat, 2))
         return -1.0;

@@ -8,7 +8,7 @@ import Evaluation from './Evaluation';
 import { getSecOpt } from './Defs';
 import {
     makeHexMap,
-    makeInfoMap,
+    getNeighbourInfo,
     getNeighbourMatrix,
     hasEqualNeighbour,
     getExpNbrStats,
@@ -127,7 +127,7 @@ class App extends React.Component {
 
     evaluateMap(sectors, rotations) {
         var hexMap = makeHexMap(sectors, rotations);
-        makeInfoMap(hexMap);
+        getNeighbourInfo(hexMap);
         var nbrMat = getNeighbourMatrix(hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
         var balance = getExpNbrStats(nbrMat);

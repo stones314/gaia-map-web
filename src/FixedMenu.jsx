@@ -22,33 +22,52 @@ class FixedImgButton extends React.Component {
 }
 
 class FixedMenu extends React.Component {
+    renderBottomMenu(isSectorView) {
+        if (isSectorView) {
+            return (
+                <div className="menu-fixed-bottom">
+                    <FixedImgButton
+                        onClick={() => this.props.onClickRot()}
+                        isSelected={!this.props.swapMode}
+                        imgRef="Rot"
+                        imgAlt="Rotate"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickSwap()}
+                        isSelected={this.props.swapMode}
+                        imgRef="Swap"
+                        imgAlt="Swap"
+                    />
+                </div>
+            );
+        }
+        return null;
+    }
+
     render() {
         return (
-            <div className="menu-fixed">
-                <FixedImgButton
-                    isSelected={this.props.showSettings}
-                    onClick={this.props.onClickShowSettings}
-                    imgRef="Cog"
-                    imgAlt="Menu"
-                />
-                <FixedImgButton
-                    onClick={() => this.props.onClickRot()}
-                    isSelected={!this.props.swapMode}
-                    imgRef="Rot"
-                    imgAlt="Rotate"
-                />
-                <FixedImgButton
-                    onClick={() => this.props.onClickSwap()}
-                    isSelected={this.props.swapMode}
-                    imgRef="Swap"
-                    imgAlt="Swap"
-                />
-                <FixedImgButton
-                    onClick={() => this.props.onClickDebug()}
-                    isSelected={this.props.showDebug}
-                    imgRef="HM"
-                    imgAlt="HexMap"
-                />
+            <div>
+                <div className="menu-fixed-top">
+                    <FixedImgButton
+                        isSelected={this.props.showSettings}
+                        onClick={this.props.onClickShowSettings}
+                        imgRef="Cog"
+                        imgAlt="Menu"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickDebug()}
+                        isSelected={this.props.showDebug}
+                        imgRef="HM"
+                        imgAlt="HexMap"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickDebug()}
+                        isSelected={!this.props.showDebug}
+                        imgRef="SM"
+                        imgAlt="SectorMap"
+                    />
+                </div>
+                {this.renderBottomMenu(!this.props.showDebug)}
             </div>
         )
     }
