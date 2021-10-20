@@ -1,3 +1,10 @@
+# Web Page for evaluation and generation of Gaia Maps
+[Gaia Project](https://boardgamegeek.com/boardgame/220308/gaia-project) is a very fun boardgame using a modular map.
+
+This web application is a tool to evaluate the balance of a map, and to automatically generate balanced maps.
+
+The web app was created using Create React App, which is amazing! See below for details :)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
