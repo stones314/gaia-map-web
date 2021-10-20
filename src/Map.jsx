@@ -5,6 +5,19 @@ import { makeHexMap, makeInfoMap, getNeighbourMatrix, hasEqualNeighbour } from '
 import Evaluation from './Evaluation';
 
 export class HexMapView extends React.Component {
+    renderSelHexImg(isSelected) {
+        if (isSelected) {
+            return (
+                <img
+                    className="hex-img-over"
+                    src={images["HSel"]}
+                    alt="HSel"
+                />
+            )
+        }
+        else
+            return;
+    }
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
         makeInfoMap(hexMap);
@@ -16,12 +29,16 @@ export class HexMapView extends React.Component {
             var planets = [];
             for (const [col, planet] of hexes.entries()) {
                 if (col < 13 || row < 13) {
+                    var showRing = false;
                     var imgClass = "hex-img";
                     var imgRef = planet["Type"];
                     var divClass = "hex-col-" + col + " rot" + hexMap[row][col]["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
-                            imgClass += " hex-selected";
+                            if (imgRef == "Em" || imgRef == "Fr")
+                                imgClass += " hex-selected";
+                            else
+                                showRing = true;
                         }
                         else if (this.props.hexInfo["Slot"] === planet["Slot"]) {
                             imgClass += " hex-sec-selected";
@@ -35,7 +52,9 @@ export class HexMapView extends React.Component {
                             <div
                                 className={divClass}
                                 key={col}
+                                onClick={() => this.props.onClick(hexMap[row][col]["Slot"])}
                             >
+                                {this.renderSelHexImg(showRing)}
                                 <img
                                     className={imgClass}
                                     src={images[imgRef]}
@@ -161,7 +180,6 @@ export class MapView extends React.Component {
             );
         }
     }
-
 
     render() {
         return (

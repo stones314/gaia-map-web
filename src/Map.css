@@ -121,13 +121,10 @@
 }
 
 .hex-selected {
-    filter: brightness(200%);
-    border: 2px solid #00ff00;
-    border-radius: 100%;
-    z-index: 3;
+    filter: brightness(300%);
 }
 .hex-sec-selected {
-    filter: brightness(200%);
+    filter: brightness(150%);
 }
 
 /*
@@ -162,6 +159,15 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.hex-img-over {
+    height: calc(var(--hex-height) * 1.1);
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
 }
 
 .hex-row-0  { top: calc(var(--hr-dy) *   0); left: calc(var(--hr-dx) *  0); position: absolute; }
