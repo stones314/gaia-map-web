@@ -22,7 +22,7 @@ export class HexMapView extends React.Component {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
         getNeighbourInfo(hexMap);
         var nbrMat = getNeighbourMatrix(hexMap);
-        var hasEqNbr = hasEqualNeighbour(nbrMat, 2);
+        var hasEqNbr = hasEqualNeighbour(nbrMat, this.props.minEqDist);
         var illegalClass = hasEqNbr ? " illegal" : " legal";
         var rows = [];
         for (const [row, hexes] of hexMap.entries()) {
@@ -50,8 +50,9 @@ export class HexMapView extends React.Component {
                         else if (this.props.hexInfo["Slot"] === hex["Slot"]) {
                             imgClass += " hex-sec-selected";
                         }
-                        if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr") {
-                            showRing |= hexMap[row][col][imgRef] == 1;
+                        if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr" && imgRef != "Ga") {
+                            for (var r = 2; r < this.props.minEqDist; r++)
+                                showRing |= hexMap[row][col][imgRef][r-1] > 0;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
@@ -216,6 +217,7 @@ export class MapView extends React.Component {
                         hexInfo={this.props.hexInfo}
                         onClick={(i) => this.props.onClick(i)}
                         numSect={this.props.numSect}
+                        minEqDist={this.props.minEqDist}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}

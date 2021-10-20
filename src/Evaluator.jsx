@@ -361,6 +361,32 @@ export function evaluateMap(sectors, rotations, debug) {
     return score;
 }
 
+function getMapValidity(sectors, rotations, criteria) {
+    /*
+     * Return values:
+     * 0 - map is valid
+     * 1 - failed on minimum equal dist
+     */
+    var hexMap = makeHexMap(sectors, rotations);
+    getNeighbourInfo(hexMap);
+    var nbrMat = getNeighbourMatrix(hexMap);
+    if (hasEqualNeighbour(nbrMat, criteria.minEqDist))
+        return 1;
+    return 0;
+}
+
+export function getRandomValidMap(sectors, rotations, criteria, withSwap) {
+    randomizeMap(sectors, rotations, withSwap);
+    var failures = 0;
+    while (getMapValidity(sectors, rotations, criteria) > 0) {
+        failures++;
+        if (failures > criteria.maxFail)
+            return [false, failures];
+        randomizeMap(sectors, rotations, withSwap);
+    }
+    return [true, failures];
+}
+
 export function optimizeMap(sectors, rotations, withSwap) {
     var tryCount = 1000;
     var bestScore = 1000.0;

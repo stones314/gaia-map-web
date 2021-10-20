@@ -1,8 +1,9 @@
 import React from 'react';
 import './Menu.css';
+import Settings from './Settings';
 
 class NumSectorSelect extends React.Component {
-    renderOpts(secId) {
+    renderOpts() {
         const vars = [
             ['A', 'B', 'C', 'D', 'E'],
             ['A'],
@@ -74,6 +75,12 @@ class Menu extends React.Component {
                     numSec={this.props.numSec}
                     onClickOpt={(variant) => this.props.onClickOpt(variant)}
                     secOpt={this.props.secOpt}
+                />
+                <Settings
+                    minEqDist={this.props.minEqDist}
+                    onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
+                    rngWithSwap={this.props.rngWithSwap}
+                    onClickRngSwap={(doSwap) => this.props.onClickRngSwap(doSwap)}
                 />
                 <div className="menu-row">
                     <button onClick={this.props.onClickRandom}>Randomize</button>
