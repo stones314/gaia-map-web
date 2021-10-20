@@ -13,6 +13,23 @@ code {
     --menu-font-size: 3vmin;
 }
 
+.menu-box {
+    /*
+    border: 2px solid #ff00ff;
+    */
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 4;
+    position: fixed;
+    right: 0;
+    top: 12vmin;
+    margin: 1px;
+    background-color: white;
+    border: 2px solid #231233;
+}
+
 .menu-box-2 {
     flex: 1;
 }
@@ -78,23 +95,21 @@ code {
     z-index: 5;
     background-color: white;
     border: 2px solid var(--img-btn-border);
+    width: auto;
 }
 
 .img-btn {
     background-color: var(--img-btn-back);
     border: 2px solid var(--img-btn-border);
     margin: 1px;
+    height: 10vmin;
 }
 
 .img-btn-sel {
     background-color: var(--img-btn-sel-back);
 }
 
-.menu-btn, .rot-btn, .swap-btn, .hex-btn {
-    height: 5vmax;
-}
-
-.menu-btn-img, .rot-btn-img, .swap-btn-img, .hex-btn-img {
+.btn-img {
     height: 100%;
     margin: 0;
     position: relative;

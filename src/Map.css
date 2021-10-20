@@ -1,6 +1,6 @@
 :root {
     --map-height: 98vmin;
-    --map-width: calc(100vmax - var(--menu-width));
+    --map-width: calc(100vmax);
     --sec-height: calc(var(--map-height) * 0.35 * 0.8);
     --sec-delta-x: calc(var(--sec-height) * 0.89);
     --sec-delta-y: calc(var(--sec-height) * 0.1);
@@ -28,7 +28,7 @@
 
 .map-box {
     position: absolute;
-    top: 0;
+    top: 11.7vmin;
     left: 0;
     width: var(--map-width);
     height: var(--map-height);
@@ -36,14 +36,6 @@
     border: 2px solid #00ffff;
     */
     z-index: 1;
-}
-
-.illegal {
-    background-color: palevioletred;
-}
-
-.legal {
-    background-color: darkseagreen;
 }
 
 .map-img {

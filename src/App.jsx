@@ -141,16 +141,13 @@ class App extends React.Component {
     renderSettings() {
         if (this.state.showSettings) {
             return (
-                <div className="menu-box">
-                    <Menu
-                        onClick={(numSec) => this.onClick(numSec)}
-                        numSec={this.state.numSect}
-                        onClickOpt={(variant) => this.onClickOpt(variant)}
-                        secOpt={this.state.secOpt}
-                        onClickRandom={() => this.onClickRandom()}
-                    />
-                    <Settings />
-                </div>
+                <Menu
+                    onClick={(numSec) => this.onClick(numSec)}
+                    numSec={this.state.numSect}
+                    onClickOpt={(variant) => this.onClickOpt(variant)}
+                    secOpt={this.state.secOpt}
+                    onClickRandom={() => this.onClickRandom()}
+                />
             );
         }
         else {
@@ -159,8 +156,19 @@ class App extends React.Component {
     }
 
     render() {
+        var illegalClass = this.state.illegal ? " illegal" : " legal";
         return (
-            <div className="App">
+            <div className={"App" + illegalClass}>
+                <FixedMenu
+                    onClickSwap={() => this.onClickSwap()}
+                    onClickRot={() => this.onClickRot()}
+                    swapMode={this.state.swapMode}
+                    onClickShowSettings={() => this.onClickShowSettings()}
+                    onClickDebug={() => this.onClickDebug()}
+                    showSettings={this.state.showSettings}
+                    showDebug={this.state.showDebug}
+                />
+                {this.renderSettings()}
                 <MapView
                     numSect={this.state.numSect}
                     sectors={this.state.sectors}
@@ -172,19 +180,7 @@ class App extends React.Component {
                     onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
                     balanceStats={this.state.balanceStats}
                     hexInfo={this.state.hexInfo}
-                />;
-                <div className="fixed-menu-box">
-                    <FixedMenu
-                        onClickSwap={() => this.onClickSwap()}
-                        onClickRot={() => this.onClickRot()}
-                        swapMode={this.state.swapMode}
-                        onClickShowSettings={() => this.onClickShowSettings()}
-                        onClickDebug={() => this.onClickDebug()}
-                        showSettings={this.state.showSettings}
-                        showDebug={this.state.showDebug}
-                    />
-                </div>
-                {this.renderSettings()}
+                />
             </div>
         )
     }

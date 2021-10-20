@@ -164,9 +164,8 @@ export class MapView extends React.Component {
 
 
     render() {
-        var illegalClass = this.props.illegal ? " illegal" : " legal";
         return (
-            <div className={"map-box" + illegalClass}>
+            <div className="map-box">
                 {this.renderMap(this.props.showDebug)}
             </div>
         )

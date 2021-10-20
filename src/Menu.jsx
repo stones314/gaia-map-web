@@ -68,7 +68,7 @@ class NumSectorSelect extends React.Component {
 class Menu extends React.Component {
     render() {
         return (
-            <div className="menu-box-2">
+            <div className="menu-box">
                 <NumSectorSelect
                     onClick={(numSec) => this.props.onClick(numSec)}
                     numSec={this.props.numSec}
