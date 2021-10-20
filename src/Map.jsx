@@ -43,6 +43,9 @@ export class HexMapView extends React.Component {
                         else if (this.props.hexInfo["Slot"] === planet["Slot"]) {
                             imgClass += " hex-sec-selected";
                         }
+                        if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr") {
+                            showRing = hexMap[row][col][imgRef] == 1;
+                        }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
                                 imgRef = getCenterRef[hexMap[row][col]["Sec"]];
