@@ -18,6 +18,20 @@ export class HexMapView extends React.Component {
         else
             return;
     }
+    renderEqNbrIndicator(isEqual, hexInfo) {
+        if (isEqual) {
+            return (
+                <img
+                    className="hex-img-over"
+                    src={images["RedRing"]}
+                    alt="RedRing"
+                    onMouseOver={() => this.props.onClickHex(hexInfo)}
+                />
+            )
+        }
+        else
+            return;
+    }
     render() {
         var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
         getNeighbourInfo(hexMap);
@@ -37,6 +51,7 @@ export class HexMapView extends React.Component {
 
                 if (!ignored) {
                     var showRing = false;
+                    var eqNbr = false;
                     var imgClass = "hex-img";
                     var imgRef = hex["Type"];
                     var divClass = "hex-col-" + col + " rot" + hexMap[row][col]["Rot"];
@@ -52,18 +67,21 @@ export class HexMapView extends React.Component {
                         }
                         if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr" && imgRef != "Ga") {
                             for (var r = 2; r < this.props.minEqDist; r++)
-                                showRing |= hexMap[row][col][imgRef][r-1] > 0;
+                                eqNbr |= hexMap[row][col][imgRef][r-1] > 0;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
                                 imgRef = getCenterRef[hexMap[row][col]["Sec"]];
                             }
                         }
+                        if (showRing)
+                            eqNbr = false;
                         planets.push(
                             <div
                                 className={divClass}
                                 key={col}
                             >
+                                {this.renderEqNbrIndicator(eqNbr, hexMap[row][col])}
                                 {this.renderSelHexImg(showRing)}
                                 <img
                                     className={imgClass}

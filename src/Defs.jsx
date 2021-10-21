@@ -46,6 +46,7 @@ export const images = {
     "HM": "https://rygg-gaard.no/gaia/img/HexMap.png",
     "SM": "https://rygg-gaard.no/gaia/img/SmallSector.png",
     "HSel": "https://rygg-gaard.no/gaia/img/HexSelected.png",
+    "RedRing": "https://rygg-gaard.no/gaia/img/RedRing.png",
 };
 
 
