@@ -1,5 +1,3 @@
-import './App.css';
-
 export const images = {
     "Re": "https://rygg-gaard.no/gaia/img/RedHex.png",
     "Bl": "https://rygg-gaard.no/gaia/img/BlueHex.png",

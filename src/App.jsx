@@ -1,20 +1,19 @@
 import React from 'react';
-import './App.css';
+import './styles/App.css';
 import { MapView } from './Map';
 import Menu from './Menu';
 import FixedMenu from './FixedMenu';
 import { getSecOpt } from './Defs';
 import {
-    makeHexMap,
+    hasEqualNeighbour,
+} from './calc/MapEvaluation';
+import {
     getNeighbourInfo,
     getNeighbourMatrix,
-    hasEqualNeighbour,
+    makeHexMap,
     getExpNbrStats,
-    getRandomValidMap,
-    optimizeMap
-} from './Evaluator';
-import Settings from './Settings';
-
+} from "./calc/MapInformation";
+import { getRandomValidMap, } from './calc/MapManipulation';
 
 class App extends React.Component {
     constructor(props) {
@@ -58,6 +57,7 @@ class App extends React.Component {
                 "Or": [0.0, 0.0],
             }
         };
+        this.hexMap = makeHexMap(this.state.sectors, this.state.rotations);
         this.onClickSector = this.onClickSector.bind(this);
     }
 

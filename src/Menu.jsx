@@ -1,5 +1,5 @@
 import React from 'react';
-import './Menu.css';
+import './styles/Menu.css';
 import Settings from './Settings';
 
 class NumSectorSelect extends React.Component {

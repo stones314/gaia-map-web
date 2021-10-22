@@ -1,8 +1,8 @@
 import React from 'react';
-import './Map.css';
+import './styles/Map.css';
 import { images, sectorCenter, getCenterRef } from './Defs';
-import { makeHexMap, getNeighbourInfo, getNeighbourMatrix, hasEqualNeighbour } from './Evaluator';
-import Evaluation from './Evaluation';
+import { hasEqualNeighbour } from './calc/MapEvaluation';
+import { makeHexMap, getNeighbourInfo, getNeighbourMatrix, } from "./calc/MapInformation";
 
 export class HexMapView extends React.Component {
     renderSelHexImg(isSelected) {
