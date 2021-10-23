@@ -1,14 +1,12 @@
 ﻿import { planets, colorWheel } from './../Defs';
 import { makeHexMap, updateNeighbourInfo, getNeighbourMatrix, getExpNbrStats } from './MapInformation';
 
-export function getMapValidity(hexMap, criteria) {
+export function getMapValidity(hexMap, nbrMat, criteria) {
     /*
      * Return values:
      * 0 - map is valid
      * 1 - failed on minimum equal dist
      */
-    updateNeighbourInfo(hexMap);
-    var nbrMat = getNeighbourMatrix(hexMap);
     if (hasEqualNeighbour(nbrMat, criteria.minEqDist))
         return 1;
     return 0;
@@ -54,6 +52,13 @@ function getScalarBalance(balance) {
     }
     return max - min;
 }
+
+export function evaluate(hexMap, nbrMat, debug) {
+    var balance = getExpNbrStats(nbrMat);
+    var score = getScalarBalance(balance);
+    return score;
+}
+
 
 
 export function evaluateMap(sectors, rotations, debug) {

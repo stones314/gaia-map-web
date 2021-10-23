@@ -8,14 +8,13 @@ import {
     hasEqualNeighbour,
 } from './calc/MapEvaluation';
 import {
-    updateNeighbourInfo,
     getNeighbourMatrix,
     makeHexMap,
     getExpNbrStats,
     setStaticNeighbourInfo,
+    updateNeighbourInfo,
 } from "./calc/MapInformation";
-import { getRandomValidMap, rotateSec, swapSec, randomizeOne, } from './calc/MapManipulation';
-import { getDynamicCoordMap } from './calc/Basics';
+import { getRandomValidMap, rotateSec, swapSec, randomizeOnce, optimize} from './calc/MapManipulation';
 
 class App extends React.Component {
     constructor(props) {
@@ -61,6 +60,8 @@ class App extends React.Component {
         };
         this.hexMap = makeHexMap(getSecOpt(10, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         setStaticNeighbourInfo(this.hexMap);
+        updateNeighbourInfo(this.hexMap);
+        this.nbrMat = getNeighbourMatrix(this.hexMap);
         this.onClickSector = this.onClickSector.bind(this);
     }
 
@@ -80,14 +81,14 @@ class App extends React.Component {
             } else {
                 [sec[i], sec[this.state.selected]] = [sec[this.state.selected], sec[i]];
                 [rot[i], rot[this.state.selected]] = [rot[this.state.selected], rot[i]];
-                swapSec(this.hexMap, i, this.state.selected);
+                swapSec(this.hexMap, this.nbrMat, i, this.state.selected);
                 this.setState({ selected: -1, sectors: sec, rotations: rot });
             }
         }
         else {
             rot[i] = (rot[i] + 1) % 6;
             this.setState({ rotations: rot });
-            rotateSec(this.hexMap, i);
+            rotateSec(this.hexMap, this.nbrMat, i);
         }
         this.evaluateMap();
     }
@@ -140,8 +141,12 @@ class App extends React.Component {
     onClickRandom() {
         var sec = this.state.sectors.slice();
         var rot = this.state.rotations.slice();
-        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
-//        var [ok, failures] = getRandomValidMap(this.hexMap, sec, rot, this.state.rngWithSwap, criteria);
+        var criteria = {
+            minEqDist: this.state.minEqDist,
+            maxFailures: 2000,
+        }
+//        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
+        var [ok, failures] = getRandomValidMap(this.hexMap, this.nbrMat, sec, rot, this.state.rngWithSwap, criteria);
         if (true) {
             this.setState({ sectors: sec, rotations: rot });
             this.evaluateMap();
@@ -149,11 +154,25 @@ class App extends React.Component {
         //console.error("Used " + failures + " tries!");
     }
 
+    onClickBalance() {
+        var sec = this.state.sectors.slice();
+        var rot = this.state.rotations.slice();
+        var criteria = {
+            minEqDist: this.state.minEqDist,
+            maxFailures: 2000,
+        }
+        //        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
+        var bs = optimize(this.hexMap, this.nbrMat, sec, rot, this.state.rngWithSwap, criteria);
+
+        this.setState({ sectors: sec, rotations: rot });
+        this.evaluateMap();
+
+        //console.error("Used " + failures + " tries!");
+    }
+
     evaluateMapWC(criteria) {
-        updateNeighbourInfo(this.hexMap);
-        var nbrMat = getNeighbourMatrix(this.hexMap);
-        var hasEqNbr = hasEqualNeighbour(nbrMat, criteria.minEqDist);
-        var balance = getExpNbrStats(nbrMat);
+        var hasEqNbr = hasEqualNeighbour(this.nbrMat, criteria.minEqDist);
+        var balance = getExpNbrStats(this.nbrMat);
         this.setState({
             illegal: hasEqNbr,
             balanceStats: balance
@@ -168,7 +187,6 @@ class App extends React.Component {
         this.evaluateMapWC(criteria);
     }
 
-
     renderSettings() {
         if (this.state.showSettings) {
             return (
@@ -182,6 +200,7 @@ class App extends React.Component {
                     onClickRandom={() => this.onClickRandom()}
                     rngWithSwap={this.state.rngWithSwap}
                     onClickRngSwap={(doSwap) => this.onClickRngSwap(doSwap)}
+                    onClickBalance={() => this.onClickBalance()}
                 />
             );
         }

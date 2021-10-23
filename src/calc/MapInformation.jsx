@@ -202,6 +202,27 @@ export function getNeighbourMatrix(hexMap) {
     return nbrMat;
 }
 
+export function updateNeighbourMatrix(hexMap, nbrMat) {
+    for (const [i, planet] of planets.entries()) {
+        for (const [j, neighbour] of hexTypes.entries()) {
+            nbrMat[planet][neighbour] = [0, 0, 0];
+        }
+    }
+
+    for (const [row, hexes] of hexMap.entries()) {
+        for (const [col, hexInfo] of hexes.entries()) {
+            var neighbour = hexInfo["Type"];
+            if (neighbour === "Fr")
+                neighbour = "No";
+            for (const [i, planet] of planets.entries()) {
+                nbrMat[planet][neighbour][0] += hexInfo[planet][0];
+                nbrMat[planet][neighbour][1] += hexInfo[planet][1];
+                nbrMat[planet][neighbour][2] += hexInfo[planet][2];
+            }
+        }
+    }
+ }
+
 
 export function getExpNbrStats(nbrMat) {
     var expNbrStats = {};
