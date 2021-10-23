@@ -1,4 +1,5 @@
-import { colorWheel } from './../Defs';
+import { colorWheel, getSecOpt } from './../Defs';
+import { makeHexMap } from './MapInformation';
 
 export function dist(r1, c1, r2, c2) {
     return Math.max([
@@ -7,7 +8,7 @@ export function dist(r1, c1, r2, c2) {
         Math.abs(-r1 - c1 - r2 + c2)]);
 }
 
-export function getRingCoord(row, col, radius) {
+export function getRingCoords(row, col, radius) {
     if (radius === 0) {
         return [[row, col]];
     }
@@ -88,7 +89,7 @@ export function colorDist(p1, p2) {
 
 
 export function getRingPlanets(row, col, rad, hexMap) {
-    const ringCoords = getRingCoord(row, col, rad);
+    const ringCoords = getRingCoords(row, col, rad);
     //console.error("ring coords = " + ringCoords);
     var ringPlanets = [];
     for (const [i, [r, c]] of ringCoords.entries()) {
@@ -116,3 +117,29 @@ export function isPlanet(hexType) {
 export function isTerraformable(hexType) {
     return (isPlanet(hexType) && hexType !== "Tr" && hexType != "Ga")
 }
+
+export function getDynamicCoordMap() {
+    var hexMap = makeHexMap(
+        ["s00", "s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08", "s09", "s10", "s00"],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    var dynamicCoordMap = [];
+    for (const [row, hexes] of hexMap.entries()) {
+        dynamicCoordMap.push([]);
+        for (const [col, hex] of hexes.entries()) {
+            dynamicCoordMap[row].push([]);
+            if (hex["Type"] !== "No") {
+                for (var rad = 1; rad < 4; rad++) {
+                    var ringCoords = getRingCoords(row, col, rad);
+                    for (const [ringId, [r, c]] of ringCoords.entries()) {
+                        if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
+                            if (hexMap[r][c]["Sec"] !== hex["Sec"]) {
+                                dynamicCoordMap[row][col].push([rad, r, c]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return dynamicCoordMap;
+} 

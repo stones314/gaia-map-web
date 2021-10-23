@@ -1,3 +1,5 @@
+import { getDynamicCoordMap } from './calc/Basics';
+
 export const images = {
     "Re": "https://rygg-gaard.no/gaia/img/RedHex.png",
     "Bl": "https://rygg-gaard.no/gaia/img/BlueHex.png",
@@ -227,4 +229,3 @@ export function getSecOpt(numSec, optNum) {
        "s08", "s09", "s10", "s00"
     ];
 }
-

@@ -8,12 +8,14 @@ import {
     hasEqualNeighbour,
 } from './calc/MapEvaluation';
 import {
-    getNeighbourInfo,
+    updateNeighbourInfo,
     getNeighbourMatrix,
     makeHexMap,
     getExpNbrStats,
+    setStaticNeighbourInfo,
 } from "./calc/MapInformation";
-import { getRandomValidMap, } from './calc/MapManipulation';
+import { getRandomValidMap, rotateSec, swapSec, randomizeOne, } from './calc/MapManipulation';
+import { getDynamicCoordMap } from './calc/Basics';
 
 class App extends React.Component {
     constructor(props) {
@@ -57,13 +59,14 @@ class App extends React.Component {
                 "Or": [0.0, 0.0],
             }
         };
-        this.hexMap = makeHexMap(this.state.sectors, this.state.rotations);
+        this.hexMap = makeHexMap(getSecOpt(10, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        setStaticNeighbourInfo(this.hexMap);
         this.onClickSector = this.onClickSector.bind(this);
     }
 
     componentDidMount() {
-        this.onClickRandom();
-//        this.evaluateMap(this.state.sectors, this.state.rotations);
+//        this.onClickRandom();
+        this.evaluateMap();
     }
 
     onClickSector(i) {
@@ -77,14 +80,16 @@ class App extends React.Component {
             } else {
                 [sec[i], sec[this.state.selected]] = [sec[this.state.selected], sec[i]];
                 [rot[i], rot[this.state.selected]] = [rot[this.state.selected], rot[i]];
+                swapSec(this.hexMap, i, this.state.selected);
                 this.setState({ selected: -1, sectors: sec, rotations: rot });
             }
         }
         else {
             rot[i] = (rot[i] + 1) % 6;
             this.setState({ rotations: rot });
+            rotateSec(this.hexMap, i);
         }
-        this.evaluateMap(sec,rot);
+        this.evaluateMap();
     }
 
     onClickHex(hexInfo) {
@@ -103,12 +108,12 @@ class App extends React.Component {
 
     onClick(numSec) {
         this.setState({ numSect: numSec, sectors: getSecOpt(numSec, 0), secOpt: 0 });
-        this.evaluateMap(getSecOpt(numSec, 0), this.state.rotations);
+        this.evaluateMap();
     }
 
     onClickOpt(variant) {
         this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
-        this.evaluateMap(getSecOpt(this.state.numSect, variant), this.state.rotations);
+        this.evaluateMap();
     }
 
     onClickRngSwap(doSwap) {
@@ -121,7 +126,7 @@ class App extends React.Component {
             minEqDist: minEqDist,
             maxFailures: 10000,
         }
-        this.evaluateMapWC(this.state.sectors, this.state.rotations, criteria);
+        this.evaluateMapWC(criteria);
     }
 
     onClickShowSettings() {
@@ -135,22 +140,18 @@ class App extends React.Component {
     onClickRandom() {
         var sec = this.state.sectors.slice();
         var rot = this.state.rotations.slice();
-        var criteria = {
-            minEqDist: this.state.minEqDist,
-            maxFailures: 2000,
-        }
-        var [ok, failures] = getRandomValidMap(sec, rot, criteria, this.state.rngWithSwap);
-        if (ok) {
+        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
+//        var [ok, failures] = getRandomValidMap(this.hexMap, sec, rot, this.state.rngWithSwap, criteria);
+        if (true) {
             this.setState({ sectors: sec, rotations: rot });
-            this.evaluateMap(sec, rot);
+            this.evaluateMap();
         }
         //console.error("Used " + failures + " tries!");
     }
 
-    evaluateMapWC(sectors, rotations, criteria) {
-        var hexMap = makeHexMap(sectors, rotations);
-        getNeighbourInfo(hexMap);
-        var nbrMat = getNeighbourMatrix(hexMap);
+    evaluateMapWC(criteria) {
+        updateNeighbourInfo(this.hexMap);
+        var nbrMat = getNeighbourMatrix(this.hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, criteria.minEqDist);
         var balance = getExpNbrStats(nbrMat);
         this.setState({
@@ -159,12 +160,12 @@ class App extends React.Component {
         });
     }
 
-    evaluateMap(sectors, rotations) {
+    evaluateMap() {
         var criteria = {
             minEqDist: this.state.minEqDist,
             maxFailures: 2000,
         }
-        this.evaluateMapWC(sectors, rotations, criteria);
+        this.evaluateMapWC(criteria);
     }
 
 
@@ -215,6 +216,7 @@ class App extends React.Component {
                     balanceStats={this.state.balanceStats}
                     hexInfo={this.state.hexInfo}
                     minEqDist={this.state.minEqDist}
+                    hexMap={this.hexMap}
                 />
             </div>
         )

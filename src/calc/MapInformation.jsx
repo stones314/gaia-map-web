@@ -1,17 +1,19 @@
 ﻿import {
     isPlanet,
-    getRingCoord,
+    getRingCoords,
     isTerraformable,
     colorDist,
     getRingPlanets,
-    isOutsideMap
+    isOutsideMap,
+    getDynamicCoordMap
 } from './Basics';
 import {
     getSectorArray,
     sectorCenter,
     planets,
     colorWheel,
-    hexTypes
+    hexTypes,
+    dynamicCoordMap
 } from './../Defs';
 import { rotate } from './MapManipulation';
 
@@ -62,6 +64,7 @@ export function makeHexMap(sectors, rotations) {
                 "sT1": [0, 0, 0],
                 "sT2": [0, 0, 0],
                 "sT3": [0, 0, 0],
+                "sNbr": [0, 0, 0],
                 "Re": [0, 0, 0],
                 "Bl": [0, 0, 0],
                 "Wh": [0, 0, 0],
@@ -94,7 +97,7 @@ export function makeHexMap(sectors, rotations) {
         hexMap[row][col]["Row"] = row;
         hexMap[row][col]["Col"] = col;
         for (rad = 1; rad < 3; rad++) {
-            var ringCoords = getRingCoord(row, col, rad);
+            var ringCoords = getRingCoords(row, col, rad);
             var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
             for (const [ringId, [r, c]] of ringCoords.entries()) {
                 hexMap[r][c]["Type"] = ringPlanets[ringId];
@@ -115,14 +118,18 @@ export function setStaticNeighbourInfo(hexMap) {
         for (const [col, hex] of hexes.entries()) {
             if (isPlanet(hex["Type"])) {
                 for (var rad = 1; rad < 4; rad++) {
-                    var ringCoords = getRingCoord(row, col, rad);
+                    var ringCoords = getRingCoords(row, col, rad);
                     for (const [ringId, [r, c]] of ringCoords.entries()) {
-                        var nbr = hexMap[r][c];
-                        if (nbr[r][c]["Sec"] == hex["Sec"]) {
-                            hex["s" + nbr["Type"]][rad - 1]++;
-                            if (isTerraformable(hex["Type"]) && isTerraformable(nbr["Type"])) {
-                                var terraCost = "sT" + colorDist(hex["Type"], nbr["Type"]);
-                                hex[terraCost][rad - 1]++;
+                        if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
+                            var nbr = hexMap[r][c];
+                            if (nbr["Sec"] === hex["Sec"]) {
+                                hex["s" + nbr["Type"]][rad - 1]++;
+                                if (isTerraformable(hex["Type"]) && isTerraformable(nbr["Type"])) {
+                                    var terraCost = "sT" + colorDist(hex["Type"], nbr["Type"]);
+                                    hex[terraCost][rad - 1]++;
+                                }
+                                if (nbr["Type"] !== "Em")
+                                    hex["sNbr"][rad - 1]++;
                             }
                         }
                     }
@@ -132,26 +139,37 @@ export function setStaticNeighbourInfo(hexMap) {
     }
 }
 
-export function getNeighbourInfo(hexMap) {
+export function updateNeighbourInfo(hexMap) {
+
+    const dynCoordMap = getDynamicCoordMap();
 
     for (const [row, hexes] of hexMap.entries()) {
         for (const [col, hex] of hexes.entries()) {
+            if (!isOutsideMap(hex["Type"])) {
+                hex["Row"] = row;
+                hex["Col"] = col;
+            }
             if (isPlanet(hex["Type"])) {
-                for (var rad = 1; rad < 4; rad++) {
-                    var ringPlanets = getRingPlanets(row, col, rad, hexMap);
-                    for (const [i, neighbour] of ringPlanets.entries()) {
-                        if (isOutsideMap(neighbour)) {
-                            hex["No"][rad - 1]++;
-                        }
-                        else {
-                            hex[neighbour][rad - 1]++;
-                            if (neighbour != "Em")
-                                hex["Nbr"][rad - 1]++;
-                        }
-                        if (isTerraformable(hex["Type"]) && isTerraformable(neighbour)) {
-                            var terraCost = "T" + colorDist(hex["Type"], neighbour);
-                            hex[terraCost][rad - 1]++;
-                        }
+                for (const [hi, ht] of hexTypes.entries()) {
+                    hex[ht] = hex["s" + ht].slice();;//reset values to the static data
+                }
+                for (var i = 0; i < 4; i++) {
+                    hex["T" + i] = hex["sT" + i].slice();;
+                }
+                hex["Nbr"] = hex["sNbr"].slice();
+                for (const [di, [rad, r, c]] of dynCoordMap[row][col].entries()) {
+                    var nbr = hexMap[r][c]["Type"];
+                    if (isOutsideMap(nbr)) {
+                        hex["No"][rad - 1]++;
+                    }
+                    else {
+                        hex[nbr][rad - 1]++;
+                        if (nbr != "Em")
+                            hex["Nbr"][rad - 1]++;
+                    }
+                    if (isTerraformable(hex["Type"]) && isTerraformable(nbr)) {
+                        var terraCost = "T" + colorDist(hex["Type"], nbr);
+                        hex[terraCost][rad - 1]++;
                     }
                 }
             }

@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/Map.css';
 import { images, sectorCenter, getCenterRef } from './Defs';
 import { hasEqualNeighbour } from './calc/MapEvaluation';
-import { makeHexMap, getNeighbourInfo, getNeighbourMatrix, } from "./calc/MapInformation";
+import { updateNeighbourInfo, getNeighbourMatrix, } from "./calc/MapInformation";
 
 export class HexMapView extends React.Component {
     renderSelHexImg(isSelected) {
@@ -33,13 +33,11 @@ export class HexMapView extends React.Component {
             return;
     }
     render() {
-        var hexMap = makeHexMap(this.props.sectors, this.props.rotations);
-        getNeighbourInfo(hexMap);
-        var nbrMat = getNeighbourMatrix(hexMap);
+        var nbrMat = getNeighbourMatrix(this.props.hexMap);
         var hasEqNbr = hasEqualNeighbour(nbrMat, this.props.minEqDist);
         var illegalClass = hasEqNbr ? " illegal" : " legal";
         var rows = [];
-        for (const [row, hexes] of hexMap.entries()) {
+        for (const [row, hexes] of this.props.hexMap.entries()) {
             var planets = [];
             for (const [col, hex] of hexes.entries()) {
                 var ignored = (row > 12 && col > 12)
@@ -54,7 +52,7 @@ export class HexMapView extends React.Component {
                     var eqNbr = false;
                     var imgClass = "hex-img";
                     var imgRef = hex["Type"];
-                    var divClass = "hex-col-" + col + " rot" + hexMap[row][col]["Rot"];
+                    var divClass = "hex-col-" + col + " rot" + this.props.hexMap[row][col]["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
                             if (imgRef == "Em" || imgRef == "Fr")
@@ -67,11 +65,11 @@ export class HexMapView extends React.Component {
                         }
                         if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr" && imgRef != "Ga") {
                             for (var r = 2; r < this.props.minEqDist; r++)
-                                eqNbr |= hexMap[row][col][imgRef][r-1] > 0;
+                                eqNbr |= this.props.hexMap[row][col][imgRef][r-1] > 0;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
-                                imgRef = getCenterRef[hexMap[row][col]["Sec"]];
+                                imgRef = getCenterRef[this.props.hexMap[row][col]["Sec"]];
                             }
                         }
                         if (showRing)
@@ -81,12 +79,12 @@ export class HexMapView extends React.Component {
                                 className={divClass}
                                 key={col}
                             >
-                                {this.renderEqNbrIndicator(eqNbr, hexMap[row][col])}
+                                {this.renderEqNbrIndicator(eqNbr, this.props.hexMap[row][col])}
                                 {this.renderSelHexImg(showRing)}
                                 <img
                                     className={imgClass}
                                     src={images[imgRef]}
-                                    onMouseOver={() => this.props.onClickHex(hexMap[row][col])}
+                                    onMouseOver={() => this.props.onClickHex(this.props.hexMap[row][col])}
                                     alt={hex["Type"]}
                                 />
                             </div>
@@ -110,7 +108,6 @@ export class HexInfoView extends React.Component {
         var keys = [
             "Sec",
             "Type",
-            "Rot",
             "Slot",
             "Row",
             "Col",
@@ -236,6 +233,7 @@ export class MapView extends React.Component {
                         onClick={(i) => this.props.onClick(i)}
                         numSect={this.props.numSect}
                         minEqDist={this.props.minEqDist}
+                        hexMap={this.props.hexMap}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}
