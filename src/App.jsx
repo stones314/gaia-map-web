@@ -108,12 +108,30 @@ class App extends React.Component {
     }
 
     onClick(numSec) {
-        this.setState({ numSect: numSec, sectors: getSecOpt(numSec, 0), secOpt: 0 });
+        this.setState({
+            numSect: numSec,
+            sectors: getSecOpt(numSec, 0),
+            secOpt: 0,
+            rotations: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        });
+        this.hexMap = makeHexMap(getSecOpt(numSec, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        setStaticNeighbourInfo(this.hexMap);
+        updateNeighbourInfo(this.hexMap);
+        this.nbrMat = getNeighbourMatrix(this.hexMap);
+
         this.evaluateMap();
     }
 
     onClickOpt(variant) {
-        this.setState({ secOpt: variant, sectors: getSecOpt(this.state.numSect, variant) });
+        this.setState({
+            secOpt: variant,
+            sectors: getSecOpt(this.state.numSect, variant),
+            rotations: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        });
+        this.hexMap = makeHexMap(getSecOpt(this.state.numSect, variant), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        setStaticNeighbourInfo(this.hexMap);
+        updateNeighbourInfo(this.hexMap);
+        this.nbrMat = getNeighbourMatrix(this.hexMap);
         this.evaluateMap();
     }
 
