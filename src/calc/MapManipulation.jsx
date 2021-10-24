@@ -1,162 +1,168 @@
 ﻿import { getMapValidity, evaluateMap, evaluate } from './MapEvaluation.jsx';
 import { sectorCenter } from '../Defs.jsx';
-import { getRingCoords } from './Basics.jsx';
+import { getSectorCoords } from './Basics.jsx';
 import { updateNeighbourMatrix, updateNeighbourInfo } from './MapInformation.jsx';
 
-export function rotateSec(hexMap, nbrMat, slot) {
+function updateSectorValues(hexGrid, slot, values) {
+    for (const [i, [rad, row, col]] of getSectorCoords(slot).entries()) {
+        for (const [j, [key, value]] of values.entries()) {
+            hexGrid[row][col][key] = value;
+        }
+    }
+}
+
+export function rotateSec(hexGrid, slot) {
     var row = sectorCenter[slot][0];
     var col = sectorCenter[slot][1];
 
     //radius === 1
     [
-        hexMap[row - 1][col    ],
-        hexMap[row - 1][col + 1],
-        hexMap[row    ][col + 1],
-        hexMap[row + 1][col    ],
-        hexMap[row + 1][col - 1],
-        hexMap[row][col - 1]]
+        hexGrid[row - 1][col    ],
+        hexGrid[row - 1][col + 1],
+        hexGrid[row    ][col + 1],
+        hexGrid[row + 1][col    ],
+        hexGrid[row + 1][col - 1],
+        hexGrid[row][col - 1]]
         = [
-            hexMap[row][col - 1],
-            hexMap[row - 1][col    ],
-            hexMap[row - 1][col + 1],
-            hexMap[row    ][col + 1],
-            hexMap[row + 1][col    ],
-            hexMap[row + 1][col - 1]];
+            hexGrid[row][col - 1],
+            hexGrid[row - 1][col    ],
+            hexGrid[row - 1][col + 1],
+            hexGrid[row    ][col + 1],
+            hexGrid[row + 1][col    ],
+            hexGrid[row + 1][col - 1]];
     
     //radius === 2) {
     [
-        hexMap[row - 2][col    ],
-        hexMap[row - 2][col + 1],
-        hexMap[row - 2][col + 2],
-        hexMap[row - 1][col + 2],
-        hexMap[row    ][col + 2],
-        hexMap[row + 1][col + 1],
-        hexMap[row + 2][col    ],
-        hexMap[row + 2][col - 1],
-        hexMap[row + 2][col - 2],
-        hexMap[row + 1][col - 2],
-        hexMap[row][col - 2],
-        hexMap[row - 1][col - 1]]
+        hexGrid[row - 2][col    ],
+        hexGrid[row - 2][col + 1],
+        hexGrid[row - 2][col + 2],
+        hexGrid[row - 1][col + 2],
+        hexGrid[row    ][col + 2],
+        hexGrid[row + 1][col + 1],
+        hexGrid[row + 2][col    ],
+        hexGrid[row + 2][col - 1],
+        hexGrid[row + 2][col - 2],
+        hexGrid[row + 1][col - 2],
+        hexGrid[row][col - 2],
+        hexGrid[row - 1][col - 1]]
         = [
-            hexMap[row][col - 2],
-            hexMap[row - 1][col - 1],
-            hexMap[row - 2][col],
-            hexMap[row - 2][col + 1],
-            hexMap[row - 2][col + 2],
-            hexMap[row - 1][col + 2],
-            hexMap[row    ][col + 2],
-            hexMap[row + 1][col + 1],
-            hexMap[row + 2][col],
-            hexMap[row + 2][col - 1],
-            hexMap[row + 2][col - 2],
-            hexMap[row + 1][col - 2]];
+            hexGrid[row][col - 2],
+            hexGrid[row - 1][col - 1],
+            hexGrid[row - 2][col],
+            hexGrid[row - 2][col + 1],
+            hexGrid[row - 2][col + 2],
+            hexGrid[row - 1][col + 2],
+            hexGrid[row    ][col + 2],
+            hexGrid[row + 1][col + 1],
+            hexGrid[row + 2][col],
+            hexGrid[row + 2][col - 1],
+            hexGrid[row + 2][col - 2],
+            hexGrid[row + 1][col - 2]];
 
-    hexMap[row][col]["Rot"] = (hexMap[row][col]["Rot"] + 1) % 6;
-    updateNeighbourInfo(hexMap);
-    updateNeighbourMatrix(hexMap, nbrMat);
+    updateSectorValues(hexGrid, slot, [["Rot", (hexGrid[row][col]["Rot"] + 1) % 6]]);
 }
 
-export function swapSec(hexMap, nbrMat, slotA, slotB) {
+export function swapSec(hexGrid, slotA, slotB) {
     var rA = sectorCenter[slotA][0];
     var cA = sectorCenter[slotA][1];
     var rB = sectorCenter[slotB][0];
     var cB = sectorCenter[slotB][1];
 
     [
-        hexMap[rA][cA],
-        hexMap[rA][cA - 1],
-        hexMap[rA - 1][cA],
-        hexMap[rA - 1][cA + 1],
-        hexMap[rA][cA + 1],
-        hexMap[rA + 1][cA],
-        hexMap[rA + 1][cA - 1],
-        hexMap[rA][cA - 2],
-        hexMap[rA - 1][cA - 1],
-        hexMap[rA - 2][cA],
-        hexMap[rA - 2][cA + 1],
-        hexMap[rA - 2][cA + 2],
-        hexMap[rA - 1][cA + 2],
-        hexMap[rA][cA + 2],
-        hexMap[rA + 1][cA + 1],
-        hexMap[rA + 2][cA],
-        hexMap[rA + 2][cA - 1],
-        hexMap[rA + 2][cA - 2],
-        hexMap[rA + 1][cA - 2],
+        hexGrid[rA][cA],
+        hexGrid[rA][cA - 1],
+        hexGrid[rA - 1][cA],
+        hexGrid[rA - 1][cA + 1],
+        hexGrid[rA][cA + 1],
+        hexGrid[rA + 1][cA],
+        hexGrid[rA + 1][cA - 1],
+        hexGrid[rA][cA - 2],
+        hexGrid[rA - 1][cA - 1],
+        hexGrid[rA - 2][cA],
+        hexGrid[rA - 2][cA + 1],
+        hexGrid[rA - 2][cA + 2],
+        hexGrid[rA - 1][cA + 2],
+        hexGrid[rA][cA + 2],
+        hexGrid[rA + 1][cA + 1],
+        hexGrid[rA + 2][cA],
+        hexGrid[rA + 2][cA - 1],
+        hexGrid[rA + 2][cA - 2],
+        hexGrid[rA + 1][cA - 2],
 
-        hexMap[rB][cB],
-        hexMap[rB][cB - 1],
-        hexMap[rB - 1][cB],
-        hexMap[rB - 1][cB + 1],
-        hexMap[rB][cB + 1],
-        hexMap[rB + 1][cB],
-        hexMap[rB + 1][cB - 1],
-        hexMap[rB][cB - 2],
-        hexMap[rB - 1][cB - 1],
-        hexMap[rB - 2][cB],
-        hexMap[rB - 2][cB + 1],
-        hexMap[rB - 2][cB + 2],
-        hexMap[rB - 1][cB + 2],
-        hexMap[rB][cB + 2],
-        hexMap[rB + 1][cB + 1],
-        hexMap[rB + 2][cB],
-        hexMap[rB + 2][cB - 1],
-        hexMap[rB + 2][cB - 2],
-        hexMap[rB + 1][cB - 2]
+        hexGrid[rB][cB],
+        hexGrid[rB][cB - 1],
+        hexGrid[rB - 1][cB],
+        hexGrid[rB - 1][cB + 1],
+        hexGrid[rB][cB + 1],
+        hexGrid[rB + 1][cB],
+        hexGrid[rB + 1][cB - 1],
+        hexGrid[rB][cB - 2],
+        hexGrid[rB - 1][cB - 1],
+        hexGrid[rB - 2][cB],
+        hexGrid[rB - 2][cB + 1],
+        hexGrid[rB - 2][cB + 2],
+        hexGrid[rB - 1][cB + 2],
+        hexGrid[rB][cB + 2],
+        hexGrid[rB + 1][cB + 1],
+        hexGrid[rB + 2][cB],
+        hexGrid[rB + 2][cB - 1],
+        hexGrid[rB + 2][cB - 2],
+        hexGrid[rB + 1][cB - 2]
     ] = [
-            hexMap[rB][cB],
-            hexMap[rB][cB - 1],
-            hexMap[rB - 1][cB],
-            hexMap[rB - 1][cB + 1],
-            hexMap[rB][cB + 1],
-            hexMap[rB + 1][cB],
-            hexMap[rB + 1][cB - 1],
-            hexMap[rB][cB - 2],
-            hexMap[rB - 1][cB - 1],
-            hexMap[rB - 2][cB],
-            hexMap[rB - 2][cB + 1],
-            hexMap[rB - 2][cB + 2],
-            hexMap[rB - 1][cB + 2],
-            hexMap[rB][cB + 2],
-            hexMap[rB + 1][cB + 1],
-            hexMap[rB + 2][cB],
-            hexMap[rB + 2][cB - 1],
-            hexMap[rB + 2][cB - 2],
-            hexMap[rB + 1][cB - 2],
+            hexGrid[rB][cB],
+            hexGrid[rB][cB - 1],
+            hexGrid[rB - 1][cB],
+            hexGrid[rB - 1][cB + 1],
+            hexGrid[rB][cB + 1],
+            hexGrid[rB + 1][cB],
+            hexGrid[rB + 1][cB - 1],
+            hexGrid[rB][cB - 2],
+            hexGrid[rB - 1][cB - 1],
+            hexGrid[rB - 2][cB],
+            hexGrid[rB - 2][cB + 1],
+            hexGrid[rB - 2][cB + 2],
+            hexGrid[rB - 1][cB + 2],
+            hexGrid[rB][cB + 2],
+            hexGrid[rB + 1][cB + 1],
+            hexGrid[rB + 2][cB],
+            hexGrid[rB + 2][cB - 1],
+            hexGrid[rB + 2][cB - 2],
+            hexGrid[rB + 1][cB - 2],
 
-            hexMap[rA][cA],
-            hexMap[rA][cA - 1],
-            hexMap[rA - 1][cA],
-            hexMap[rA - 1][cA + 1],
-            hexMap[rA][cA + 1],
-            hexMap[rA + 1][cA],
-            hexMap[rA + 1][cA - 1],
-            hexMap[rA][cA - 2],
-            hexMap[rA - 1][cA - 1],
-            hexMap[rA - 2][cA],
-            hexMap[rA - 2][cA + 1],
-            hexMap[rA - 2][cA + 2],
-            hexMap[rA - 1][cA + 2],
-            hexMap[rA][cA + 2],
-            hexMap[rA + 1][cA + 1],
-            hexMap[rA + 2][cA],
-            hexMap[rA + 2][cA - 1],
-            hexMap[rA + 2][cA - 2],
-            hexMap[rA + 1][cA - 2],
+            hexGrid[rA][cA],
+            hexGrid[rA][cA - 1],
+            hexGrid[rA - 1][cA],
+            hexGrid[rA - 1][cA + 1],
+            hexGrid[rA][cA + 1],
+            hexGrid[rA + 1][cA],
+            hexGrid[rA + 1][cA - 1],
+            hexGrid[rA][cA - 2],
+            hexGrid[rA - 1][cA - 1],
+            hexGrid[rA - 2][cA],
+            hexGrid[rA - 2][cA + 1],
+            hexGrid[rA - 2][cA + 2],
+            hexGrid[rA - 1][cA + 2],
+            hexGrid[rA][cA + 2],
+            hexGrid[rA + 1][cA + 1],
+            hexGrid[rA + 2][cA],
+            hexGrid[rA + 2][cA - 1],
+            hexGrid[rA + 2][cA - 2],
+            hexGrid[rA + 1][cA - 2],
         ];
-    updateNeighbourInfo(hexMap);
-    updateNeighbourMatrix(hexMap, nbrMat);
+    updateSectorValues(hexGrid, slotA, [["Slot", slotA]]);
+    updateSectorValues(hexGrid, slotB, [["Slot", slotB]]);
 }
 
-function rotateRandomSec(hexMap, nbrMat, sectors, rotations) {
+function rotateRandomSec(hexGrid, sectors, rotations) {
     var i = Math.floor(Math.random() * 12);
     while (sectors[i] === "s00") {
         i = Math.floor(Math.random() * 12);
     }
     rotations[i] = (rotations[i] + 1) % 6;
-    rotateSec(hexMap, nbrMat, i);
+    rotateSec(hexGrid, i);
 }
 
-function swapRandomSec(hexMap, nbrMat, sectors, rotations) {
+function swapRandomSec(hexGrid, sectors, rotations) {
     var i = Math.floor(Math.random() * 12);
     while (sectors[i] === "s00") {
         i = Math.floor(Math.random() * 12);
@@ -167,45 +173,45 @@ function swapRandomSec(hexMap, nbrMat, sectors, rotations) {
     }
     [sectors[i], sectors[j]] = [sectors[j], sectors[i]];
     [rotations[i], rotations[j]] = [rotations[j], rotations[i]];
-    swapSec(hexMap, nbrMat, i, j);
+    swapSec(hexGrid, i, j);
 }
 
-export function randomizeOnce(hexMap, nbrMat, sectors, rotations, withSwap) {
+export function randomizeOnce(hexGrid, sectors, rotations, withSwap) {
     if (withSwap) {
         var i = Math.random() * 2;
         if (i < 1) {
-            swapRandomSec(hexMap, nbrMat, sectors, rotations);
+            swapRandomSec(hexGrid, sectors, rotations);
         } else {
-            rotateRandomSec(hexMap, nbrMat, sectors, rotations);
+            rotateRandomSec(hexGrid, sectors, rotations);
         }
     } else {
-        rotateRandomSec(hexMap, nbrMat, sectors, rotations);
+        rotateRandomSec(hexGrid, sectors, rotations);
     }
 }
 
-export function getRandomValidMap(hexMap, nbrMat, sectors, rotations, withSwap, criteria) {
-    randomizeOnce(hexMap, nbrMat, sectors, rotations, withSwap);
+export function getRandomValidMap(hexGrid, nbrMat, sectors, rotations, withSwap, criteria) {
+    randomizeOnce(hexGrid, nbrMat, sectors, rotations, withSwap);
 
     var failures = 1;
-    while (getMapValidity(hexMap, nbrMat, criteria) > 0) {
+    while (getMapValidity(hexGrid, nbrMat, criteria) > 0) {
         failures++;
         if (failures > criteria.maxFail)
             return [false, failures];
-        randomizeOnce(hexMap, nbrMat, sectors, rotations, withSwap);
+        randomizeOnce(hexGrid, nbrMat, sectors, rotations, withSwap);
     }
     return [true, failures];
 }
 
 
-export function optimize(hexMap, nbrMat, sectors, rotations, withSwap, criteria) {
+export function optimize(hexGrid, nbrMat, sectors, rotations, withSwap, criteria) {
     var tryCount = 1000;
     var bestScore = 1000.0;
     var bestSec = sectors.slice();
     var bestRot = rotations.slice();
     var totEval = 0;
     for (var t = 0; t < tryCount; t++) {
-        var [ok, failures] = getRandomValidMap(hexMap, nbrMat, sectors, rotations, withSwap, criteria);
-        var score = evaluate(hexMap, nbrMat, false);
+        var [ok, failures] = getRandomValidMap(hexGrid, nbrMat, sectors, rotations, withSwap, criteria);
+        var score = evaluate(hexGrid, nbrMat, false);
         if (failures < criteria.maxFail) {
             if (score < bestScore) {
                 bestScore = score;
@@ -221,13 +227,13 @@ export function optimize(hexMap, nbrMat, sectors, rotations, withSwap, criteria)
     }
     console.error("iterations: " + totEval);
 
-    evaluate(hexMap, nbrMat, true);
+    evaluate(hexGrid, nbrMat, true);
     return bestScore;
 }
 
 /*
  * OLD: Using secotrs and rotations to store state
- * and creating a new hexMap every time we shall evaluate or display it.
+ * and creating a new hexGrid every time we shall evaluate or display it.
  **/
 
 export function rotate(ring, radius, n) {

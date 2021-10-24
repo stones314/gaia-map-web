@@ -1,5 +1,19 @@
-import { colorWheel, getSecOpt } from './../Defs';
-import { makeHexMap } from './MapInformation';
+import { colorWheel, getSecOpt, sectorCenter } from './../Defs';
+import { makeHexGrid } from './MapInformation';
+
+export function isValidCoords(r, c) {
+    if (r >= 0 && c >= 0 && r <= 16 && c <= 23)
+        return true;
+    return false;
+}
+
+export function getRandomSlot(sectors, ignore) {
+    var i = Math.floor(Math.random() * 12);
+    while (ignore.includes(sectors[i])) {
+        i = Math.floor(Math.random() * 12);
+    }
+    return i;
+}
 
 export function dist(r1, c1, r2, c2) {
     return Math.max([
@@ -60,6 +74,29 @@ export function getRingCoords(row, col, radius) {
     return []
 }
 
+export function getSectorCoords(slot) {
+    var [row, col] = sectorCenter[slot];
+    return [[0, row, col],
+        [1, row - 1, col],
+        [1, row - 1, col + 1],
+        [1, row, col + 1],
+        [1, row + 1, col],
+        [1, row + 1, col - 1],
+        [1, row, col - 1],
+        [2, row - 2, col],
+        [2, row - 2, col + 1],
+        [2, row - 2, col + 2],
+        [2, row - 1, col + 2],
+        [2, row, col + 2],
+        [2, row + 1, col + 1],
+        [2, row + 2, col],
+        [2, row + 2, col - 1],
+        [2, row + 2, col - 2],
+        [2, row + 1, col - 2],
+        [2, row, col - 2],
+        [2, row - 1, col - 1]
+    ];
+}
 
 export function colorDist(p1, p2) {
     if (p1 === p2)
@@ -88,7 +125,7 @@ export function colorDist(p1, p2) {
 }
 
 
-export function getRingPlanets(row, col, rad, hexMap) {
+export function getRingPlanets(row, col, rad, hexGrid) {
     const ringCoords = getRingCoords(row, col, rad);
     //console.error("ring coords = " + ringCoords);
     var ringPlanets = [];
@@ -97,7 +134,7 @@ export function getRingPlanets(row, col, rad, hexMap) {
             ringPlanets.push("No");
         }
         else {
-            ringPlanets.push(hexMap[r][c]["Type"]);
+            ringPlanets.push(hexGrid[r][c]["Type"]);
         }
     }
     return ringPlanets;
@@ -119,11 +156,11 @@ export function isTerraformable(hexType) {
 }
 
 export function getDynamicCoordMap() {
-    var hexMap = makeHexMap(
+    var hexGrid = makeHexGrid(
         ["s00", "s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08", "s09", "s10", "s00"],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     var dynamicCoordMap = [];
-    for (const [row, hexes] of hexMap.entries()) {
+    for (const [row, hexes] of hexGrid.entries()) {
         dynamicCoordMap.push([]);
         for (const [col, hex] of hexes.entries()) {
             dynamicCoordMap[row].push([]);
@@ -132,7 +169,7 @@ export function getDynamicCoordMap() {
                     var ringCoords = getRingCoords(row, col, rad);
                     for (const [ringId, [r, c]] of ringCoords.entries()) {
                         if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
-                            if (hexMap[r][c]["Sec"] !== hex["Sec"]) {
+                            if (hexGrid[r][c]["Sec"] !== hex["Sec"]) {
                                 dynamicCoordMap[row][col].push([rad, r, c]);
                             }
                         }

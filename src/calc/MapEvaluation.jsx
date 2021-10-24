@@ -1,7 +1,7 @@
 ﻿import { planets, colorWheel } from './../Defs';
-import { makeHexMap, updateNeighbourInfo, getNeighbourMatrix, getExpNbrStats } from './MapInformation';
+import { makeHexGrid, updateNeighbourInfo, getNeighbourMatrix, getExpNbrStats } from './MapInformation';
 
-export function getMapValidity(hexMap, nbrMat, criteria) {
+export function getMapValidity(hexGrid, nbrMat, criteria) {
     /*
      * Return values:
      * 0 - map is valid
@@ -29,14 +29,14 @@ export function hasEqualNeighbour(nbrMat, minEqDist) {
     return false;
 }
 
-export function evaluatePlanetHappiness(hexMap) {
+export function evaluatePlanetHappiness(hexGrid) {
 
-    for (const [row, hexes] of hexMap.entries()) {
+    for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
 
         }
     }
-    return hexMap;
+    return hexGrid;
 }
 
 
@@ -53,7 +53,7 @@ function getScalarBalance(balance) {
     return max - min;
 }
 
-export function evaluate(hexMap, nbrMat, debug) {
+export function evaluate(hexGrid, nbrMat, debug) {
     var balance = getExpNbrStats(nbrMat);
     var score = getScalarBalance(balance);
     return score;
@@ -62,9 +62,9 @@ export function evaluate(hexMap, nbrMat, debug) {
 
 
 export function evaluateMap(sectors, rotations, debug) {
-    var hexMap = makeHexMap(sectors, rotations);
-    updateNeighbourInfo(hexMap);
-    var nbrMat = getNeighbourMatrix(hexMap);
+    var hexGrid = makeHexGrid(sectors, rotations);
+    updateNeighbourInfo(hexGrid);
+    var nbrMat = getNeighbourMatrix(hexGrid);
     if (hasEqualNeighbour(nbrMat, 2))
         return -1.0;
     var balance = getExpNbrStats(nbrMat);

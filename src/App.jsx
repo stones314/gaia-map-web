@@ -3,13 +3,14 @@ import './styles/App.css';
 import { MapView } from './Map';
 import Menu from './Menu';
 import FixedMenu from './FixedMenu';
+import { HexMap } from './calc/HexMap';
 import { getSecOpt } from './Defs';
 import {
     hasEqualNeighbour,
 } from './calc/MapEvaluation';
 import {
     getNeighbourMatrix,
-    makeHexMap,
+    makeHexGrid,
     getExpNbrStats,
     setStaticNeighbourInfo,
     updateNeighbourInfo,
@@ -20,8 +21,6 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sectors: getSecOpt(10, 0),
-            rotations: [0,0,0,0,0,0,0,0,0,0,0,0],
             selected: -1,
             swapMode: true,
             numSect: 10,
@@ -31,6 +30,7 @@ class App extends React.Component {
             illegal: false,
             rngWithSwap: true,
             minEqDist: 2,
+            maxClusterSize: 5,
             hexInfo: {
                 "Visited": false,
                 "Re": 7,
@@ -58,41 +58,34 @@ class App extends React.Component {
                 "Or": [0.0, 0.0],
             }
         };
-        this.hexMap = makeHexMap(getSecOpt(10, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        setStaticNeighbourInfo(this.hexMap);
-        updateNeighbourInfo(this.hexMap);
-        this.nbrMat = getNeighbourMatrix(this.hexMap);
-        this.onClickSector = this.onClickSector.bind(this);
+        this.hexMap = new HexMap();
     }
 
     componentDidMount() {
         this.onClickRandom();
     }
 
-    onClickSector(i) {
-        var rot = this.state.rotations.slice();
-        var sec = this.state.sectors.slice();
+    onClickSector(slot) {
         if (this.state.swapMode) {
             if (this.state.selected < 0) {
-                this.setState({ selected: i});
-            } else if (this.state.selected === i) {
+                this.setState({ selected: slot});
+            } else if (this.state.selected === slot) {
                 this.setState({ selected: -1 });
             } else {
-                [sec[i], sec[this.state.selected]] = [sec[this.state.selected], sec[i]];
-                [rot[i], rot[this.state.selected]] = [rot[this.state.selected], rot[i]];
-                swapSec(this.hexMap, this.nbrMat, i, this.state.selected);
-                this.setState({ selected: -1, sectors: sec, rotations: rot });
+                this.hexMap.swapSec(slot, this.state.selected);
+                this.setState({ selected: -1});
             }
         }
         else {
-            rot[i] = (rot[i] + 1) % 6;
-            this.setState({ rotations: rot });
-            rotateSec(this.hexMap, this.nbrMat, i);
+            this.hexMap.rotateSec(slot);
         }
         this.evaluateMap();
     }
 
     onClickHex(hexInfo) {
+        if (!this.state.showDebug) {
+            this.onClickSector(hexInfo["Slot"]);
+        }
         this.setState({ hexInfo: hexInfo });
     }
 
@@ -109,28 +102,17 @@ class App extends React.Component {
     onClick(numSec) {
         this.setState({
             numSect: numSec,
-            sectors: getSecOpt(numSec, 0),
             secOpt: 0,
-            rotations: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         });
-        this.hexMap = makeHexMap(getSecOpt(numSec, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        setStaticNeighbourInfo(this.hexMap);
-        updateNeighbourInfo(this.hexMap);
-        this.nbrMat = getNeighbourMatrix(this.hexMap);
-
+        this.hexMap.newSectorSelection(numSec, 0);
         this.evaluateMap();
     }
 
     onClickOpt(variant) {
         this.setState({
             secOpt: variant,
-            sectors: getSecOpt(this.state.numSect, variant),
-            rotations: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         });
-        this.hexMap = makeHexMap(getSecOpt(this.state.numSect, variant), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        setStaticNeighbourInfo(this.hexMap);
-        updateNeighbourInfo(this.hexMap);
-        this.nbrMat = getNeighbourMatrix(this.hexMap);
+        this.hexMap.newSectorSelection(this.state.numSect, variant);
         this.evaluateMap();
     }
 
@@ -140,11 +122,8 @@ class App extends React.Component {
 
     onClickMinEqualDist(minEqDist) {
         this.setState({ minEqDist: minEqDist });
-        var criteria = {
-            minEqDist: minEqDist,
-            maxFailures: 10000,
-        }
-        this.evaluateMapWC(criteria);
+        this.hexMap.criteria.minEqDist = minEqDist;
+        this.evaluateMap();
     }
 
     onClickShowSettings() {
@@ -156,52 +135,19 @@ class App extends React.Component {
     }
 
     onClickRandom() {
-        var sec = this.state.sectors.slice();
-        var rot = this.state.rotations.slice();
-        var criteria = {
-            minEqDist: this.state.minEqDist,
-            maxFailures: 2000,
-        }
-//        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
-        var [ok, failures] = getRandomValidMap(this.hexMap, this.nbrMat, sec, rot, this.state.rngWithSwap, criteria);
+        var [ok, failures] = this.hexMap.getRandomValidMap(this.state.rngWithSwap);
         if (true) {
-            this.setState({ sectors: sec, rotations: rot });
             this.evaluateMap();
         }
-        //console.error("Used " + failures + " tries!");
     }
 
-    onClickBalance() {
-        var sec = this.state.sectors.slice();
-        var rot = this.state.rotations.slice();
-        var criteria = {
-            minEqDist: this.state.minEqDist,
-            maxFailures: 2000,
-        }
-        //        randomizeOne(this.hexMap, sec, rot, this.state.rngWithSwap);
-        var bs = optimize(this.hexMap, this.nbrMat, sec, rot, this.state.rngWithSwap, criteria);
-
-        this.setState({ sectors: sec, rotations: rot });
-        this.evaluateMap();
-
-        //console.error("Used " + failures + " tries!");
-    }
-
-    evaluateMapWC(criteria) {
-        var hasEqNbr = hasEqualNeighbour(this.nbrMat, criteria.minEqDist);
-        var balance = getExpNbrStats(this.nbrMat);
-        this.setState({
-            illegal: hasEqNbr,
-            balanceStats: balance
-        });
-    }
 
     evaluateMap() {
-        var criteria = {
-            minEqDist: this.state.minEqDist,
-            maxFailures: 2000,
-        }
-        this.evaluateMapWC(criteria);
+        var i = this.hexMap.getMapValidity();
+        
+        this.setState({
+            illegal: i !== 0,
+        });
     }
 
     renderSettings() {
@@ -218,6 +164,7 @@ class App extends React.Component {
                     rngWithSwap={this.state.rngWithSwap}
                     onClickRngSwap={(doSwap) => this.onClickRngSwap(doSwap)}
                     onClickBalance={() => this.onClickBalance()}
+                    maxClusterSize={this.state.maxClusterSize}
                 />
             );
         }
@@ -242,8 +189,8 @@ class App extends React.Component {
                 {this.renderSettings()}
                 <MapView
                     numSect={this.state.numSect}
-                    sectors={this.state.sectors}
-                    rotations={this.state.rotations}
+                    sectors={this.hexMap.sectors}
+                    rotations={this.hexMap.rotations}
                     onClick={(i) => this.onClickSector(i)}
                     selected={this.state.selected}
                     illegal={this.state.illegal}
@@ -252,7 +199,8 @@ class App extends React.Component {
                     balanceStats={this.state.balanceStats}
                     hexInfo={this.state.hexInfo}
                     minEqDist={this.state.minEqDist}
-                    hexMap={this.hexMap}
+                    hexGrid={this.hexMap.hexGrid}
+                    maxClusterSize={this.state.maxClusterSize}
                 />
             </div>
         )

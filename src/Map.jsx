@@ -3,6 +3,7 @@ import './styles/Map.css';
 import { images, sectorCenter, getCenterRef } from './Defs';
 import { hasEqualNeighbour } from './calc/MapEvaluation';
 import { getNeighbourMatrix, } from "./calc/MapInformation";
+import { isTerraformable } from './calc/Basics';
 
 export class HexMapView extends React.Component {
     renderSelHexImg(isSelected) {
@@ -18,14 +19,18 @@ export class HexMapView extends React.Component {
         else
             return;
     }
-    renderEqNbrIndicator(isEqual, hexInfo) {
-        if (isEqual) {
+    renderInvalidIndicator(isEqual, isCluster) {
+        var imgRef = "";
+        if (isEqual)
+            imgRef = "RedRing";
+        else if (isCluster)
+            imgRef = "RedRing";
+        if (imgRef !== "") {
             return (
                 <img
                     className="hex-img-over"
-                    src={images["RedRing"]}
+                    src={images[imgRef]}
                     alt="RedRing"
-                    onMouseOver={() => this.props.onClickHex(hexInfo)}
                 />
             )
         }
@@ -33,11 +38,9 @@ export class HexMapView extends React.Component {
             return;
     }
     render() {
-        var nbrMat = getNeighbourMatrix(this.props.hexMap);
-        var hasEqNbr = hasEqualNeighbour(nbrMat, this.props.minEqDist);
-        var illegalClass = hasEqNbr ? " illegal" : " legal";
+        var illegalClass = this.props.illegal ? " illegal" : " legal";
         var rows = [];
-        for (const [row, hexes] of this.props.hexMap.entries()) {
+        for (const [row, hexes] of this.props.hexGrid.entries()) {
             var planets = [];
             for (const [col, hex] of hexes.entries()) {
                 var ignored = (row > 12 && col > 12)
@@ -50,30 +53,35 @@ export class HexMapView extends React.Component {
                 if (!ignored) {
                     var showRing = false;
                     var eqNbr = false;
+                    var cluster = false;
                     var imgRef = hex["Type"];
-                    var divClass = "hex-col-" + col + " rot" + this.props.hexMap[row][col]["Rot"];
+                    var divClass = "hex-col-" + col + " rot" + ["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
-                            showRing = true;
+                            showRing = this.props.showDebug;
                         }
-                        if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr" && imgRef != "Ga") {
+                        if (isTerraformable(imgRef)) {
                             for (var r = 2; r < this.props.minEqDist; r++)
-                                eqNbr |= this.props.hexMap[row][col][imgRef][r-1] > 0;
+                                eqNbr |= hex[imgRef][r-1] > 0;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
-                                imgRef = getCenterRef[this.props.hexMap[row][col]["Sec"]];
+                                imgRef = getCenterRef[hex["Sec"]];
                             }
                         }
-                        if (showRing)
+                        if (hex["Cs"] > this.props.maxClusterSize)
+                            cluster = true;
+                        if (showRing) {
                             eqNbr = false;
+                            cluster = false;
+                        }
                         planets.push(
                             <div
                                 className={divClass}
                                 key={col}
-                                onMouseOver={() => this.props.onClickHex(this.props.hexMap[row][col])}
+                                onClick={() => this.props.onClickHex(hex)}
                             >
-                                {this.renderEqNbrIndicator(eqNbr, this.props.hexMap[row][col])}
+                                {this.renderInvalidIndicator(eqNbr, cluster)}
                                 {this.renderSelHexImg(showRing)}
                             </div>
                         );
@@ -99,6 +107,7 @@ export class HexInfoView extends React.Component {
             "Slot",
             "Row",
             "Col",
+            "Cs",
             "Re",
             "Bl",
             "Wh",
@@ -179,20 +188,19 @@ class SectorView extends React.Component {
 
 export class MapView extends React.Component {
 
-    renderSector(i, col) {
-        var ignored = (i === 11)
-            || (i === 0 && this.props.numSect !== 9);
+    renderSector(slot, col) {
+        var ignored = (slot === 11)
+            || (slot === 0 && this.props.numSect !== 9);
         if (ignored) return null;
         return (
             <SectorView
-                key={i}
-                sid={i}
+                key={slot}
+                sid={slot}
                 numSect={this.props.numSect}
-                sector={this.props.sectors[i]}
-                rotation={this.props.rotations[i]}
+                sector={this.props.sectors[slot]}
+                rotation={this.props.rotations[slot]}
                 col={col}
-                onClick={() => this.props.onClick(i)}
-                selected={this.props.selected === i}
+                selected={this.props.selected === slot}
             />
         );
     }
@@ -210,7 +218,6 @@ export class MapView extends React.Component {
     }
 
     renderMap(doHexMap) {
-        if (doHexMap) {
             return (
                 <div className="map-eval-box">
                     {this.renderRow(0)}
@@ -224,23 +231,16 @@ export class MapView extends React.Component {
                         onClick={(i) => this.props.onClick(i)}
                         numSect={this.props.numSect}
                         minEqDist={this.props.minEqDist}
-                        hexMap={this.props.hexMap}
+                        hexGrid={this.props.hexGrid}
+                        maxClusterSize={this.props.maxClusterSize}
+                        illegal={this.props.illegal}
+                        showDebug={this.props.showDebug}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}
                     />
                 </div>
             );
-        }
-        else {
-            return (
-                <div className="map-eval-box">
-                    {this.renderRow(0)}
-                    {this.renderRow(1)}
-                    {this.renderRow(2)}                    
-                </div>
-            );
-        }
     }
 
     render() {

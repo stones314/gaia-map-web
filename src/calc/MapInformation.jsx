@@ -4,7 +4,7 @@
     isTerraformable,
     colorDist,
     getRingPlanets,
-    isOutsideMap,
+    isOutsideMap,    isValidCoords,
     getDynamicCoordMap
 } from './Basics';
 import {
@@ -36,13 +36,12 @@ const nbrWgt = {
 
 const distWgt = [1.0, 0.75, 0.5];
 
-
-export function makeHexMap(sectors, rotations) {
-    var hexMap = [];
+export function makeHexGrid(sectors, rotations) {
+    var hexGrid = [];
     for (var i = 0; i < 17; i++) {
-        hexMap.push([]);
+        hexGrid.push([]);
         for (var j = 0; j < 24; j++) {
-            hexMap[i].push({
+            hexGrid[i].push({
                 "Row": 0,
                 "Col": 0,
                 "Type": "No",
@@ -80,8 +79,9 @@ export function makeHexMap(sectors, rotations) {
                 "T1": [0, 0, 0],
                 "T2": [0, 0, 0],
                 "T3": [0, 0, 0],
+                "Cs": 0,
                 "Nbr": [0, 0, 0],
-                "Visited": 0,
+                "Visited": false,
             });
         }
     }
@@ -90,38 +90,38 @@ export function makeHexMap(sectors, rotations) {
         var row = sectorCenter[index][0];
         var col = sectorCenter[index][1];
         var rad = 0;
-        hexMap[row][col]["Type"] = hexes[rad][0];
-        hexMap[row][col]["Sec"] = sector;
-        hexMap[row][col]["Rot"] = rotations[index];
-        hexMap[row][col]["Slot"] = index;
-        hexMap[row][col]["Row"] = row;
-        hexMap[row][col]["Col"] = col;
+        hexGrid[row][col]["Type"] = hexes[rad][0];
+        hexGrid[row][col]["Sec"] = sector;
+        hexGrid[row][col]["Rot"] = rotations[index];
+        hexGrid[row][col]["Slot"] = index;
+        hexGrid[row][col]["Row"] = row;
+        hexGrid[row][col]["Col"] = col;
         for (rad = 1; rad < 3; rad++) {
             var ringCoords = getRingCoords(row, col, rad);
             var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
             for (const [ringId, [r, c]] of ringCoords.entries()) {
-                hexMap[r][c]["Type"] = ringPlanets[ringId];
-                hexMap[r][c]["Sec"] = sector;
-                hexMap[r][c]["Rot"] = rotations[index];
-                hexMap[r][c]["Slot"] = index;
-                hexMap[r][c]["Row"] = r;
-                hexMap[r][c]["Col"] = c;
+                hexGrid[r][c]["Type"] = ringPlanets[ringId];
+                hexGrid[r][c]["Sec"] = sector;
+                hexGrid[r][c]["Rot"] = rotations[index];
+                hexGrid[r][c]["Slot"] = index;
+                hexGrid[r][c]["Row"] = r;
+                hexGrid[r][c]["Col"] = c;
             }
         }
     }
-    return hexMap;
+    return hexGrid;
 }
 
 
-export function setStaticNeighbourInfo(hexMap) {
-    for (const [row, hexes] of hexMap.entries()) {
+export function setStaticNeighbourInfo(hexGrid) {
+    for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
             if (isPlanet(hex["Type"])) {
                 for (var rad = 1; rad < 4; rad++) {
                     var ringCoords = getRingCoords(row, col, rad);
                     for (const [ringId, [r, c]] of ringCoords.entries()) {
-                        if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
-                            var nbr = hexMap[r][c];
+                        if (isValidCoords(r, c)) {
+                            var nbr = hexGrid[r][c];
                             if (nbr["Sec"] === hex["Sec"]) {
                                 hex["s" + nbr["Type"]][rad - 1]++;
                                 if (isTerraformable(hex["Type"]) && isTerraformable(nbr["Type"])) {
@@ -139,11 +139,11 @@ export function setStaticNeighbourInfo(hexMap) {
     }
 }
 
-export function updateNeighbourInfo(hexMap) {
+export function updateNeighbourInfo(hexGrid) {
 
     const dynCoordMap = getDynamicCoordMap();
 
-    for (const [row, hexes] of hexMap.entries()) {
+    for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
             if (!isOutsideMap(hex["Type"])) {
                 hex["Row"] = row;
@@ -158,7 +158,7 @@ export function updateNeighbourInfo(hexMap) {
                 }
                 hex["Nbr"] = hex["sNbr"].slice();
                 for (const [di, [rad, r, c]] of dynCoordMap[row][col].entries()) {
-                    var nbr = hexMap[r][c]["Type"];
+                    var nbr = hexGrid[r][c]["Type"];
                     if (isOutsideMap(nbr)) {
                         hex["No"][rad - 1]++;
                     }
@@ -178,7 +178,7 @@ export function updateNeighbourInfo(hexMap) {
 }
 
 
-export function getNeighbourMatrix(hexMap) {
+export function getNeighbourMatrix(hexGrid) {
     var nbrMat = {};
     for (const [i, planet] of planets.entries()) {
         nbrMat[planet] = {};
@@ -187,7 +187,7 @@ export function getNeighbourMatrix(hexMap) {
         }
     }
 
-    for (const [row, hexes] of hexMap.entries()) {
+    for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
             var neighbour = hexInfo["Type"];
             if (neighbour === "Fr")
@@ -202,14 +202,14 @@ export function getNeighbourMatrix(hexMap) {
     return nbrMat;
 }
 
-export function updateNeighbourMatrix(hexMap, nbrMat) {
+export function updateNeighbourMatrix(hexGrid, nbrMat) {
     for (const [i, planet] of planets.entries()) {
         for (const [j, neighbour] of hexTypes.entries()) {
             nbrMat[planet][neighbour] = [0, 0, 0];
         }
     }
 
-    for (const [row, hexes] of hexMap.entries()) {
+    for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hexInfo] of hexes.entries()) {
             var neighbour = hexInfo["Type"];
             if (neighbour === "Fr")
@@ -257,4 +257,46 @@ export function getExpNbrStats(nbrMat) {
         balance[planet] = expNbrStats[planet]["Su"];
 
     return balance;
+}
+
+export function getClusterData(hexGrid, debug = false) {
+    var clusters = [];
+    var visited = !hexGrid[0][0]["Visited"];
+    for (const [row, hexes] of hexGrid.entries()) {
+        for (const [col, hex] of hexes.entries()) {
+            var cluster = [];
+            if (hex["Visited"] !== visited && isPlanet(hex["Type"])) {
+                cluster.push([row, col]);
+            }
+            var i = 0;
+            hex["Visited"] = visited;
+            while (i < cluster.length) {
+                var [r, c] = cluster[i];
+                var nbrCoord = getRingCoords(r, c, 1);
+                for (const [n, [nr, nc]] of nbrCoord.entries()) {
+                    if (isValidCoords(nr, nc) && hexGrid[nr][nc]["Visited"] !== visited) {
+                        hexGrid[nr][nc]["Visited"] = visited;
+                        if (isPlanet(hexGrid[nr][nc]["Type"])) {
+                            cluster.push([nr, nc]);
+                        }
+                    }
+                }
+                i++;
+            }
+            if (cluster.length > 0)
+                clusters.push(cluster);
+        }
+    }
+    var maxSize = 0;
+    for (const [i, cluster] of clusters.entries()) {
+        for (const [p, [r, c]] of cluster.entries()) {
+            hexGrid[r][c]["Cs"] = cluster.length;
+        }
+        if (cluster.length > maxSize) maxSize = cluster.length;
+    }
+
+    if (debug)
+        console.error("Clusters: " + clusters.length);
+
+    return maxSize;
 }
