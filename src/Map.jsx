@@ -50,18 +50,11 @@ export class HexMapView extends React.Component {
                 if (!ignored) {
                     var showRing = false;
                     var eqNbr = false;
-                    var imgClass = "hex-img";
                     var imgRef = hex["Type"];
                     var divClass = "hex-col-" + col + " rot" + this.props.hexMap[row][col]["Rot"];
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
-                            if (imgRef == "Em" || imgRef == "Fr")
-                                imgClass += " hex-selected";
-                            else
-                                showRing = true;
-                        }
-                        else if (this.props.hexInfo["Slot"] === hex["Slot"]) {
-                            imgClass += " hex-sec-selected";
+                            showRing = true;
                         }
                         if (imgRef != "Em" && imgRef != "Fr" && imgRef != "Tr" && imgRef != "Ga") {
                             for (var r = 2; r < this.props.minEqDist; r++)
@@ -78,15 +71,10 @@ export class HexMapView extends React.Component {
                             <div
                                 className={divClass}
                                 key={col}
+                                onMouseOver={() => this.props.onClickHex(this.props.hexMap[row][col])}
                             >
                                 {this.renderEqNbrIndicator(eqNbr, this.props.hexMap[row][col])}
                                 {this.renderSelHexImg(showRing)}
-                                <img
-                                    className={imgClass}
-                                    src={images[imgRef]}
-                                    onMouseOver={() => this.props.onClickHex(this.props.hexMap[row][col])}
-                                    alt={hex["Type"]}
-                                />
                             </div>
                         );
                     }
@@ -225,6 +213,9 @@ export class MapView extends React.Component {
         if (doHexMap) {
             return (
                 <div className="map-eval-box">
+                    {this.renderRow(0)}
+                    {this.renderRow(1)}
+                    {this.renderRow(2)}
                     <HexMapView
                         sectors={this.props.sectors}
                         rotations={this.props.rotations}

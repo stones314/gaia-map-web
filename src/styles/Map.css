@@ -9,7 +9,7 @@
     --hex-dx: calc(var(--hex-height) * 0.98);
     --hex-dy: calc(var(--hex-height) * 0.55);
     --hr-dx: calc(var(--hex-height) * 0.0);
-    --hr-dy: calc(var(--hex-height) * 1.1);
+    --hr-dy: calc(var(--hex-height) * 1.11);
 }
 
 .rot0 { transform: rotate(0deg); }
@@ -18,6 +18,11 @@
 .rot3 { transform: rotate(180deg); }
 .rot4 { transform: rotate(240deg); }
 .rot5 { transform: rotate(300deg); }
+
+.test-border {
+    border: 1px solid #ff0000;
+    border-radius: 100%;
+}
 
 .map-eval-box {
     width: 99.5%;
@@ -141,7 +146,7 @@
 
 .hex-map {
     position: absolute;
-    top: calc(0vmin - 7 * var(--hr-dy));
+    top: calc(0vmin - 6.85 * var(--hr-dy));
     left: 0.5vmin;
     width: 99.5%;
     z-index: 1;
@@ -165,7 +170,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 4;
+    z-index: 8;
 }
 
 .hex-row-0  { top: calc(var(--hr-dy) *   0); left: calc(var(--hr-dx) *  0); position: absolute; }
