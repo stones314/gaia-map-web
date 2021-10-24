@@ -66,8 +66,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-//        this.onClickRandom();
-        this.evaluateMap();
+        this.onClickRandom();
     }
 
     onClickSector(i) {
