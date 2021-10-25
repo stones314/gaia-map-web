@@ -20,6 +20,7 @@ export class HexMap {
         updateNeighbourInfo(this.hexGrid);
         this.nbrMat = getNeighbourMatrix(this.hexGrid);
         this.biggestCluster = getClusterData(this.hexGrid);
+        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat);
         this.criteria = {
             minEqDist: 2,
             maxClusterSize: 5,
@@ -33,6 +34,7 @@ export class HexMap {
         this.rotations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.hexGrid = makeHexGrid(this.sectors, this.rotations);
         setStaticNeighbourInfo(this.hexGrid);
+        this.nbrMat = getNeighbourMatrix(this.hexGrid);
         this.updateMapData();
     }
 
@@ -40,6 +42,7 @@ export class HexMap {
         updateNeighbourInfo(this.hexGrid);
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
+        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat);
     }
 
     rotateSec(slot) {
@@ -112,7 +115,7 @@ export class HexMap {
             return 1;
         else if (this.biggestCluster > this.criteria.maxClusterSize)
             return 2;
-        else if (this.criteria.maxEdgeCount < getHighestEdgeCount(this.nbrMat))
+        else if (this.criteria.maxEdgeCount < this.highestEdgeCount[1])
             return 3;
         return 0;
     }

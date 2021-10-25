@@ -193,9 +193,9 @@ export function getNeighbourMatrix(hexGrid) {
             if (neighbour === "Fr")
                 neighbour = "No";
             for (const [i, planet] of planets.entries()) {
-                nbrMat[planet][neighbour][0] += hexInfo[planet][0];
-                nbrMat[planet][neighbour][1] += hexInfo[planet][1];
-                nbrMat[planet][neighbour][2] += hexInfo[planet][2];
+                nbrMat[planet][neighbour][0] += hexInfo[planet][0] > 0 ? 1 : 0;
+                nbrMat[planet][neighbour][1] += hexInfo[planet][1] > 0 ? 1 : 0;
+                nbrMat[planet][neighbour][2] += hexInfo[planet][2] > 0 ? 1 : 0;
             }
         }
     }
@@ -215,9 +215,14 @@ export function updateNeighbourMatrix(hexGrid, nbrMat) {
             if (neighbour === "Fr")
                 neighbour = "No";
             for (const [i, planet] of planets.entries()) {
-                nbrMat[planet][neighbour][0] += hexInfo[planet][0];
-                nbrMat[planet][neighbour][1] += hexInfo[planet][1];
-                nbrMat[planet][neighbour][2] += hexInfo[planet][2];
+                nbrMat[planet][neighbour][0] += hexInfo[planet][0] > 0 ? 1 : 0;
+                nbrMat[planet][neighbour][1] += hexInfo[planet][1] > 0 ? 1 : 0;
+                nbrMat[planet][neighbour][2] += hexInfo[planet][2] > 0 ? 1 : 0;
+            }
+            if (isPlanet(neighbour)) {
+                nbrMat[neighbour]["No"][0] += hexInfo["No"][0] > 0 ? 1 : 0;
+                nbrMat[neighbour]["No"][1] += hexInfo["No"][1] > 0 ? 1 : 0;
+                nbrMat[neighbour]["No"][2] += hexInfo["No"][2] > 0 ? 1 : 0;
             }
         }
     }

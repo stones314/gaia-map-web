@@ -31,6 +31,7 @@ class App extends React.Component {
             rngWithSwap: true,
             minEqDist: 2,
             maxClusterSize: 5,
+            maxEdge: 2,
             hexInfo: {
                 "Visited": false,
                 "Re": 7,
@@ -136,9 +137,10 @@ class App extends React.Component {
 
     onClickRandom() {
         var [ok, failures] = this.hexMap.getRandomValidMap(this.state.rngWithSwap);
-        if (true) {
+        if (ok) {
             this.evaluateMap();
         }
+        //console.error("iterations: " + failures);
     }
 
 
@@ -201,6 +203,9 @@ class App extends React.Component {
                     minEqDist={this.state.minEqDist}
                     hexGrid={this.hexMap.hexGrid}
                     maxClusterSize={this.state.maxClusterSize}
+                    nbrMat={this.hexMap.nbrMat}
+                    highEdge={this.hexMap.highestEdgeCount}
+                    maxEdge={this.state.maxEdge}
                 />
             </div>
         )

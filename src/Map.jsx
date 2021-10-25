@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/Map.css';
-import { images, sectorCenter, getCenterRef } from './Defs';
+import { images, sectorCenter, getCenterRef, hexTypes, planets } from './Defs';
 import { hasEqualNeighbour } from './calc/MapEvaluation';
 import { getNeighbourMatrix, } from "./calc/MapInformation";
 import { isTerraformable } from './calc/Basics';
@@ -19,12 +19,14 @@ export class HexMapView extends React.Component {
         else
             return;
     }
-    renderInvalidIndicator(isEqual, isCluster) {
+    renderInvalidIndicator(isEqual, isCluster, isEdge) {
         var imgRef = "";
         if (isEqual)
             imgRef = "RedGlowyMark";
         else if (isCluster)
             imgRef = "YellowMark";
+        else if (isEdge)
+            imgRef = "GrayMark";
         if (imgRef !== "") {
             return (
                 <img
@@ -52,6 +54,7 @@ export class HexMapView extends React.Component {
                 if (!ignored) {
                     var showRing = false;
                     var eqNbr = false;
+                    var edgeErr = false;
                     var cluster = false;
                     var imgRef = hex["Type"];
                     var divClass = "hex-col-" + col + " rot" + ["Rot"];
@@ -61,7 +64,9 @@ export class HexMapView extends React.Component {
                         }
                         if (isTerraformable(imgRef)) {
                             for (var r = 1; r < this.props.minEqDist; r++)
-                                eqNbr |= hex[imgRef][r-1] > 0;
+                                eqNbr |= hex[imgRef][r - 1] > 0;
+                            if (hex["No"][0] > 0 && this.props.highEdge[0] === imgRef && this.props.highEdge[1] > this.props.maxEdge)
+                                edgeErr = true;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {
@@ -73,6 +78,7 @@ export class HexMapView extends React.Component {
                         if (showRing) {
                             eqNbr = false;
                             cluster = false;
+                            edgeErr = false;
                         }
                         planets.push(
                             <div
@@ -80,7 +86,7 @@ export class HexMapView extends React.Component {
                                 key={col}
                                 onClick={() => this.props.onClickHex(hex)}
                             >
-                                {this.renderInvalidIndicator(eqNbr, cluster)}
+                                {this.renderInvalidIndicator(eqNbr, cluster, edgeErr)}
                                 {this.renderSelHexImg(showRing)}
                             </div>
                         );
@@ -159,6 +165,30 @@ export class HexInfoView extends React.Component {
     }
 }
 
+
+class NbrMatView extends React.Component {
+    render() {
+        var rows = [];
+        for (const [i, planet] of planets.entries()) {
+            var info = planet + ": ";
+            for (const [j, nbr] of hexTypes.entries()) {
+                info += nbr+"="+this.props.nbrMat[planet][nbr] + ", "
+            }
+            rows.push(
+                <div key={i}>
+                    {info}
+                </div>
+            );
+        }
+        return (
+            <div className="hex-info-2">
+                {rows}
+            </div>
+        );
+
+    }
+}
+
 class SectorView extends React.Component {
     getClassName(rot, col, sel, b) {
         var s = "rot" + rot +
@@ -216,6 +246,18 @@ export class MapView extends React.Component {
         );
     }
 
+    renderNbrMat(doIt) {
+        if (doIt) {
+            return (
+                <NbrMatView
+                    nbrMat={this.props.nbrMat}
+                />
+            );
+        }
+        return null;
+    }
+
+
     renderMap(doHexMap) {
             return (
                 <div className="map-eval-box">
@@ -234,10 +276,13 @@ export class MapView extends React.Component {
                         maxClusterSize={this.props.maxClusterSize}
                         illegal={this.props.illegal}
                         showDebug={this.props.showDebug}
+                        highEdge={this.props.highEdge}
+                        maxEdge={this.props.maxEdge}
                     />
                     <HexInfoView
                         hexInfo={this.props.hexInfo}
                     />
+                    {this.renderNbrMat(this.props.showDebug)}
                 </div>
             );
     }
@@ -250,4 +295,3 @@ export class MapView extends React.Component {
         )
     }
 }
-

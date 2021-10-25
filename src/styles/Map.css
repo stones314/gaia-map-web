@@ -114,12 +114,23 @@
 
 .hex-info {
     border: 2px solid darkblue;
-    width: 10vmax;
+    width: 15vmax;
     display: flex;
     flex-direction: column;
     z-index: 2;
     position: fixed;
     right: 0;
+    bottom: 2vmin;
+    background-color: darkgray;
+}
+.hex-info-2 {
+    border: 2px solid darkblue;
+    width: 85vmax;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    position: fixed;
+    left: 1vmax;
     bottom: 2vmin;
     background-color: darkgray;
 }
