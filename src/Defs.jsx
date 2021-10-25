@@ -47,6 +47,15 @@ export const images = {
     "SM": "https://rygg-gaard.no/gaia/img/SmallSector.png",
     "HSel": "https://rygg-gaard.no/gaia/img/HexSelected.png",
     "RedRing": "https://rygg-gaard.no/gaia/img/RedRing.png",
+    "RedMark": "https://rygg-gaard.no/gaia/img/RedMark.png",
+    "RedGlowyMark": "https://rygg-gaard.no/gaia/img/RedGlowyMark.png",
+    "BlueMark": "https://rygg-gaard.no/gaia/img/BlueMark.png",
+    "GreenMark": "https://rygg-gaard.no/gaia/img/GreenMark.png",
+    "GrayMark": "https://rygg-gaard.no/gaia/img/GrayMark.png",
+    "WhiteMark": "https://rygg-gaard.no/gaia/img/WhiteMark.png",
+    "YellowMark": "https://rygg-gaard.no/gaia/img/YellowMark.png",
+    "YellowDottedMark": "https://rygg-gaard.no/gaia/img/YellowDottedMark.png",
+    "NoisyMark": "https://rygg-gaard.no/gaia/img/NoisyMark.png",
 };
 
 

@@ -11,7 +11,7 @@ export class HexMapView extends React.Component {
             return (
                 <img
                     className="hex-img-over"
-                    src={images["HSel"]}
+                    src={images["WhiteMark"]}
                     alt="HSel"
                 />
             )
@@ -22,9 +22,9 @@ export class HexMapView extends React.Component {
     renderInvalidIndicator(isEqual, isCluster) {
         var imgRef = "";
         if (isEqual)
-            imgRef = "RedRing";
+            imgRef = "RedGlowyMark";
         else if (isCluster)
-            imgRef = "RedRing";
+            imgRef = "YellowMark";
         if (imgRef !== "") {
             return (
                 <img
@@ -47,7 +47,6 @@ export class HexMapView extends React.Component {
                     || (row > 9 && col > 21)
                     || (row > 10 && col > 17)
                     || (row > 14 && col > 7)
-                    || (hex["Sec"] === "s00")
                     ;
 
                 if (!ignored) {
@@ -61,7 +60,7 @@ export class HexMapView extends React.Component {
                             showRing = this.props.showDebug;
                         }
                         if (isTerraformable(imgRef)) {
-                            for (var r = 2; r < this.props.minEqDist; r++)
+                            for (var r = 1; r < this.props.minEqDist; r++)
                                 eqNbr |= hex[imgRef][r-1] > 0;
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {

@@ -29,6 +29,15 @@ export function hasEqualNeighbour(nbrMat, minEqDist) {
     return false;
 }
 
+export function getHighestEdgeCount(nbrMat) {
+    var max = 0;
+    for (const [i, planet] of colorWheel.entries()) {
+        if (nbrMat[planet]["No"][0] > max)
+            max = nbrMat[planet]["No"][0];
+    }
+    return max;
+}
+
 export function evaluatePlanetHappiness(hexGrid) {
 
     for (const [row, hexes] of hexGrid.entries()) {

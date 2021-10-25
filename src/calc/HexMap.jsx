@@ -8,7 +8,7 @@ import {
     updateNeighbourMatrix,
 } from './MapInformation';
 import { rotateSec, swapSec } from './MapManipulation';
-import { hasEqualNeighbour } from './MapEvaluation';
+import { hasEqualNeighbour, getHighestEdgeCount } from './MapEvaluation';
 import { getRandomSlot } from './Basics';
 
 export class HexMap {
@@ -19,10 +19,11 @@ export class HexMap {
         setStaticNeighbourInfo(this.hexGrid);
         updateNeighbourInfo(this.hexGrid);
         this.nbrMat = getNeighbourMatrix(this.hexGrid);
-        this.maxClusterSize = getClusterData(this.hexGrid);
+        this.biggestCluster = getClusterData(this.hexGrid);
         this.criteria = {
             minEqDist: 2,
             maxClusterSize: 5,
+            maxEdgeCount: 2,
             maxFailures: 10000,
         }
     }
@@ -38,13 +39,12 @@ export class HexMap {
     updateMapData() {
         updateNeighbourInfo(this.hexGrid);
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
-        this.maxClusterSize = getClusterData(this.hexGrid);
+        this.biggestCluster = getClusterData(this.hexGrid);
     }
 
     rotateSec(slot) {
         rotateSec(this.hexGrid, slot);
         this.rotations[slot] = (this.rotations[slot] + 1) % 6;
-        this.updateMapData();
     }
 
     swapSec(slotA, slotB) {
@@ -53,7 +53,6 @@ export class HexMap {
             = [this.sectors[slotB], this.sectors[slotA]];
         [this.rotations[slotA], this.rotations[slotB]]
             = [this.rotations[slotB], this.rotations[slotA]];
-        this.updateMapData();
     }
 
     rotateRandomSec() {
@@ -105,12 +104,16 @@ export class HexMap {
          * 0 - map is valid
          * 1 - failed on minimum equal dist
          * 2 - failed on maximum cluster size
-         * N - failed on 
+         * 3 - failed on max edge count
+         * N - failed on
          */
+        this.updateMapData();
         if (hasEqualNeighbour(this.nbrMat, this.criteria.minEqDist))
             return 1;
-        else if (this.maxClusterSize > this.criteria.maxClusterSize)
+        else if (this.biggestCluster > this.criteria.maxClusterSize)
             return 2;
+        else if (this.criteria.maxEdgeCount < getHighestEdgeCount(this.nbrMat))
+            return 3;
         return 0;
     }
 }
