@@ -22,7 +22,7 @@ class NumSectorSelect extends React.Component {
             );
         }
         return (
-            <div>
+            <div className="menu-item">
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
                         Variant
@@ -52,6 +52,7 @@ class NumSectorSelect extends React.Component {
 
         return (
             <div>
+            <div className="menu-item">
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
                         Number of sectors
@@ -59,6 +60,7 @@ class NumSectorSelect extends React.Component {
                 </div>
                 <div className="menu-row">
                     {rows}
+                </div>
                 </div>
                 {this.renderOpts()}
             </div>

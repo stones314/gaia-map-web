@@ -18,7 +18,7 @@ class SelectOptionFromList extends React.Component {
             );
         }
         return (
-            <div>
+            <div className="menu-item">
                 <div className="menu-row">
                     <div className="menu-mode-lbl">
                         {this.props.optName}

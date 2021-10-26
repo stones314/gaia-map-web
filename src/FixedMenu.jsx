@@ -44,6 +44,18 @@ class FixedMenu extends React.Component {
         return null;
     }
 
+    renderDebug(showDebug) {
+        if (!showDebug) return null;
+        return (
+            <FixedImgButton
+                onClick={() => this.props.onClickDebug()}
+                isSelected={!this.props.showDebug}
+                imgRef="SM"
+                imgAlt="SectorMap"
+            />
+        );
+    }
+
     render() {
         return (
             <div>
@@ -54,18 +66,7 @@ class FixedMenu extends React.Component {
                         imgRef="Cog"
                         imgAlt="Menu"
                     />
-                    <FixedImgButton
-                        onClick={() => this.props.onClickDebug()}
-                        isSelected={this.props.showDebug}
-                        imgRef="HM"
-                        imgAlt="HexMap"
-                    />
-                    <FixedImgButton
-                        onClick={() => this.props.onClickDebug()}
-                        isSelected={!this.props.showDebug}
-                        imgRef="SM"
-                        imgAlt="SectorMap"
-                    />
+                    {this.renderDebug(false)}
                 </div>
                 {this.renderBottomMenu(!this.props.showDebug)}
             </div>
