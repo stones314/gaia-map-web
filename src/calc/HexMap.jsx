@@ -9,24 +9,25 @@ import {
 } from './MapInformation';
 import { rotateSec, swapSec } from './MapManipulation';
 import { hasEqualNeighbour, getHighestEdgeCount } from './MapEvaluation';
-import { getRandomSlot } from './Basics';
+import { getRandomSlot, getDynamicCoordMap } from './Basics';
 
 export class HexMap {
     constructor() {
         this.sectors = getSecOpt(10, 0);
         this.rotations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.dynCoordMap = getDynamicCoordMap();
         this.hexGrid = makeHexGrid(this.sectors, this.rotations);
         setStaticNeighbourInfo(this.hexGrid);
-        updateNeighbourInfo(this.hexGrid);
+        updateNeighbourInfo(this.hexGrid, this.dynCoordMap);
         this.nbrMat = getNeighbourMatrix(this.hexGrid);
-        this.biggestCluster = getClusterData(this.hexGrid);
-        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat);
         this.criteria = {
             minEqDist: 2,
             maxClusterSize: 5,
             maxEdgeCount: 2,
             maxFailures: 10000,
         }
+        this.biggestCluster = getClusterData(this.hexGrid);
+        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
     }
 
     newSectorSelection(numSec, variant) {
@@ -39,10 +40,10 @@ export class HexMap {
     }
 
     updateMapData() {
-        updateNeighbourInfo(this.hexGrid);
+        updateNeighbourInfo(this.hexGrid, this.dynCoordMap);
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
-        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat);
+        this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
     }
 
     rotateSec(slot) {

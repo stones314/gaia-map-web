@@ -21,10 +21,10 @@ export class HexMapView extends React.Component {
     }
     renderInvalidIndicator(isEqual, isCluster, isEdge) {
         var imgRef = "";
-        if (isEqual)
-            imgRef = "RedGlowyMark";
-        else if (isCluster)
+        if (isCluster)
             imgRef = "YellowMark";
+        else if (isEqual)
+            imgRef = "RedGlowyMark";
         else if (isEdge)
             imgRef = "GrayMark";
         if (imgRef !== "") {
@@ -65,8 +65,9 @@ export class HexMapView extends React.Component {
                         if (isTerraformable(imgRef)) {
                             for (var r = 1; r < this.props.minEqDist; r++)
                                 eqNbr |= hex[imgRef][r - 1] > 0;
-                            if (hex["No"][0] > 0 && this.props.highEdge[0] === imgRef && this.props.highEdge[1] > this.props.maxEdge)
+                            if (hex["No"][0] > 0 && this.props.highEdge[1] > this.props.maxEdge && this.props.highEdge[0].includes(imgRef)) {
                                 edgeErr = true;
+                            }
                         }
                         for (const [i, [r, c]] of sectorCenter.entries()) {
                             if (row === r && col === c) {

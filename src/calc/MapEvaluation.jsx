@@ -29,13 +29,16 @@ export function hasEqualNeighbour(nbrMat, minEqDist) {
     return false;
 }
 
-export function getHighestEdgeCount(nbrMat) {
+export function getHighestEdgeCount(nbrMat, maxEdgeCount) {
     var max = 0;
-    var p = "No";
+    var p = [];
     for (const [i, planet] of colorWheel.entries()) {
-        if (nbrMat[planet]["No"][0] > max) {
-            p = planet;
-            max = nbrMat[planet]["No"][0];
+        var edgeCount = nbrMat[planet]["No"][0];
+        if (edgeCount > max) {
+            max = edgeCount;
+        }
+        if (edgeCount > maxEdgeCount) {
+            p.push(planet);
         }
     }
     return [p, max];

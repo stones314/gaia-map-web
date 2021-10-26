@@ -1,4 +1,3 @@
-import { getDynamicCoordMap } from './calc/Basics';
 
 export const images = {
     "Re": "https://rygg-gaard.no/gaia/img/RedHex.png",

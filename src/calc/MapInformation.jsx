@@ -139,9 +139,7 @@ export function setStaticNeighbourInfo(hexGrid) {
     }
 }
 
-export function updateNeighbourInfo(hexGrid) {
-
-    const dynCoordMap = getDynamicCoordMap();
+export function updateNeighbourInfo(hexGrid, dynCoordMap) {
 
     for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
@@ -157,6 +155,8 @@ export function updateNeighbourInfo(hexGrid) {
                     hex["T" + i] = hex["sT" + i].slice();;
                 }
                 hex["Nbr"] = hex["sNbr"].slice();
+                if (row === 0 || row === 16 || col === 0 || col === 23)
+                    hex["No"][0]++;
                 for (const [di, [rad, r, c]] of dynCoordMap[row][col].entries()) {
                     var nbr = hexGrid[r][c]["Type"];
                     if (isOutsideMap(nbr)) {

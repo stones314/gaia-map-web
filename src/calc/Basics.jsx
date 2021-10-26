@@ -164,14 +164,12 @@ export function getDynamicCoordMap() {
         dynamicCoordMap.push([]);
         for (const [col, hex] of hexes.entries()) {
             dynamicCoordMap[row].push([]);
-            if (hex["Type"] !== "No") {
-                for (var rad = 1; rad < 4; rad++) {
-                    var ringCoords = getRingCoords(row, col, rad);
-                    for (const [ringId, [r, c]] of ringCoords.entries()) {
-                        if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
-                            if (hexGrid[r][c]["Sec"] !== hex["Sec"]) {
-                                dynamicCoordMap[row][col].push([rad, r, c]);
-                            }
+            for (var rad = 1; rad < 4; rad++) {
+                var ringCoords = getRingCoords(row, col, rad);
+                for (const [ringId, [r, c]] of ringCoords.entries()) {
+                    if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
+                        if (hexGrid[r][c]["Sec"] !== hex["Sec"]) {
+                            dynamicCoordMap[row][col].push([rad, r, c]);
                         }
                     }
                 }
@@ -179,4 +177,5 @@ export function getDynamicCoordMap() {
         }
     }
     return dynamicCoordMap;
-} 
+}
+
