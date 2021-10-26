@@ -1,10 +1,10 @@
 :root {
     --map-height: 98vmin;
-    --map-width: calc(100vmax);
-    --sec-height: calc(var(--map-height) * 0.35 * 0.8);
+    --map-width: 99vmax;
+    --sec-height: calc(var(--map-height) * 0.38 * 0.8);
     --sec-delta-x: calc(var(--sec-height) * 0.89);
     --sec-delta-y: calc(var(--sec-height) * 0.1);
-    --hex-height: 5vmin;
+    --hex-height: calc(var(--sec-height) / 5.5);
     --hex-img-height: calc(var(--hex-height) * 1.1);
     --hex-dx: calc(var(--hex-height) * 0.98);
     --hex-dy: calc(var(--hex-height) * 0.55);
@@ -45,6 +45,7 @@
 .map-img {
     width: auto;
     height: 100%;
+    filter: brightness(150%);
 }
 
 .map-sec {
@@ -55,7 +56,7 @@
 
 .map-sec-selected {
     position: absolute;
-    filter: brightness(300%);
+    filter: brightness(250%);
     height: 100%;
     width: auto;
     /*
@@ -230,6 +231,9 @@
 
 
 @media screen and (orientation:portrait) {
+    :root {
+        --sec-height: 25vmin;
+    }
 
     .map-eval-box {
         flex-direction: column;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { edgeOpts, clustOpts, settingOpts } from './Defs';
 import './styles/Menu.css';
 
 class SelectOptionFromList extends React.Component {
@@ -11,7 +12,7 @@ class SelectOptionFromList extends React.Component {
         var rows = [];
         for (const [index, value] of this.props.opts.entries()) {
             rows.push(
-                <button key={index} className={optClass[index]} onClick={() => this.props.onClickOpt(value)}>
+                <button key={index} className={optClass[index]} onClick={() => this.props.onClickOpt(index)}>
                     {value}
                 </button>
             );
@@ -36,10 +37,22 @@ class Settings extends React.Component {
         return (
             <div className="menu-box-2">
                 <SelectOptionFromList
-                    optName="Min Equal Range"
-                    opts={[2,3]}
-                    selectedOptIndex={this.props.minEqDist - 2}
+                    optName={settingOpts.minEqDist.text}
+                    opts={settingOpts.minEqDist.optsView}
+                    selectedOptIndex={this.props.menuSelect.minEqDist}
                     onClickOpt={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
+                />
+                <SelectOptionFromList
+                    optName={settingOpts.maxClustSize.text}
+                    opts={settingOpts.maxClustSize.optsView}
+                    selectedOptIndex={this.props.menuSelect.maxCluster}
+                    onClickOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
+                />
+                <SelectOptionFromList
+                    optName={settingOpts.maxEdgeCount.text}
+                    opts={settingOpts.maxEdgeCount.optsView}
+                    selectedOptIndex={this.props.menuSelect.maxEdge}
+                    onClickOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                 />
                 <SelectOptionFromList
                     optName="Random with swap"

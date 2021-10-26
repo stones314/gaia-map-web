@@ -18,6 +18,7 @@ code {
     --img-btn-back: darkgrey;
     --img-btn-border: black;
     --img-btn-sel-back: green;
+    --img-btn-txt: black;
 }
 
 .App {
@@ -52,7 +53,7 @@ code {
 
 @media screen and (orientation:portrait) {
     :root {
-        --main-height: 100vmax;
+        --main-height: 95vmax;
     }
 
     .App {
@@ -60,9 +61,6 @@ code {
         height: 95vmax;
     }
 
-    .menu-box {
-        flex-direction: row;
-    }
     .eval-box {
         flex-direction: row;
     }

@@ -49,7 +49,7 @@ export class HexMapView extends React.Component {
                     || (row > 9 && col > 21)
                     || (row > 10 && col > 17)
                     || (row > 14 && col > 7)
-                    ;
+                    || (hex["Slot"] === 11);
 
                 if (!ignored) {
                     var showRing = false;
@@ -57,7 +57,7 @@ export class HexMapView extends React.Component {
                     var edgeErr = false;
                     var cluster = false;
                     var imgRef = hex["Type"];
-                    var divClass = "hex-col-" + col + " rot" + ["Rot"];
+                    var divClass = "hex-col-" + col + " rot" + ["Rot"];// + " test-border";
                     if (imgRef != "No") {
                         if (this.props.hexInfo["Row"] === row && this.props.hexInfo["Col"] === col) {
                             showRing = this.props.showDebug;
@@ -280,10 +280,6 @@ export class MapView extends React.Component {
                         highEdge={this.props.highEdge}
                         maxEdge={this.props.maxEdge}
                     />
-                    <HexInfoView
-                        hexInfo={this.props.hexInfo}
-                    />
-                    {this.renderNbrMat(this.props.showDebug)}
                 </div>
             );
     }

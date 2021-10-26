@@ -4,18 +4,7 @@ import { MapView } from './Map';
 import Menu from './Menu';
 import FixedMenu from './FixedMenu';
 import { HexMap } from './calc/HexMap';
-import { getSecOpt } from './Defs';
-import {
-    hasEqualNeighbour,
-} from './calc/MapEvaluation';
-import {
-    getNeighbourMatrix,
-    makeHexGrid,
-    getExpNbrStats,
-    setStaticNeighbourInfo,
-    updateNeighbourInfo,
-} from "./calc/MapInformation";
-import { getRandomValidMap, rotateSec, swapSec, randomizeOnce, optimize} from './calc/MapManipulation';
+import { edgeOpts, clustOpts, settingOpts } from './Defs';
 
 class App extends React.Component {
     constructor(props) {
@@ -29,9 +18,11 @@ class App extends React.Component {
             showDebug: false,
             illegal: false,
             rngWithSwap: true,
-            minEqDist: 2,
-            maxClusterSize: 5,
-            maxEdge: 2,
+            menuSelect: {
+                minEqDist: settingOpts.minEqDist.defaultId,
+                maxCluster: settingOpts.maxClustSize.defaultId,
+                maxEdge: settingOpts.maxEdgeCount.defaultId,
+            },
             hexInfo: {
                 "Visited": false,
                 "Re": 7,
@@ -122,8 +113,38 @@ class App extends React.Component {
     }
 
     onClickMinEqualDist(minEqDist) {
-        this.setState({ minEqDist: minEqDist });
-        this.hexMap.criteria.minEqDist = minEqDist;
+        this.setState({
+            menuSelect: {
+                minEqDist: minEqDist,
+                maxCluster: this.state.menuSelect.maxCluster,
+                maxEdge: this.state.menuSelect.maxEdge,
+            }
+        });
+        this.hexMap.criteria.minEqDist = settingOpts.minEqDist.optsVal[minEqDist];
+        this.evaluateMap();
+    }
+
+    onClickMaxClustSize(clustOpt) {
+        this.setState({
+            menuSelect: {
+                minEqDist: this.state.menuSelect.minEqDist,
+                maxCluster: clustOpt,
+                maxEdge: this.state.menuSelect.maxEdge,
+            }
+        });
+        this.hexMap.criteria.maxClusterSize = settingOpts.maxClustSize.optsVal[clustOpt];
+        this.evaluateMap();
+    }
+
+    onClickMaxEdgeCount(edgeOpt) {
+        this.setState({
+            menuSelect: {
+                minEqDist: this.state.menuSelect.minEqDist,
+                maxCluster: this.state.menuSelect.maxCluster,
+                maxEdge: edgeOpt,
+            }
+        });
+        this.hexMap.criteria.maxEdgeCount = settingOpts.maxEdgeCount.optsVal[edgeOpt];
         this.evaluateMap();
     }
 
@@ -160,13 +181,14 @@ class App extends React.Component {
                     numSec={this.state.numSect}
                     onClickOpt={(variant) => this.onClickOpt(variant)}
                     secOpt={this.state.secOpt}
-                    minEqDist={this.state.minEqDist}
-                    onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
                     onClickRandom={() => this.onClickRandom()}
                     rngWithSwap={this.state.rngWithSwap}
                     onClickRngSwap={(doSwap) => this.onClickRngSwap(doSwap)}
                     onClickBalance={() => this.onClickBalance()}
-                    maxClusterSize={this.state.maxClusterSize}
+                    menuSelect={this.state.menuSelect}
+                    onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
+                    onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
+                    onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
                 />
             );
         }
@@ -200,12 +222,12 @@ class App extends React.Component {
                     onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
                     balanceStats={this.state.balanceStats}
                     hexInfo={this.state.hexInfo}
-                    minEqDist={this.state.minEqDist}
                     hexGrid={this.hexMap.hexGrid}
-                    maxClusterSize={this.state.maxClusterSize}
                     nbrMat={this.hexMap.nbrMat}
                     highEdge={this.hexMap.highestEdgeCount}
-                    maxEdge={this.state.maxEdge}
+                    minEqDist={settingOpts.minEqDist.optsVal[this.state.menuSelect.minEqDist]}
+                    maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
+                    maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
                 />
             </div>
         )

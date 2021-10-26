@@ -61,7 +61,29 @@ export const images = {
 export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
 export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+export const clustOpts = [4, 5, 6, -1];
+export const edgeOpts = [1, 2, 3, -1];
 
+export const settingOpts = {
+    minEqDist: {
+        text: "Min Equal Range",
+        optsView: ["2", "3"],
+        optsVal: [2, 3],
+        defaultId: 0,
+    },
+    maxClustSize: {
+        text: "Max Cluster Size",
+        optsView: ["4", "5", "6", "None"],
+        optsVal: [4, 5, 6, 100],
+        defaultId: 1,
+    },
+    maxEdgeCount: {
+        text: "Max Edge Count",
+        optsView: ["1", "2", "3", "None"],
+        optsVal: [1, 2, 3, 100],
+        defaultId: 1,
+    },
+};
 
 export const sectorCenter = [
     [8, 2], [6, 7], [4, 12], [2, 17],

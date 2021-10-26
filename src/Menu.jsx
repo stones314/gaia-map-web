@@ -77,10 +77,13 @@ class Menu extends React.Component {
                     secOpt={this.props.secOpt}
                 />
                 <Settings
-                    minEqDist={this.props.minEqDist}
-                    onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
                     rngWithSwap={this.props.rngWithSwap}
                     onClickRngSwap={(doSwap) => this.props.onClickRngSwap(doSwap)}
+                    menuSelect={this.props.menuSelect}
+                    onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
+                    onClickClustOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
+                    onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
+
                 />
                 <div className="menu-row">
                     <button onClick={this.props.onClickRandom}>Randomize</button>

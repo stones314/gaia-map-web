@@ -95,7 +95,7 @@ export class HexMap {
         var failures = 1;
         while (this.getMapValidity() > 0) {
             failures++;
-            if (failures > this.criteria.maxFail)
+            if (failures > this.criteria.maxFailures)
                 return [false, failures];
             this.randomizeMany(withSwap, 10);
         }
