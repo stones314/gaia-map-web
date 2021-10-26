@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles/Menu.css';
-import Settings from './Settings';
+import { Settings, SelectOptionFromList } from './Settings';
+import { settingOpts } from './Defs'
 
 class NumSectorSelect extends React.Component {
     renderOpts() {
@@ -16,7 +17,7 @@ class NumSectorSelect extends React.Component {
         var rows = [];
         for (const [index, value] of vars[this.props.numSec - 7].entries()) {
             rows.push(
-                <button key={index} className={varClass[index]} onClick={() => this.props.onClickOpt(index)}>
+                <button key={index} className={varClass[index]} onClick={() => this.props.onClickVar(index)}>
                     {value}
                 </button>
             );
@@ -51,18 +52,24 @@ class NumSectorSelect extends React.Component {
         }
 
         return (
-            <div>
-            <div className="menu-item">
-                <div className="menu-row">
-                    <div className="menu-mode-lbl">
-                        Number of sectors
+            <div className="menu-box-2">
+                <div className="menu-item">
+                    <div className="menu-row">
+                        <div className="menu-mode-lbl">
+                            Number of sectors
+                    </div>
+                    </div>
+                    <div className="menu-row">
+                        {rows}
                     </div>
                 </div>
-                <div className="menu-row">
-                    {rows}
-                </div>
-                </div>
                 {this.renderOpts()}
+                <SelectOptionFromList
+                    optName={settingOpts.rngWithSwap.text}
+                    opts={settingOpts.rngWithSwap.optsView}
+                    selectedOptIndex={this.props.menuSelect.rngWithSwap}
+                    onClickOpt={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                />
             </div>
         )
     }
@@ -71,23 +78,25 @@ class NumSectorSelect extends React.Component {
 class Menu extends React.Component {
     render() {
         return (
-            <div className="menu-box">
-                <NumSectorSelect
-                    onClick={(numSec) => this.props.onClick(numSec)}
-                    numSec={this.props.numSec}
-                    onClickOpt={(variant) => this.props.onClickOpt(variant)}
-                    secOpt={this.props.secOpt}
-                />
-                <Settings
-                    rngWithSwap={this.props.rngWithSwap}
-                    onClickRngSwap={(doSwap) => this.props.onClickRngSwap(doSwap)}
-                    menuSelect={this.props.menuSelect}
-                    onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
-                    onClickClustOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
-                    onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
-
-                />
-                <div className="menu-row">
+            <div className="menu-box-0">
+                <div className="menu-box">
+                    <NumSectorSelect
+                        onClick={(numSec) => this.props.onClick(numSec)}
+                        numSec={this.props.numSec}
+                        onClickVar={(variant) => this.props.onClickOpt(variant)}
+                        secOpt={this.props.secOpt}
+                        menuSelect={this.props.menuSelect}
+                        onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                    />
+                    <Settings
+                        menuSelect={this.props.menuSelect}
+                        onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
+                        onClickClustOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
+                        onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
+                        onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                    />
+                </div>
+                <div className="menu-box-2">
                     <button onClick={this.props.onClickRandom}>Randomize</button>
                 </div>
             </div>

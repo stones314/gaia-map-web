@@ -28,6 +28,7 @@ export class HexMap {
         }
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
+        this.rngWithSwap = true;
     }
 
     newSectorSelection(numSec, variant) {
@@ -70,8 +71,8 @@ export class HexMap {
         this.swapSec(slotA, slotB);
     }
 
-    randomizeOnce(withSwap) {
-        if (withSwap) {
+    randomizeOnce() {
+        if (this.rngWithSwap) {
             var i = Math.random() * 2;
             if (i < 1) {
                 this.swapRandomSec();
@@ -83,21 +84,21 @@ export class HexMap {
         }
     }
 
-    randomizeMany(withSwap, times) {
+    randomizeMany(times) {
         for (var i = 0; i < times; i++) {
-            this.randomizeOnce(withSwap);
+            this.randomizeOnce();
         }
     }
 
-    getRandomValidMap(withSwap) {
-        this.randomizeMany(withSwap, 10);
+    getRandomValidMap() {
+        this.randomizeMany(10);
 
         var failures = 1;
         while (this.getMapValidity() > 0) {
             failures++;
             if (failures > this.criteria.maxFailures)
                 return [false, failures];
-            this.randomizeMany(withSwap, 10);
+            this.randomizeMany(10);
         }
         return [true, failures];
     }

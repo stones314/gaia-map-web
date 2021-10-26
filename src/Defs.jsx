@@ -83,6 +83,12 @@ export const settingOpts = {
         optsVal: [1, 2, 3, 100],
         defaultId: 1,
     },
+    rngWithSwap: {
+        text: "Random With Swap",
+        optsView: ["Yes", "No"],
+        optsVal: [true, false],
+        defaultId: 0,
+    },
 };
 
 export const sectorCenter = [

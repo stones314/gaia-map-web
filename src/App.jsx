@@ -17,11 +17,11 @@ class App extends React.Component {
             showSettings: false,
             showDebug: false,
             illegal: false,
-            rngWithSwap: true,
             menuSelect: {
                 minEqDist: settingOpts.minEqDist.defaultId,
                 maxCluster: settingOpts.maxClustSize.defaultId,
                 maxEdge: settingOpts.maxEdgeCount.defaultId,
+                rngWithSwap: settingOpts.rngWithSwap.defaultId,
             },
             hexInfo: {
                 "Visited": false,
@@ -108,42 +108,34 @@ class App extends React.Component {
         this.evaluateMap();
     }
 
-    onClickRngSwap(doSwap) {
-        this.setState({ rngWithSwap: doSwap == "Yes" });
+    onClickRngSwap(rngSwapOpt) {
+        var ms = this.state.menuSelect;
+        ms.rngWithSwap = rngSwapOpt;
+        this.setState({ menuSelect: ms });
+        this.hexMap.rngWithSwap = settingOpts.rngWithSwap.optsVal[rngSwapOpt];
+        this.evaluateMap();
     }
 
     onClickMinEqualDist(minEqDist) {
-        this.setState({
-            menuSelect: {
-                minEqDist: minEqDist,
-                maxCluster: this.state.menuSelect.maxCluster,
-                maxEdge: this.state.menuSelect.maxEdge,
-            }
-        });
+        var ms = this.state.menuSelect;
+        ms.minEqDist = minEqDist;
+        this.setState({ menuSelect: ms});
         this.hexMap.criteria.minEqDist = settingOpts.minEqDist.optsVal[minEqDist];
         this.evaluateMap();
     }
 
     onClickMaxClustSize(clustOpt) {
-        this.setState({
-            menuSelect: {
-                minEqDist: this.state.menuSelect.minEqDist,
-                maxCluster: clustOpt,
-                maxEdge: this.state.menuSelect.maxEdge,
-            }
-        });
+        var ms = this.state.menuSelect;
+        ms.maxCluster = clustOpt;
+        this.setState({ menuSelect: ms });
         this.hexMap.criteria.maxClusterSize = settingOpts.maxClustSize.optsVal[clustOpt];
         this.evaluateMap();
     }
 
     onClickMaxEdgeCount(edgeOpt) {
-        this.setState({
-            menuSelect: {
-                minEqDist: this.state.menuSelect.minEqDist,
-                maxCluster: this.state.menuSelect.maxCluster,
-                maxEdge: edgeOpt,
-            }
-        });
+        var ms = this.state.menuSelect;
+        ms.maxEdge = edgeOpt;
+        this.setState({ menuSelect: ms });
         this.hexMap.criteria.maxEdgeCount = settingOpts.maxEdgeCount.optsVal[edgeOpt];
         this.evaluateMap();
     }
@@ -157,7 +149,7 @@ class App extends React.Component {
     }
 
     onClickRandom() {
-        var [ok, failures] = this.hexMap.getRandomValidMap(this.state.rngWithSwap);
+        var [ok, failures] = this.hexMap.getRandomValidMap();
         if (ok) {
             this.evaluateMap();
         }
@@ -182,13 +174,12 @@ class App extends React.Component {
                     onClickOpt={(variant) => this.onClickOpt(variant)}
                     secOpt={this.state.secOpt}
                     onClickRandom={() => this.onClickRandom()}
-                    rngWithSwap={this.state.rngWithSwap}
-                    onClickRngSwap={(doSwap) => this.onClickRngSwap(doSwap)}
                     onClickBalance={() => this.onClickBalance()}
                     menuSelect={this.state.menuSelect}
                     onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
                     onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
                     onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
+                    onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
                 />
             );
         }

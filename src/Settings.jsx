@@ -2,7 +2,7 @@ import React from 'react';
 import { edgeOpts, clustOpts, settingOpts } from './Defs';
 import './styles/Menu.css';
 
-class SelectOptionFromList extends React.Component {
+export class SelectOptionFromList extends React.Component {
 
     render() {
         var nOpt = this.props.opts.length;
@@ -32,7 +32,7 @@ class SelectOptionFromList extends React.Component {
     }
 }
 
-class Settings extends React.Component {
+export class Settings extends React.Component {
     render() {
         return (
             <div className="menu-box-2">
@@ -53,12 +53,6 @@ class Settings extends React.Component {
                     opts={settingOpts.maxEdgeCount.optsView}
                     selectedOptIndex={this.props.menuSelect.maxEdge}
                     onClickOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
-                />
-                <SelectOptionFromList
-                    optName="Random with swap"
-                    opts={["Yes", "No"]}
-                    selectedOptIndex={this.props.rngWithSwap ? 0 : 1}
-                    onClickOpt={(doSwap) => this.props.onClickRngSwap(doSwap)}
                 />
             </div>
         )

@@ -45,7 +45,6 @@
 .map-img {
     width: auto;
     height: 100%;
-    filter: brightness(150%);
 }
 
 .map-sec {
@@ -56,7 +55,7 @@
 
 .map-sec-selected {
     position: absolute;
-    filter: brightness(250%);
+    filter: brightness(200%);
     height: 100%;
     width: auto;
     /*

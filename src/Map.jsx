@@ -49,7 +49,8 @@ export class HexMapView extends React.Component {
                     || (row > 9 && col > 21)
                     || (row > 10 && col > 17)
                     || (row > 14 && col > 7)
-                    || (hex["Slot"] === 11);
+                    || (hex["Slot"] === 11)
+                    || (hex["Type"] === "Fr" && this.props.selected === -1);
 
                 if (!ignored) {
                     var showRing = false;
@@ -220,7 +221,7 @@ export class MapView extends React.Component {
 
     renderSector(slot, col) {
         var ignored = (slot === 11)
-            || (slot === 0 && this.props.numSect !== 9);
+            || (this.props.sectors[slot] === "s00" && this.props.selected === -1);
         if (ignored) return null;
         return (
             <SectorView
@@ -279,6 +280,7 @@ export class MapView extends React.Component {
                         showDebug={this.props.showDebug}
                         highEdge={this.props.highEdge}
                         maxEdge={this.props.maxEdge}
+                        selected={this.props.selected}
                     />
                 </div>
             );

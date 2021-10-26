@@ -22,28 +22,6 @@ class FixedImgButton extends React.Component {
 }
 
 class FixedMenu extends React.Component {
-    renderBottomMenu(isSectorView) {
-        if (isSectorView) {
-            return (
-                <div className="menu-fixed-bottom">
-                    <FixedImgButton
-                        onClick={() => this.props.onClickRot()}
-                        isSelected={!this.props.swapMode}
-                        imgRef="Rot"
-                        imgAlt="Rotate"
-                    />
-                    <FixedImgButton
-                        onClick={() => this.props.onClickSwap()}
-                        isSelected={this.props.swapMode}
-                        imgRef="Swap"
-                        imgAlt="Swap"
-                    />
-                </div>
-            );
-        }
-        return null;
-    }
-
     renderDebug(showDebug) {
         if (!showDebug) return null;
         return (
@@ -67,8 +45,19 @@ class FixedMenu extends React.Component {
                         imgAlt="Menu"
                     />
                     {this.renderDebug(false)}
+                    <FixedImgButton
+                        onClick={() => this.props.onClickRot()}
+                        isSelected={!this.props.swapMode}
+                        imgRef="Rot"
+                        imgAlt="Rotate"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickSwap()}
+                        isSelected={this.props.swapMode}
+                        imgRef="Swap"
+                        imgAlt="Swap"
+                    />
                 </div>
-                {this.renderBottomMenu(!this.props.showDebug)}
             </div>
         )
     }
