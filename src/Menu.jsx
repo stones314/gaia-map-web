@@ -97,7 +97,11 @@ class Menu extends React.Component {
                     />
                 </div>
                 <div className="menu-box-2">
-                    <button onClick={this.props.onClickRandom}>Randomize</button>
+                    <button
+                        className="menu-label"
+                        onClick={this.props.onClickRandom}>
+                        Random Valid Map
+                        </button>
                 </div>
             </div>
         )

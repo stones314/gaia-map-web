@@ -13,7 +13,6 @@ code {
 }
 
 :root {
-    --main-height: 100vmin;
     /*Button stuff:*/
     --img-btn-back: darkgrey;
     --img-btn-border: black;
@@ -24,7 +23,7 @@ code {
 .App {
     display: flex;
     flex-direction: column;
-    height: 100vmin;
+    height: 100vh;
     /*
     border: 2px solid #ff00ff;
     */
@@ -51,14 +50,10 @@ code {
 }
 
 
-@media screen and (orientation:portrait) {
-    :root {
-        --main-height: 95vmax;
-    }
+@media screen and (max-aspect-ratio: 210/152) {
 
     .App {
         flex-direction: column;
-        height: 95vmax;
     }
 
     .eval-box {
