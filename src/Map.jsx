@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/Map.css';
-import { images, sectorCenter, getCenterRef, hexTypes, planets } from './Defs';
+import { images, sectorCenter, getCenterRef, hexTypes, planets, colorWheel } from './Defs';
 import { hasEqualNeighbour } from './calc/MapEvaluation';
 import { getNeighbourMatrix, } from "./calc/MapInformation";
 import { isTerraformable } from './calc/Basics';
@@ -109,19 +109,7 @@ export class HexMapView extends React.Component {
 export class HexInfoView extends React.Component {
     render() {
         var keys = [
-            "Sec",
-            "Type",
-            "Slot",
-            "Row",
-            "Col",
             "Cs",
-            "Re",
-            "Bl",
-            "Wh",
-            "Bk",
-            "Br",
-            "Ye",
-            "Or",
             "Ga",
             "Tr",
             "T0",
@@ -130,35 +118,18 @@ export class HexInfoView extends React.Component {
             "T3",
             "Em",
             "No",
-            "Nbr",
+            "Happy",
         ];
         if (!this.props.hexInfo["No"])
             return null;
         var rows = [];
         for (const [i, key] of keys.entries()) {
-            var sum = "";
-            if (key === "Nbr")
-                sum += "("+(this.props.hexInfo[key][0]
-                    + this.props.hexInfo[key][1]
-                    + this.props.hexInfo[key][2])+")";
             rows.push(
                 <div key={key}>
-                    {key + ": " + this.props.hexInfo[key] + sum}
+                    {key + ": " + this.props.hexInfo[key]}
                 </div>
             );
         }
-        var a = 6 - this.props.hexInfo["Nbr"][0];
-        var b = 12 - this.props.hexInfo["Nbr"][1];
-        var c = 18 - this.props.hexInfo["Nbr"][2]
-        rows.push(
-            <div key="---">
-                {"---: [" + a
-                    + ", " + b
-                    + ", " + c
-                    + "]("+(a+b+c) + ")"
-                }
-            </div>
-        );
         return (
             <div className="hex-info">
                 {rows}
@@ -190,6 +161,7 @@ class NbrMatView extends React.Component {
 
     }
 }
+
 
 class SectorView extends React.Component {
     getClassName(rot, col, sel, b) {
@@ -282,6 +254,7 @@ export class MapView extends React.Component {
                         maxEdge={this.props.maxEdge}
                         selected={this.props.selected}
                     />
+                    <HexInfoView hexInfo={this.props.hexInfo} />
                 </div>
             );
     }

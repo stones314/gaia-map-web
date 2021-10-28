@@ -1,5 +1,12 @@
 
 export const images = {
+    "pRe": "https://rygg-gaard.no/gaia/img/RedPlanet.png",
+    "pBl": "https://rygg-gaard.no/gaia/img/BluePlanet.png",
+    "pWh": "https://rygg-gaard.no/gaia/img/WhitePlanet.png",
+    "pBk": "https://rygg-gaard.no/gaia/img/GreyPlanet.png",
+    "pBr": "https://rygg-gaard.no/gaia/img/BrownPlanet.png",
+    "pYe": "https://rygg-gaard.no/gaia/img/YellowPlanet.png",
+    "pOr": "https://rygg-gaard.no/gaia/img/OrangePlanet.png",
     "Re": "https://rygg-gaard.no/gaia/img/RedHex.png",
     "Bl": "https://rygg-gaard.no/gaia/img/BlueHex.png",
     "Wh": "https://rygg-gaard.no/gaia/img/WhiteHex.png",
@@ -61,8 +68,6 @@ export const images = {
 export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
 export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
-export const clustOpts = [4, 5, 6, -1];
-export const edgeOpts = [1, 2, 3, -1];
 
 export const settingOpts = {
     minEqDist: {
@@ -73,14 +78,14 @@ export const settingOpts = {
     },
     maxClustSize: {
         text: "Max Cluster Size",
-        optsView: ["4", "5", "6", "None"],
+        optsView: ["4", "5", "6", "N/A"],
         optsVal: [4, 5, 6, 100],
         defaultId: 1,
     },
     maxEdgeCount: {
-        text: "Max Edge Count",
-        optsView: ["1", "2", "3", "None"],
-        optsVal: [1, 2, 3, 100],
+        text: "Max Edge Planets",
+        optsView: ["1", "2", "N/A"],
+        optsVal: [1, 2, 100],
         defaultId: 1,
     },
     rngWithSwap: {

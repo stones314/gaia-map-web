@@ -49,6 +49,24 @@ code {
     left: 0;
 }
 
+.happy-box {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.happy-row {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.happy-img {
+    height: 3vh;
+    margin: 0;
+}
 
 @media screen and (max-aspect-ratio: 210/152) {
 

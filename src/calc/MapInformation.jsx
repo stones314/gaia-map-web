@@ -82,6 +82,7 @@ export function makeHexGrid(sectors, rotations) {
                 "Cs": 0,
                 "Nbr": [0, 0, 0],
                 "Visited": false,
+                "Happy": 0.0,
             });
         }
     }

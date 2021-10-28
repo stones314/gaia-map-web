@@ -8,7 +8,7 @@ import {
     updateNeighbourMatrix,
 } from './MapInformation';
 import { rotateSec, swapSec } from './MapManipulation';
-import { hasEqualNeighbour, getHighestEdgeCount } from './MapEvaluation';
+import { hasEqualNeighbour, getHighestEdgeCount, evaluatePlanetHappiness } from './MapEvaluation';
 import { getRandomSlot, getDynamicCoordMap } from './Basics';
 
 export class HexMap {
@@ -29,6 +29,7 @@ export class HexMap {
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
         this.rngWithSwap = true;
+        this.colorHappy = evaluatePlanetHappiness(this.hexGrid);
     }
 
     newSectorSelection(numSec, variant) {
@@ -45,6 +46,7 @@ export class HexMap {
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
+        this.colorHappy = evaluatePlanetHappiness(this.hexGrid);
     }
 
     rotateSec(slot) {

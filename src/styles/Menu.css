@@ -147,10 +147,10 @@ code {
 
 @media screen and (max-aspect-ratio: 210/152) {
     .menu-box-0 {
-        width: 98%;
+        width: 85%;
         bottom: 0;
         top: auto;
-        left: 1%;
+        right: 0;
     }
 
     .menu-box {

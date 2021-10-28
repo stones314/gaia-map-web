@@ -122,7 +122,6 @@
 }
 .hex-info-2 {
     border: 2px solid darkblue;
-    width: 85vmax;
     display: flex;
     flex-direction: column;
     z-index: 2;

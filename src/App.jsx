@@ -3,8 +3,9 @@ import './styles/App.css';
 import { MapView } from './Map';
 import Menu from './Menu';
 import FixedMenu from './FixedMenu';
+import ColorHappyView from './ColorHappyView';
 import { HexMap } from './calc/HexMap';
-import { edgeOpts, clustOpts, settingOpts } from './Defs';
+import { settingOpts } from './Defs';
 
 class App extends React.Component {
     constructor(props) {
@@ -219,7 +220,10 @@ class App extends React.Component {
                     minEqDist={settingOpts.minEqDist.optsVal[this.state.menuSelect.minEqDist]}
                     maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
                     maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
+                    
                 />
+                <ColorHappyView colorHappy={this.hexMap.colorHappy} />
+
             </div>
         )
     }

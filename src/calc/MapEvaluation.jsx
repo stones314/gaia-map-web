@@ -1,5 +1,6 @@
 ﻿import { planets, colorWheel } from './../Defs';
 import { makeHexGrid, updateNeighbourInfo, getNeighbourMatrix, getExpNbrStats } from './MapInformation';
+import { isTerraformable } from './Basics';
 
 export function getMapValidity(hexGrid, nbrMat, criteria) {
     /*
@@ -44,14 +45,75 @@ export function getHighestEdgeCount(nbrMat, maxEdgeCount) {
     return [p, max];
 }
 
+const expandHappy = {
+    "T0": 1.0,
+    "T1": 0.8,
+    "T2": 0.0,
+    "T3": 0.0,
+    "Ga": 1.0,
+    "Tr": 0.2,
+}
+const leechHappy = {
+    "T0": 0.0,
+    "T1": 0.0,
+    "T2": 0.8,
+    "T3": 1.0,
+    "Ga": 0.0,
+    "Tr": 0.0,
+}
+const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
+const rangeWeight = [1.0, 1.0, 1.0];
+const edgeSadness = -0.3;
+
 export function evaluatePlanetHappiness(hexGrid) {
+    var colorHappy = {
+        "Re": 0.0,
+        "Bl": 0.0,
+        "Wh": 0.0,
+        "Bk": 0.0,
+        "Br": 0.0,
+        "Ye": 0.0,
+        "Or": 0.0,
+    }
+
+    var numPlan = 0;
 
     for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
-
+            if (isTerraformable(hex["Type"])) {
+                if (hex["Type"] === "Re")
+                    numPlan++;
+                hex["Happy"] = 0.0;
+                //Add happiness if easy to expand, or easy to leech:
+                for (var rad = 0; rad < 3; rad++) {
+                    for (const [i, nbrQ] of nbrQual.entries()) {
+                        if (rad < 2)
+                            hex["Happy"] += hex[nbrQ][rad] * leechHappy[nbrQ];
+                        hex["Happy"] += hex[nbrQ][rad] * expandHappy[nbrQ] * rangeWeight[rad];
+                    }
+                }
+                if (hex["No"][0] > 0)
+                    hex["Happy"] *= (1.0 + edgeSadness);
+                colorHappy[hex["Type"]] += hex["Happy"];
+            }
         }
     }
-    return hexGrid;
+    var myArr = [];
+    for (const [i, planet] of colorWheel.entries()) {
+        //best score I have seen was 42 for 6 planets, so set 7.1 per planet to 100%
+        //worst score was about 3 per planet, so set 1.2 to be 0%
+        var minScore = 1.2 * numPlan;
+        var maxScore = 7.1 * numPlan;
+        var ch = 100 * (colorHappy[planet] - minScore) / (maxScore - minScore); 
+        myArr.push([planet, ch.toFixed(1)]);
+    }
+
+    // Sort the array based on the second element
+    myArr.sort(function (first, second) {
+        return second[1] - first[1];
+    });
+
+    return myArr;
 }
 
 
