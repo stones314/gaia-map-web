@@ -83,6 +83,8 @@ export function makeHexGrid(sectors, rotations) {
                 "Nbr": [0, 0, 0],
                 "Visited": false,
                 "Happy": 0.0,
+                "Exp": 0.0,
+                "Leech": 0.0,
             });
         }
     }

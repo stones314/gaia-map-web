@@ -23,6 +23,7 @@ class App extends React.Component {
                 maxCluster: settingOpts.maxClustSize.defaultId,
                 maxEdge: settingOpts.maxEdgeCount.defaultId,
                 rngWithSwap: settingOpts.rngWithSwap.defaultId,
+                ignoreOpt: settingOpts.ignoreNum.defaultId,
             },
             hexInfo: {
                 "Visited": false,
@@ -141,6 +142,14 @@ class App extends React.Component {
         this.evaluateMap();
     }
 
+    onClickIgnoreOpt(ignoreOpt) {
+        var ms = this.state.menuSelect;
+        ms.ignoreOpt = ignoreOpt;
+        this.setState({ menuSelect: ms });
+        this.hexMap.criteria.ignoreNum = settingOpts.ignoreNum.optsVal[ignoreOpt];
+        this.evaluateMap();
+    }
+
     onClickShowSettings() {
         this.setState({ showSettings: !this.state.showSettings });
     }
@@ -180,6 +189,7 @@ class App extends React.Component {
                     onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
                     onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
                     onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
+                    onClickIgnoreOpt={(ignoreOpt) => this.onClickIgnoreOpt(ignoreOpt)}
                     onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
                 />
             );
@@ -222,8 +232,10 @@ class App extends React.Component {
                     maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
                     
                 />
-                <ColorHappyView colorHappy={this.hexMap.colorHappy} />
-
+                <ColorHappyView
+                    colorHappy={this.hexMap.colorHappy}
+                    ignoredNum={this.hexMap.criteria.ignoreNum}
+                />
             </div>
         )
     }

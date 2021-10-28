@@ -54,6 +54,12 @@ export class Settings extends React.Component {
                     selectedOptIndex={this.props.menuSelect.maxEdge}
                     onClickOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                 />
+                <SelectOptionFromList
+                    optName={settingOpts.ignoreNum.text}
+                    opts={settingOpts.ignoreNum.optsView}
+                    selectedOptIndex={this.props.menuSelect.ignoreOpt}
+                    onClickOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
+                />
             </div>
         )
     }

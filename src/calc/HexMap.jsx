@@ -25,6 +25,7 @@ export class HexMap {
             maxClusterSize: 5,
             maxEdgeCount: 2,
             maxFailures: 10000,
+            ignoreNum: 0,
         }
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
@@ -46,7 +47,7 @@ export class HexMap {
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
-        this.colorHappy = evaluatePlanetHappiness(this.hexGrid);
+        this.colorHappy = evaluatePlanetHappiness(this.hexGrid, this.criteria.ignoreNum);
     }
 
     rotateSec(slot) {

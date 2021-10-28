@@ -8,12 +8,24 @@ class ColorHappyView extends React.Component {
             Happiness
             </div>);
         for (const [i, [planet, happy]] of this.props.colorHappy.entries()) {
-            rows.push(<div key={planet} className="happy-row">
-                <img src={images["p" + planet]} className="happy-img" alt={planet} />
-                <div>
-                    {" : " + happy+"%"}
-                </div>
-            </div>);
+            var rowClass = "happy-row";
+            if (i < 7 && i > 6 - this.props.ignoredNum)
+                rowClass += " ignored";
+            if (i < 7) {
+                rows.push(<div key={planet} className={rowClass}>
+                    <img src={images["p" + planet]} className="happy-img" alt={planet} />
+                    <div>
+                        {" : " + happy + "%"}
+                    </div>
+                </div>);
+            } else {
+                rows.push(<div key={planet} className={rowClass}>
+                    <div>{planet}</div>
+                    <div>
+                        {" : " + happy + "%"}
+                    </div>
+                </div>);
+            }
         }
         return (<div className="happy-box">
             {rows}

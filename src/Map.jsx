@@ -254,7 +254,6 @@ export class MapView extends React.Component {
                         maxEdge={this.props.maxEdge}
                         selected={this.props.selected}
                     />
-                    <HexInfoView hexInfo={this.props.hexInfo} />
                 </div>
             );
     }

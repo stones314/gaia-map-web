@@ -93,7 +93,7 @@ class Menu extends React.Component {
                         onClickMinEqualDist={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
                         onClickClustOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
                         onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
-                        onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                        onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
                     />
                 </div>
                 <div className="menu-box-2">

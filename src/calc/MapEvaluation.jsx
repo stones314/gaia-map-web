@@ -64,8 +64,13 @@ const leechHappy = {
 const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
 const rangeWeight = [1.0, 1.0, 1.0];
 const edgeSadness = -0.3;
+const comboBonus = [
+    [0.0, 0.3, 0.6],
+    [0.3, 0.6, 0.9],
+    [0.6, 0.9, 1.2],
+];
 
-export function evaluatePlanetHappiness(hexGrid) {
+export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
     var colorHappy = {
         "Re": 0.0,
         "Bl": 0.0,
@@ -84,12 +89,16 @@ export function evaluatePlanetHappiness(hexGrid) {
                 if (hex["Type"] === "Re")
                     numPlan++;
                 hex["Happy"] = 0.0;
+                var l, e = 0;
                 //Add happiness if easy to expand, or easy to leech:
                 for (var rad = 0; rad < 3; rad++) {
                     for (const [i, nbrQ] of nbrQual.entries()) {
-                        if (rad < 2)
+                        if (rad < 2) {
                             hex["Happy"] += hex[nbrQ][rad] * leechHappy[nbrQ];
+                            
+                        }
                         hex["Happy"] += hex[nbrQ][rad] * expandHappy[nbrQ] * rangeWeight[rad];
+                        
                     }
                 }
                 if (hex["No"][0] > 0)
@@ -98,13 +107,14 @@ export function evaluatePlanetHappiness(hexGrid) {
             }
         }
     }
+
+    var minScore = 1.2 * numPlan;
+    var maxScore = 7.1 * numPlan;
     var myArr = [];
     for (const [i, planet] of colorWheel.entries()) {
         //best score I have seen was 42 for 6 planets, so set 7.1 per planet to 100%
         //worst score was about 3 per planet, so set 1.2 to be 0%
-        var minScore = 1.2 * numPlan;
-        var maxScore = 7.1 * numPlan;
-        var ch = 100 * (colorHappy[planet] - minScore) / (maxScore - minScore); 
+        var ch = 100.0 * (colorHappy[planet] - minScore) / (maxScore - minScore); 
         myArr.push([planet, ch.toFixed(1)]);
     }
 
@@ -112,6 +122,10 @@ export function evaluatePlanetHappiness(hexGrid) {
     myArr.sort(function (first, second) {
         return second[1] - first[1];
     });
+
+    var diff = myArr[0][1] - myArr[6 - ignoreNum][1];
+    var balance = 100.0 - diff;
+    myArr.push(["Balance", balance.toFixed(0)]);
 
     return myArr;
 }

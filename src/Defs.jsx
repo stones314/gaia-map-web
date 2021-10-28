@@ -62,6 +62,7 @@ export const images = {
     "YellowMark": "https://rygg-gaard.no/gaia/img/YellowMark.png",
     "YellowDottedMark": "https://rygg-gaard.no/gaia/img/YellowDottedMark.png",
     "NoisyMark": "https://rygg-gaard.no/gaia/img/NoisyMark.png",
+    "pBalance": "https://rygg-gaard.no/gaia/img/SwapSec.png",
 };
 
 
@@ -92,6 +93,12 @@ export const settingOpts = {
         text: "Random With Swap",
         optsView: ["Yes", "No"],
         optsVal: [true, false],
+        defaultId: 0,
+    },
+    ignoreNum: {
+        text: "Ignore Worst Color",
+        optsView: ["0", "1", "2", "3"],
+        optsVal: [0, 1, 2, 3],
         defaultId: 0,
     },
 };
