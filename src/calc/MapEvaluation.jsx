@@ -65,9 +65,9 @@ const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
 const rangeWeight = [1.0, 1.0, 0.5];
 const edgeSadness = [0.3, 0.1, 0.0];
 const comboBonus = [
-    [0.1, 0.3, 0.6],
-    [0.3, 0.6, 0.9],
-    [0.6, 0.9, 1.0],
+    [0.1, 0.4, 0.6],
+    [0.2, 0.6, 0.9],
+    [0.3, 0.8, 1.1],
 ];
 
 export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
@@ -108,7 +108,7 @@ export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
                     hex["Happy"] *= (1.0 - edgeSadness[1]);
                 if (leech > 2) leech = 2;
                 if (e > 2) e = 2;
-                //hex["Happy"] *= comboBonus[Math.floor(leech)][Math.floor(e)];
+                hex["Happy"] *= comboBonus[Math.floor(leech)][Math.floor(e)];
 
                 colorHappy[hex["Type"]] += hex["Happy"];
             }
@@ -116,7 +116,7 @@ export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
     }
 
     var minScore = 2.0 * numPlan;
-    var maxScore = 5.5 * numPlan;
+    var maxScore = 5.7 * numPlan;
     var myArr = [];
     for (const [i, planet] of colorWheel.entries()) {
         //best score I have seen was 42 for 6 planets, so set 7.1 per planet to 100%
