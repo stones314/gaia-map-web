@@ -96,13 +96,6 @@ class Menu extends React.Component {
                         onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
                     />
                 </div>
-                <div className="menu-box-2">
-                    <button
-                        className="menu-label"
-                        onClick={this.props.onClickRandom}>
-                        Random Valid Map
-                        </button>
-                </div>
             </div>
         )
     }

@@ -46,8 +46,8 @@ export function getHighestEdgeCount(nbrMat, maxEdgeCount) {
 }
 
 const expandHappy = {
-    "T0": 1.0,
-    "T1": 0.8,
+    "T0": 0.8,
+    "T1": 1.0,
     "T2": 0.0,
     "T3": 0.0,
     "Ga": 1.0,
@@ -56,18 +56,18 @@ const expandHappy = {
 const leechHappy = {
     "T0": 0.0,
     "T1": 0.0,
-    "T2": 0.8,
+    "T2": 1.0,
     "T3": 1.0,
     "Ga": 0.0,
     "Tr": 0.0,
 }
 const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
-const rangeWeight = [1.0, 1.0, 1.0];
-const edgeSadness = -0.3;
+const rangeWeight = [1.0, 1.0, 0.5];
+const edgeSadness = [0.3, 0.1, 0.0];
 const comboBonus = [
-    [0.0, 0.3, 0.6],
+    [0.1, 0.3, 0.6],
     [0.3, 0.6, 0.9],
-    [0.6, 0.9, 1.2],
+    [0.6, 0.9, 1.0],
 ];
 
 export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
@@ -89,33 +89,41 @@ export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
                 if (hex["Type"] === "Re")
                     numPlan++;
                 hex["Happy"] = 0.0;
-                var l, e = 0;
                 //Add happiness if easy to expand, or easy to leech:
+                var e = 0;
+                var leech = 0;
                 for (var rad = 0; rad < 3; rad++) {
                     for (const [i, nbrQ] of nbrQual.entries()) {
                         if (rad < 2) {
                             hex["Happy"] += hex[nbrQ][rad] * leechHappy[nbrQ];
-                            
+                            leech += hex[nbrQ][rad] * leechHappy[nbrQ];
                         }
                         hex["Happy"] += hex[nbrQ][rad] * expandHappy[nbrQ] * rangeWeight[rad];
-                        
+                        e += hex[nbrQ][rad] * expandHappy[nbrQ];
                     }
                 }
                 if (hex["No"][0] > 0)
-                    hex["Happy"] *= (1.0 + edgeSadness);
+                    hex["Happy"] *= (1.0 - edgeSadness[0]);
+                if (hex["No"][1] > 0)
+                    hex["Happy"] *= (1.0 - edgeSadness[1]);
+                if (leech > 2) leech = 2;
+                if (e > 2) e = 2;
+                //hex["Happy"] *= comboBonus[Math.floor(leech)][Math.floor(e)];
+
                 colorHappy[hex["Type"]] += hex["Happy"];
             }
         }
     }
 
-    var minScore = 1.2 * numPlan;
-    var maxScore = 7.1 * numPlan;
+    var minScore = 2.0 * numPlan;
+    var maxScore = 5.5 * numPlan;
     var myArr = [];
     for (const [i, planet] of colorWheel.entries()) {
         //best score I have seen was 42 for 6 planets, so set 7.1 per planet to 100%
         //worst score was about 3 per planet, so set 1.2 to be 0%
-        var ch = 100.0 * (colorHappy[planet] - minScore) / (maxScore - minScore); 
-        myArr.push([planet, ch.toFixed(1)]);
+        var ch = 100.0 * (colorHappy[planet] - minScore) / (maxScore - minScore);
+        //ch = colorHappy[planet];
+        myArr.push([planet, ch.toFixed(0)]);
     }
 
     // Sort the array based on the second element
@@ -124,7 +132,7 @@ export function evaluatePlanetHappiness(hexGrid, ignoreNum = 0) {
     });
 
     var diff = myArr[0][1] - myArr[6 - ignoreNum][1];
-    var balance = 100.0 - diff;
+    var balance = 100-diff;
     myArr.push(["Balance", balance.toFixed(0)]);
 
     return myArr;

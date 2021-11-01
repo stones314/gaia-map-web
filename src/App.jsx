@@ -183,7 +183,6 @@ class App extends React.Component {
                     numSec={this.state.numSect}
                     onClickOpt={(variant) => this.onClickOpt(variant)}
                     secOpt={this.state.secOpt}
-                    onClickRandom={() => this.onClickRandom()}
                     onClickBalance={() => this.onClickBalance()}
                     menuSelect={this.state.menuSelect}
                     onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
@@ -211,6 +210,7 @@ class App extends React.Component {
                     onClickDebug={() => this.onClickDebug()}
                     showSettings={this.state.showSettings}
                     showDebug={this.state.showDebug}
+                    onClickRandom={() => this.onClickRandom()}
                 />
                 {this.renderSettings()}
                 <MapView

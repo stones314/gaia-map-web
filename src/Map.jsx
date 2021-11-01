@@ -1,8 +1,6 @@
 import React from 'react';
 import './styles/Map.css';
 import { images, sectorCenter, getCenterRef, hexTypes, planets, colorWheel } from './Defs';
-import { hasEqualNeighbour } from './calc/MapEvaluation';
-import { getNeighbourMatrix, } from "./calc/MapInformation";
 import { isTerraformable } from './calc/Basics';
 
 export class HexMapView extends React.Component {
@@ -193,7 +191,7 @@ export class MapView extends React.Component {
 
     renderSector(slot, col) {
         var ignored = (slot === 11)
-            || (this.props.sectors[slot] === "s00" && this.props.selected === -1);
+            || (this.props.sectors[slot] === "s00");// && this.props.selected === -1);
         if (ignored) return null;
         return (
             <SectorView

@@ -49,6 +49,7 @@ export const images = {
     "Rot": "https://rygg-gaard.no/gaia/img/RotateSec.png",
     "Swap": "https://rygg-gaard.no/gaia/img/SwapSec.png",
     "Cog": "https://rygg-gaard.no/gaia/img/Cog.png",
+    "Random": "https://rygg-gaard.no/gaia/img/Random.png",
     "HM": "https://rygg-gaard.no/gaia/img/HexMap.png",
     "SM": "https://rygg-gaard.no/gaia/img/SmallSector.png",
     "HSel": "https://rygg-gaard.no/gaia/img/HexSelected.png",

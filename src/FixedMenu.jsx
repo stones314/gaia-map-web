@@ -44,6 +44,12 @@ class FixedMenu extends React.Component {
                         imgRef="Cog"
                         imgAlt="Menu"
                     />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickRandom()}
+                        isSelected={false}
+                        imgRef="Random"
+                        imgAlt="RNG"
+                    />
                     {this.renderDebug(false)}
                     <FixedImgButton
                         onClick={() => this.props.onClickRot()}
