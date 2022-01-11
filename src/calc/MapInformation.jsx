@@ -85,6 +85,8 @@ export function makeHexGrid(sectors, rotations) {
                 "Happy": 0.0,
                 "Exp": 0.0,
                 "Leech": 0.0,
+                "Central": 0.0,
+                "EdgSad": 0.0,
             });
         }
     }

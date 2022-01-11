@@ -2,21 +2,29 @@ import React from 'react';
 import './styles/App.css';
 import { MapView } from './Map';
 import Menu from './Menu';
+import Info from './Info';
+import MapDbInfo from './MapDbInfo';
 import FixedMenu from './FixedMenu';
 import ColorHappyView from './ColorHappyView';
 import { HexMap } from './calc/HexMap';
 import { settingOpts } from './Defs';
+import { loadMaps } from './SheetAPI';
+
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            landscape: false,
             selected: -1,
-            swapMode: true,
+            mapId: 0,
+            swapMode: false,
             numSect: 10,
             secOpt: 0,
-            showSettings: false,
+            showMenu: false,
+            showStats: false,
             showDebug: false,
+            showInfo: false,
             illegal: false,
             menuSelect: {
                 minEqDist: settingOpts.minEqDist.defaultId,
@@ -55,8 +63,24 @@ class App extends React.Component {
         this.hexMap = new HexMap();
     }
 
-    componentDidMount() {
-        this.onClickRandom();
+    async componentDidMount() {
+
+        this.mapdata = await loadMaps("Meta");
+        this.hexMap.setFromString(this.mapdata.meta[0].TestKey);
+        //this.onClickRandom();
+        this.evaluateMap();
+        window.addEventListener('resize', this.checkLandscape);
+        this.checkLandscape();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.checkLandscape);
+    }
+
+    checkLandscape = () => {
+        var mq = window.matchMedia("(max-aspect-ratio: 210/152)");
+        if (mq.matches != this.state.landscape)
+            this.setState({ landscape: !this.state.landscape });
     }
 
     onClickSector(slot) {
@@ -99,7 +123,7 @@ class App extends React.Component {
             secOpt: 0,
         });
         this.hexMap.newSectorSelection(numSec, 0);
-        this.evaluateMap();
+        this.onClickRandom();
     }
 
     onClickOpt(variant) {
@@ -107,7 +131,7 @@ class App extends React.Component {
             secOpt: variant,
         });
         this.hexMap.newSectorSelection(this.state.numSect, variant);
-        this.evaluateMap();
+        this.onClickRandom();
     }
 
     onClickRngSwap(rngSwapOpt) {
@@ -150,9 +174,20 @@ class App extends React.Component {
         this.evaluateMap();
     }
 
-    onClickShowSettings() {
-        this.setState({ showSettings: !this.state.showSettings });
+    onClickShowMenu() {
+        if (this.state.showStats)
+            this.setState({ showStats: false});
+        this.setState({ showMenu: !this.state.showMenu });
     }
+    onClickShowStats() {
+        if (this.state.showMenu)
+            this.setState({ showMenu: false });
+        this.setState({ showStats: !this.state.showStats });
+    }
+    onClickShowInfo() {
+        this.setState({ showInfo: !this.state.showInfo });
+    }
+
 
     onClickDebug() {
         this.setState({ showDebug: !this.state.showDebug });
@@ -166,6 +201,14 @@ class App extends React.Component {
         //console.error("iterations: " + failures);
     }
 
+    onClickNewBalancedMap() {
+        this.onClickRandom()
+
+        //var tmp = Math.floor(Math.random() * this.mapdata.meta.length);
+        //this.setState({ mapId: tmp });
+        //this.hexMap.setFromString(this.mapdata.meta[tmp].TestKey);
+        //this.evaluateMap();
+    }
 
     evaluateMap() {
         var i = this.hexMap.getMapValidity();
@@ -175,8 +218,8 @@ class App extends React.Component {
         });
     }
 
-    renderSettings() {
-        if (this.state.showSettings) {
+    renderMenu() {
+        if (this.state.showMenu) {
             return (
                 <Menu
                     onClick={(numSec) => this.onClick(numSec)}
@@ -198,6 +241,59 @@ class App extends React.Component {
         }
     }
 
+    renderStats() {
+        if (this.state.showStats) {
+            return (
+                <ColorHappyView
+                    hexMap={this.hexMap}
+                    landscape={this.state.landscape}
+                />
+            );
+        }
+        else {
+            return;
+        }
+    }
+
+    renderNonFixed() {
+        if (this.state.showInfo) {
+            return (
+                <div>
+                    <Info />
+                    {this.renderMenu()}
+                    {this.renderStats()}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    {this.renderMenu()}
+                    <MapView
+                        numSect={this.state.numSect}
+                        sectors={this.hexMap.sectors}
+                        rotations={this.hexMap.rotations}
+                        onClick={(i) => this.onClickSector(i)}
+                        selected={this.state.selected}
+                        illegal={this.state.illegal}
+                        showDebug={this.state.showDebug}
+                        onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
+                        balanceStats={this.state.balanceStats}
+                        hexInfo={this.state.hexInfo}
+                        hexGrid={this.hexMap.hexGrid}
+                        nbrMat={this.hexMap.nbrMat}
+                        highEdge={this.hexMap.highestEdgeCount}
+                        minEqDist={settingOpts.minEqDist.optsVal[this.state.menuSelect.minEqDist]}
+                        maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
+                        maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
+
+                    />
+                    {this.renderStats()}
+                </div>
+            );
+        }
+    }
+
     render() {
         var illegalClass = this.state.illegal ? " illegal" : " legal";
         return (
@@ -206,36 +302,19 @@ class App extends React.Component {
                     onClickSwap={() => this.onClickSwap()}
                     onClickRot={() => this.onClickRot()}
                     swapMode={this.state.swapMode}
-                    onClickShowSettings={() => this.onClickShowSettings()}
+                    onClickShowSettings={() => this.onClickShowMenu()}
                     onClickDebug={() => this.onClickDebug()}
-                    showSettings={this.state.showSettings}
+                    showSettings={this.state.showMenu == 1}
                     showDebug={this.state.showDebug}
                     onClickRandom={() => this.onClickRandom()}
+                    onClickShowStats={() => this.onClickShowStats()}
+                    showStats={this.state.showStats}
+                    onClickNewBalancedMap={() => this.onClickNewBalancedMap()}
+                    onClickShowInfo={() => this.onClickShowInfo()}
+                    showInfo={this.state.showInfo}
                 />
-                {this.renderSettings()}
-                <MapView
-                    numSect={this.state.numSect}
-                    sectors={this.hexMap.sectors}
-                    rotations={this.hexMap.rotations}
-                    onClick={(i) => this.onClickSector(i)}
-                    selected={this.state.selected}
-                    illegal={this.state.illegal}
-                    showDebug={this.state.showDebug}
-                    onClickHex={(hexInfo) => this.onClickHex(hexInfo)}
-                    balanceStats={this.state.balanceStats}
-                    hexInfo={this.state.hexInfo}
-                    hexGrid={this.hexMap.hexGrid}
-                    nbrMat={this.hexMap.nbrMat}
-                    highEdge={this.hexMap.highestEdgeCount}
-                    minEqDist={settingOpts.minEqDist.optsVal[this.state.menuSelect.minEqDist]}
-                    maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
-                    maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
-                    
-                />
-                <ColorHappyView
-                    colorHappy={this.hexMap.colorHappy}
-                    ignoredNum={this.hexMap.criteria.ignoreNum}
-                />
+                {this.renderNonFixed()}
+
             </div>
         )
     }

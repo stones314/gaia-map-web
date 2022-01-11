@@ -45,6 +45,18 @@ class FixedMenu extends React.Component {
                         imgAlt="Menu"
                     />
                     <FixedImgButton
+                        onClick={() => this.props.onClickShowStats()}
+                        isSelected={this.props.showStats}
+                        imgRef="Stats"
+                        imgAlt="Stats"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickNewBalancedMap()}
+                        isSelected={false}
+                        imgRef="pBalance"
+                        imgAlt="Stats"
+                    />
+                    <FixedImgButton
                         onClick={() => this.props.onClickRandom()}
                         isSelected={false}
                         imgRef="Random"
@@ -62,6 +74,12 @@ class FixedMenu extends React.Component {
                         isSelected={this.props.swapMode}
                         imgRef="Swap"
                         imgAlt="Swap"
+                    />
+                    <FixedImgButton
+                        onClick={() => this.props.onClickShowInfo()}
+                        isSelected={this.props.showInfo}
+                        imgRef="Info"
+                        imgAlt="Info"
                     />
                 </div>
             </div>

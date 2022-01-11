@@ -38,7 +38,7 @@ class Evaluation extends React.Component {
             planets.push(p);
             expand.push(this.props.balance[p][0].toFixed(1));
             neighbour.push(this.props.balance[p][1].toFixed(1));
-            total.push((this.props.balance[p][0] + this.props.balance[p][1] - (Math.abs(this.props.balance[p][0] - this.props.balance[p][1]))).toFixed(1));
+            total.push((this.props.balance[p][0] + this.props.balance[p][1]).toFixed(1));
         }
         const planetData = [];
         for (const [index, value] of planets.entries()) {

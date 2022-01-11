@@ -49,26 +49,66 @@ code {
     left: 0;
 }
 
-.happy-box {
+.happy-big-box {
     display: flex;
     flex-direction: column;
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 1px;
+    right: 1px;
+    background-color: darkgrey;
+    border: 1px solid var(--img-btn-border);
+    z-index: 4;
+}
+
+.happy-box {
+    display: flex;
+    flex-direction: column;
+    background-color: darkgrey;
+    border: 1px solid var(--img-btn-border);
+}
+
+.happy-hist {
+    display: flex;
+    flex-direction: column;
+    background-color: darkgrey;
 }
 
 .happy-row {
-    flex: 1;
     display: flex;
     flex-direction: row;
-    background-color: darkolivegreen;
+    justify-content: flex-start;
+    height: 15vh;
+    width: 100%;
+}
+.happy-planet-row {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--img-btn-border);
+}
+.happy-row-head {
+    text-align: center;
+}
+
+.happy-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    margin: 1px;
+}
+.happy-col-down {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1px;
 }
 .ignored {
     background-color: orangered;
 }
 
 .happy-img {
-    height: 3vh;
+    height: 5vh;
     margin: 0;
 }
 
@@ -81,4 +121,42 @@ code {
     .eval-box {
         flex-direction: row;
     }
+
+
+    .happy-big-box {
+        flex-direction: row;
+    }
+
+    .happy-box {
+        flex-direction: column;
+        width: 20vw;
+    }
+
+    .happy-hist {
+        flex-direction: row;
+    }
+
+
+    .happy-row {
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .happy-planet-row {
+        flex-direction: column;
+    }
+
+    .happy-col {
+        flex-direction: row-reverse;
+    }
+
+    .happy-col-down {
+        flex-direction: row;
+    }
+
+    .happy-img {
+        height: 4vh;
+        margin: 0;
+    }
+
 }

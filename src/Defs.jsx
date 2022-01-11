@@ -63,13 +63,16 @@ export const images = {
     "YellowMark": "https://rygg-gaard.no/gaia/img/YellowMark.png",
     "YellowDottedMark": "https://rygg-gaard.no/gaia/img/YellowDottedMark.png",
     "NoisyMark": "https://rygg-gaard.no/gaia/img/NoisyMark.png",
-    "pBalance": "https://rygg-gaard.no/gaia/img/SwapSec.png",
+    "pBalance": "https://rygg-gaard.no/gaia/img/Balance.png",
+    "Stats": "https://rygg-gaard.no/gaia/img/Stats.png",
+    "Info": "https://rygg-gaard.no/gaia/img/Info.png",
 };
 
 
 export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "Em", "No"];
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
 export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
+export const metrics = ["Happy", "Exp", "Leech", "EdgSad"];
 
 export const settingOpts = {
     minEqDist: {

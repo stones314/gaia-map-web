@@ -130,6 +130,7 @@ code {
     border: 2px solid var(--img-btn-border);
     margin: 1px;
     height: 11vh;
+    display: inline-block;
 }
 
 .img-btn-sel {
@@ -137,6 +138,25 @@ code {
 }
 
 .btn-img {
+    height: 100%;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.info-box {
+    background-color: white;
+    margin-top: calc(11vh + 10px);
+}
+.info-element {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid var(--img-btn-border);
+    margin: 1px;
+}
+
+.info-img {
     height: 100%;
     margin: 0;
     position: relative;

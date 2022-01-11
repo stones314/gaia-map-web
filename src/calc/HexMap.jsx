@@ -1,4 +1,4 @@
-﻿import { getSecOpt, } from './../Defs';
+﻿import { getSecOpt, colorWheel, metrics} from './../Defs';
 import {
     makeHexGrid,
     getNeighbourMatrix,
@@ -10,6 +10,66 @@ import {
 import { rotateSec, swapSec } from './MapManipulation';
 import { hasEqualNeighbour, getHighestEdgeCount, evaluatePlanetHappiness } from './MapEvaluation';
 import { getRandomSlot, getDynamicCoordMap } from './Basics';
+
+class PlanetHappiness {
+    constructor(planetType) {
+        this.planet = planetType;
+        this.score = {
+            "Exp": 0.0,
+            "Leech": 0.0,
+            "EdgSad": 0.0,
+            "Happy": 0.0,
+        }
+    }
+
+    update() {
+        this.score["Happy"] = this.score["Exp"] + this.score["Leech"] - this.score["EdgSad"];
+    }
+}
+
+export class MapHappiness {
+    constructor() {
+        this.colorHappy = {
+            "Re": new PlanetHappiness("Re"),
+            "Bl": new PlanetHappiness("Bl"),
+            "Wh": new PlanetHappiness("Wh"),
+            "Bk": new PlanetHappiness("Bk"),
+            "Br": new PlanetHappiness("Br"),
+            "Ye": new PlanetHappiness("Ye"),
+            "Or": new PlanetHappiness("Or"),
+            "Max": new PlanetHappiness("Max"),
+        }
+    }
+
+    update() {
+        for (const [j, p] of colorWheel.entries()) {
+            this.colorHappy[p].update();
+        }
+
+        for (const [i, m] of metrics.entries()) {
+            this.colorHappy["Max"].score[m] = 0.0;
+            for (const [j, p] of colorWheel.entries()) {
+                if (this.colorHappy[p].score[m] > this.colorHappy["Max"].score[m])
+                    this.colorHappy["Max"].score[m] = this.colorHappy[p].score[m];
+            }
+        }
+    }
+
+    getValues(metric) {
+        var myOut = {
+            planets: [],
+            values: [],
+            max: 0.0
+        }
+        for (const [j, p] of colorWheel.entries()) {
+            myOut.planets.push(p);
+            myOut.values.push(this.colorHappy[p].score[metric]);
+            myOut.max = this.colorHappy["Max"].score["Happy"];
+        }
+        return myOut;
+    }
+}
+
 
 export class HexMap {
     constructor() {
@@ -30,16 +90,32 @@ export class HexMap {
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
         this.rngWithSwap = true;
-        this.colorHappy = evaluatePlanetHappiness(this.hexGrid);
+        this.happiness = new MapHappiness();
     }
 
-    newSectorSelection(numSec, variant) {
-        this.sectors = getSecOpt(numSec, variant);
-        this.rotations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    setFromString(mapString) {
+        const parts = mapString.split("-");
+        var sectors = [];
+        var rotations = [];
+        for (const [i, p] of parts.entries()) {
+            const s = p.split(".");
+            sectors.push(s[0]);
+            rotations.push(parseInt(s[1]));
+        }
+        this.setMap(sectors, rotations);
+    }
+
+    setMap(sectors, rotations) {
+        this.sectors = sectors;
+        this.rotations = rotations;
         this.hexGrid = makeHexGrid(this.sectors, this.rotations);
         setStaticNeighbourInfo(this.hexGrid);
         this.nbrMat = getNeighbourMatrix(this.hexGrid);
         this.updateMapData();
+    }
+
+    newSectorSelection(numSec, variant) {
+        this.setMap(getSecOpt(numSec, variant), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
 
     updateMapData() {
@@ -47,7 +123,7 @@ export class HexMap {
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);
-        this.colorHappy = evaluatePlanetHappiness(this.hexGrid, this.criteria.ignoreNum);
+        evaluatePlanetHappiness(this.hexGrid, this.happiness);
     }
 
     rotateSec(slot) {
@@ -123,5 +199,9 @@ export class HexMap {
         else if (this.criteria.maxEdgeCount < this.highestEdgeCount[1])
             return 3;
         return 0;
+    }
+
+    getHappyValues(metric) {
+        return this.happiness.getValues(metric);
     }
 }
