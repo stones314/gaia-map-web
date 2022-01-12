@@ -7,7 +7,7 @@ import {
     updateNeighbourInfo,
     updateNeighbourMatrix,
 } from './MapInformation';
-import { rotateSec, swapSec } from './MapManipulation';
+import { rotateSec, swapSec, convertMapString } from './MapManipulation';
 import { hasEqualNeighbour, getHighestEdgeCount, evaluatePlanetHappiness } from './MapEvaluation';
 import { getRandomSlot, getDynamicCoordMap } from './Basics';
 
@@ -94,15 +94,11 @@ export class HexMap {
     }
 
     setFromString(mapString) {
-        const parts = mapString.split("-");
-        var sectors = [];
-        var rotations = [];
-        for (const [i, p] of parts.entries()) {
-            const s = p.split(".");
-            sectors.push(s[0]);
-            rotations.push(parseInt(s[1]));
-        }
-        this.setMap(sectors, rotations);
+        var out = convertMapString(mapString);
+        if (!out.valid)
+            return out;
+        this.setMap(out.sectors, out.rotations);
+        return out;
     }
 
     setMap(sectors, rotations) {

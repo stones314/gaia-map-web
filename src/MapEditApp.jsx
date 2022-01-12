@@ -3,6 +3,7 @@ import './styles/App.css';
 import { MapView } from './Map';
 import Menu from './Menu';
 import Info from './Info';
+import ErrorMsg from './ErrorMsg';
 import MapDbInfo from './MapDbInfo';
 import FixedMenu from './FixedMenu';
 import ColorHappyView from './ColorHappyView';
@@ -21,10 +22,14 @@ class App extends React.Component {
             swapMode: false,
             numSect: 10,
             secOpt: 0,
+            editMapString: "",
+            mapString: "",
             showMenu: false,
             showStats: false,
             showDebug: false,
             showInfo: false,
+            showError: false,
+            errorMsg: "",
             illegal: false,
             menuSelect: {
                 minEqDist: settingOpts.minEqDist.defaultId,
@@ -61,13 +66,14 @@ class App extends React.Component {
             }
         };
         this.hexMap = new HexMap();
+        this.onMapStringChange = this.onMapStringChange.bind(this);
+        this.onMapStringSubmit = this.onMapStringSubmit.bind(this);
     }
 
     async componentDidMount() {
 
         this.mapdata = await loadMaps("Meta");
-        this.hexMap.setFromString(this.mapdata.meta[0].TestKey);
-        //this.onClickRandom();
+        this.hexMap.setFromString("s00.0-s10.0-s01.0-s05.0-s09.0-s02.0-s03.0-s06.0-s08.0-s04.0-s07.0-s00.0");
         this.evaluateMap();
         window.addEventListener('resize', this.checkLandscape);
         this.checkLandscape();
@@ -188,6 +194,31 @@ class App extends React.Component {
         this.setState({ showInfo: !this.state.showInfo });
     }
 
+    onMapStringSubmit(event) {
+        var out = this.hexMap.setFromString(this.state.editMapString);
+        event.preventDefault();
+        if (!out.valid) {
+            this.setState({ errorMsg: out.errorMsg, showError: true });
+        }
+        else {
+            this.evaluateMap();
+            this.setState({
+                mapString: this.state.editMapString,
+                editMapString: "",
+                errorMsg: "",
+                numSect: out.numSec,
+                secOpt: out.secOpt
+            });
+        }
+    }
+
+    onMapStringChange(newValue) {
+        this.setState({ editMapString: newValue});
+    }
+
+    onClickErrorOk() {
+        this.setState({ showError: false });
+    }
 
     onClickDebug() {
         this.setState({ showDebug: !this.state.showDebug });
@@ -233,6 +264,24 @@ class App extends React.Component {
                     onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
                     onClickIgnoreOpt={(ignoreOpt) => this.onClickIgnoreOpt(ignoreOpt)}
                     onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
+                    onMapStringChange={(value) => this.onMapStringChange(value)}
+                    onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
+                    mapString={this.state.editMapString}
+                    errorMsg={this.state.errorMsg}
+                />
+            );
+        }
+        else {
+            return;
+        }
+    }
+
+    renderError() {
+        if (this.state.showError) {
+            return (
+                <ErrorMsg
+                    onClickErrorOk={() => this.onClickErrorOk()}
+                    errorMsg={this.state.errorMsg}
                 />
             );
         }
@@ -314,7 +363,6 @@ class App extends React.Component {
                     showInfo={this.state.showInfo}
                 />
                 {this.renderNonFixed()}
-
             </div>
         )
     }

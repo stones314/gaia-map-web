@@ -64,6 +64,13 @@ class Info extends React.Component {
 
                 <h2> The Settings Menu </h2>
 
+                <div>
+                    <img
+                        src={images["SettingsMenu"]}
+                        alt="SettingsMenu"
+                    />
+                </div>
+
                 <h3>Number of Sectors</h3>
                 Select number of sectors for your map
 

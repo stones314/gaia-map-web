@@ -66,6 +66,8 @@ export const images = {
     "pBalance": "https://rygg-gaard.no/gaia/img/Balance.png",
     "Stats": "https://rygg-gaard.no/gaia/img/Stats.png",
     "Info": "https://rygg-gaard.no/gaia/img/Info.png",
+    "SettingsMenu": "https://rygg-gaard.no/gaia/img/SettingsMenu.png",
+    "EvalMenu": "https://rygg-gaard.no/gaia/img/Evaluation.png",
 };
 
 

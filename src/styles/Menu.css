@@ -102,7 +102,7 @@ code {
 }
 
 .menu-fixed-top {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     display: flex;
@@ -163,6 +163,33 @@ code {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.error-box {
+    border: 2px solid var(--img-btn-border);
+    background-color: orangered;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.error-msg {
+    text-align: center;
+}
+
+.error-btn {
+    text-align: center;
+}
+
+input {
+    width: 100%;
+}
+
+.string-inn-box {
+    text-align: center;
+    border: 2px solid var(--img-btn-border);
 }
 
 @media screen and (max-aspect-ratio: 210/152) {

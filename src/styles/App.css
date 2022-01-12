@@ -38,7 +38,7 @@ code {
 }
 
 .eval-box {
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: row;
     /*
@@ -52,7 +52,7 @@ code {
 .happy-big-box {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     bottom: 1px;
     right: 1px;
     background-color: darkgrey;

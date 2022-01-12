@@ -312,3 +312,112 @@ export function optimizeMap(sectors, rotations, withSwap) {
     evaluateMap(sectors, rotations, true);
     return bestScore;
 }
+
+const sectorVal = {
+    "s00": 0,
+    "s01": 1,
+    "s02": 2,
+    "s03": 4,
+    "s04": 8,
+    "s05": 16,
+    "s05b": 32,
+    "s06": 64,
+    "s06b": 128,
+    "s07": 256,
+    "s07b": 512,
+    "s08": 1024,
+    "s09": 2048,
+    "s10": 4096,
+};
+
+const sectorList = [ "s00","s01","s02","s03","s04","s05","s05b","s06","s06b","s07","s07b","s08","s09","s10" ];
+const rotList = ["0", "1", "2", "3", "4", "5", "00", "01", "02", "03", "04", "05"];
+
+function getSecOptHashVal(numSec, secOpt) {
+    return 0;
+}
+
+function getSecOptFromHash(mapHash) {
+    return [0, 0];
+}
+
+function validSec(sec) {
+    for (const [i, s] of sectorList.entries()) {
+        if (sec === s) return true;
+    }
+    return false;
+}
+
+function validRot(rot) {
+    for (const [i, r] of rotList.entries()) {
+        if (rot === r) return true;
+    }
+    return false;
+}
+
+function getSecOpt(mapHash, numSec) {
+    //7519	6831	7527	1375	687	1383	5722	2461	6685
+    if (numSec === 10 && mapHash === 7519)
+        return 0;
+    if (numSec === 9 && mapHash === 6831)
+        return 0;
+    if (numSec === 9 && mapHash === 7527)
+        return 1;
+    if (numSec === 8 && mapHash === 1375)
+        return 0;
+    if (numSec === 7 && mapHash === 687)
+        return 0;
+    if (numSec === 7 && mapHash === 1383)
+        return 1;
+    if (numSec === 7 && mapHash === 5722)
+        return 2;
+    if (numSec === 7 && mapHash === 2461)
+        return 3;
+    if (numSec === 7 && mapHash === 6685)
+        return 4;
+    return -1;
+}
+
+export function convertMapString(mapString) {
+    var out = {
+        valid: false,
+        sectors: [],
+        rotations: [],
+        numSec: 0,
+        secOpt: 0,
+        errorMsg: "",
+        mapHash: 0,
+    }
+    const parts = mapString.split("-");
+    if (parts.length != 12) {
+        out.errorMsg = "Incorrect map string, it must be 12 sector.rotation pairs separated with - ";
+        return out;
+    }
+    for (const [i, p] of parts.entries()) {
+        const s = p.split('.');
+        if (s.length != 2) {
+            out.errorMsg = "Incorrect map string, " + s + " could not be parsed as sector.rotation.";
+            return out;
+        }
+        if (!validSec(s[0])) {
+            out.errorMsg = "Incorrect map string, " + s[0] + " is not a valid sector.";
+            return out;
+        }
+        out.sectors.push(s[0]);
+        if (!validRot(s[1])) {
+            out.errorMsg = "Incorrect map string, " + s[1] + " is not a valid rotation.";
+            return out;
+        }
+        out.rotations.push(parseInt(s[1]));
+        out.mapHash += sectorVal[s[0]];
+        if (s[0] != "s00")
+            out.numSec++;
+    }
+    out.secOpt = getSecOpt(out.mapHash, out.numSec);
+    if (out.secOpt < 0) {
+        out.errorMsg = "Incorrect map string, not a valid combination of sectors.";
+        return out;
+    }
+    out.valid = true;
+    return out;
+}

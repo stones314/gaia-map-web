@@ -75,6 +75,36 @@ class NumSectorSelect extends React.Component {
     }
 }
 
+class MapStringInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleChange(e) {
+        this.props.onMapStringChange(e.target.value);
+    }
+    handleSubmit(e) {
+        this.props.onMapStringSubmit(e);
+    }
+    render() {
+        return (
+            <div className="string-inn-box">
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Import by map string:
+                    </label>
+                    <input type="text" value={this.props.mapString} onChange={this.handleChange} />
+                    <input type="submit" value="Submit" />
+                </form>
+                <text>
+                    {this.props.errorMsg}
+                </text>
+            </div>
+        );
+    }
+}
+
 class Menu extends React.Component {
     render() {
         return (
@@ -96,6 +126,12 @@ class Menu extends React.Component {
                         onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
                     />
                 </div>
+                <MapStringInput
+                    onMapStringSubmit={(event) => this.props.onMapStringSubmit(event)}
+                    onMapStringChange={(value) => this.props.onMapStringChange(value)}
+                    mapString={this.props.mapString}
+                    errorMsg={this.props.errorMsg}
+                />
             </div>
         )
     }
