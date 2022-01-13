@@ -24,7 +24,7 @@ code {
     z-index: 4;
     position: fixed;
     right: 1px;
-    top: 13vh;
+    top: calc(13vh + 25px);
     background-color: white;
 }
 
@@ -100,9 +100,17 @@ code {
   font-color: #654321;
   */
 }
-
 .menu-fixed-top {
     position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    
+}
+
+.menu-fixed-btns {
     top: 0;
     right: 0;
     display: flex;
@@ -145,6 +153,11 @@ code {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+.map-string-box {
+    text-align: right;
+    margin-right: 5px;
+}
+
 .info-box {
     background-color: white;
     margin-top: calc(11vh + 10px);
@@ -212,6 +225,6 @@ input {
     }
 
     .img-btn {
-        height: 9vw;
+        height: min(11vh, 10vw);
     }
 }

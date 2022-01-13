@@ -9,7 +9,7 @@ import FixedMenu from './FixedMenu';
 import ColorHappyView from './ColorHappyView';
 import { HexMap } from './calc/HexMap';
 import { settingOpts } from './Defs';
-import { loadMaps } from './SheetAPI';
+import { loadMaps, mapType } from './SheetAPI';
 
 
 class App extends React.Component {
@@ -72,7 +72,7 @@ class App extends React.Component {
 
     async componentDidMount() {
 
-        this.mapdata = await loadMaps("Meta");
+        this.mapdata = await loadMaps();
         this.hexMap.setFromString("s00.0-s10.0-s01.0-s05.0-s09.0-s02.0-s03.0-s06.0-s08.0-s04.0-s07.0-s00.0");
         this.evaluateMap();
         window.addEventListener('resize', this.checkLandscape);
@@ -233,12 +233,13 @@ class App extends React.Component {
     }
 
     onClickNewBalancedMap() {
-        this.onClickRandom()
-
-        //var tmp = Math.floor(Math.random() * this.mapdata.meta.length);
-        //this.setState({ mapId: tmp });
-        //this.hexMap.setFromString(this.mapdata.meta[tmp].TestKey);
-        //this.evaluateMap();
+        var mT = mapType(this.state.numSect, this.state.secOpt);
+        if (this.mapdata[mT].length < 1)
+            return;
+        var tmp = Math.floor(Math.random() * this.mapdata[mT].length);
+        this.setState({ mapId: tmp });
+        this.hexMap.setFromString(this.mapdata[mT][tmp].MapKey);
+        this.evaluateMap();
     }
 
     evaluateMap() {
@@ -246,6 +247,7 @@ class App extends React.Component {
         
         this.setState({
             illegal: i !== 0,
+            mapString: this.hexMap.getMapString(),
         });
     }
 
@@ -361,6 +363,7 @@ class App extends React.Component {
                     onClickNewBalancedMap={() => this.onClickNewBalancedMap()}
                     onClickShowInfo={() => this.onClickShowInfo()}
                     showInfo={this.state.showInfo}
+                    mapString={this.state.mapString}
                 />
                 {this.renderNonFixed()}
             </div>

@@ -101,6 +101,19 @@ export class HexMap {
         return out;
     }
 
+    getMapString() {
+        var mapString = "";
+        for (const [i, s] of this.sectors.entries()) {
+            mapString += s + "." + this.rotations[i];
+            mapString += i < 11 ? "-" : "";
+        }
+        var i = this.sectors.length;
+        while (i < 12) {
+            mapString += "s00.0";
+        }
+        return mapString;
+    }
+
     setMap(sectors, rotations) {
         this.sectors = sectors;
         this.rotations = rotations;

@@ -1,5 +1,5 @@
 :root {
-    --sec-height: 34vh;
+    --sec-height: 30.8vh;
     --sec-delta-x: calc(var(--sec-height) * 0.89);
     --sec-delta-y: calc(var(--sec-height) * 0.1);
     --hex-height: calc(var(--sec-height) / 5.5);
@@ -31,13 +31,12 @@
 
 .map-box {
     position: absolute;
-    top: 0.5vmin;
+    top: 12vh;
     left: 0;
     width: 99.5%;
-    /*
-    border: 2px solid #00ffff;
-    */
     z-index: 1;
+    overflow: hidden;
+    height: 88vh;
 }
 
 .map-img {
@@ -225,13 +224,13 @@
 .hex-col-23 { top: calc(var(--hex-dy) * 23); left: calc(var(--hex-dx) * 23); position: absolute; width: var(--hex-dx); height: var(--hex-dx); }
 
 
-@media screen and (max-aspect-ratio: 210/152) {
+@media screen and (max-aspect-ratio: 210/170) {
     :root {
         --sec-height: 24.5vw;
     }
 
     .map-box {
-        top: 5vw;
+        top: 12vh;
     }
 
     .map-eval-box {

@@ -21,6 +21,18 @@ class FixedImgButton extends React.Component {
     }
 }
 
+class MapString extends React.Component {
+    render() {
+        return (
+            <div className="map-string-box">
+                <text className="map-string-txt">
+                    {this.props.mapString}
+                </text>
+            </div>
+        );
+    }
+}
+
 class FixedMenu extends React.Component {
     renderDebug(showDebug) {
         if (!showDebug) return null;
@@ -36,8 +48,8 @@ class FixedMenu extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="menu-fixed-top">
+            <div className="menu-fixed-top">
+                <div className="menu-fixed-btns">
                     <FixedImgButton
                         isSelected={this.props.showSettings}
                         onClick={this.props.onClickShowSettings}
@@ -82,6 +94,7 @@ class FixedMenu extends React.Component {
                         imgAlt="Info"
                     />
                 </div>
+                <MapString mapString={this.props.mapString} />
             </div>
         )
     }
