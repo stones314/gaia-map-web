@@ -1,5 +1,5 @@
 ﻿import { getMapValidity, evaluateMap, evaluate } from './MapEvaluation.jsx';
-import { sectorCenter } from '../Defs.jsx';
+import { sectorCenter, sectorToLetter, sectorFromLetter } from '../Defs.jsx';
 import { getSectorCoords } from './Basics.jsx';
 import { updateNeighbourMatrix, updateNeighbourInfo } from './MapInformation.jsx';
 
@@ -333,6 +333,8 @@ const sectorVal = {
 const sectorList = [ "s00","s01","s02","s03","s04","s05","s05b","s06","s06b","s07","s07b","s08","s09","s10" ];
 const rotList = ["0", "1", "2", "3", "4", "5", "00", "01", "02", "03", "04", "05"];
 
+const rotListNew = ["0", "1", "2", "3", "4", "5"];
+
 function getSecOptHashVal(numSec, secOpt) {
     return 0;
 }
@@ -378,7 +380,7 @@ function getSecOpt(mapHash, numSec) {
     return -1;
 }
 
-export function convertMapString(mapString) {
+function convertOldMapString(mapString) {
     var out = {
         valid: false,
         sectors: [],
@@ -390,22 +392,22 @@ export function convertMapString(mapString) {
     }
     const parts = mapString.split("-");
     if (parts.length != 12) {
-        out.errorMsg = "Incorrect map string, it must be 12 sector.rotation pairs separated with - ";
+        out.errorMsg = "Incorrect [old] map string, it must be 12 sector.rotation pairs separated with - ";
         return out;
     }
     for (const [i, p] of parts.entries()) {
         const s = p.split('.');
         if (s.length != 2) {
-            out.errorMsg = "Incorrect map string, " + s + " could not be parsed as sector.rotation.";
+            out.errorMsg = "Incorrect [old] map string, " + s + " could not be parsed as sector.rotation.";
             return out;
         }
         if (!validSec(s[0])) {
-            out.errorMsg = "Incorrect map string, " + s[0] + " is not a valid sector.";
+            out.errorMsg = "Incorrect [old] map string, " + s[0] + " is not a valid sector.";
             return out;
         }
         out.sectors.push(s[0]);
         if (!validRot(s[1])) {
-            out.errorMsg = "Incorrect map string, " + s[1] + " is not a valid rotation.";
+            out.errorMsg = "Incorrect [old] map string, " + s[1] + " is not a valid rotation.";
             return out;
         }
         out.rotations.push(parseInt(s[1]));
@@ -415,9 +417,52 @@ export function convertMapString(mapString) {
     }
     out.secOpt = getSecOpt(out.mapHash, out.numSec);
     if (out.secOpt < 0) {
+        out.errorMsg = "Incorrect [old] map string, not a valid combination of sectors.";
+        return out;
+    }
+    out.valid = true;
+    return out;
+}
+
+export function convertMapString(mapString) {
+    const parts = mapString.split("-");
+    if (parts.length > 1)
+        return convertOldMapString(mapString);
+
+    var out = {
+        valid: false,
+        sectors: [],
+        rotations: [],
+        numSec: 0,
+        secOpt: 0,
+        errorMsg: "",
+        mapHash: 0,
+    }
+    if (mapString.length != 22) {
+        out.errorMsg = "Incorrect map string, must have 22 characters.";
+        return out;
+    }
+    for (var i = 0; i < 11; i++) {
+        if (!validSec(sectorFromLetter[mapString[i*2]])) {
+            out.errorMsg = "Incorrect map string, " + mapString[i * 2] + " is not a valid sector.";
+            return out;
+        }
+        out.sectors.push(sectorFromLetter[mapString[i * 2]]);
+        if (!validRot(mapString[i * 2 + 1])) {
+            out.errorMsg = "Incorrect map string, " + mapString[i * 2 + 1] + " is not a valid rotation.";
+            return out;
+        }
+        out.rotations.push(parseInt(mapString[i * 2 + 1]));
+        out.mapHash += sectorVal[sectorFromLetter[mapString[i * 2]]];
+        if (mapString[i * 2] != "A")
+            out.numSec++;
+    }
+    out.secOpt = getSecOpt(out.mapHash, out.numSec);
+    if (out.secOpt < 0) {
         out.errorMsg = "Incorrect map string, not a valid combination of sectors.";
         return out;
     }
     out.valid = true;
     return out;
+
 }

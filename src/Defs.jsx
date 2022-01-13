@@ -132,6 +132,40 @@ export const getCenterRef = {
     "s10": "c10",
 };
 
+export const sectorToLetter = {
+    "s00": "A",
+    "s01": "B",
+    "s02": "C",
+    "s03": "D",
+    "s04": "E",
+    "s05": "F",
+    "s05b": "G",
+    "s06": "H",
+    "s06b": "I",
+    "s07": "J",
+    "s07b": "K",
+    "s08": "L",
+    "s09": "M",
+    "s10": "N",
+}
+
+export const sectorFromLetter = {
+    "A": "s00",
+    "B": "s01",
+    "C": "s02",
+    "D": "s03",
+    "E": "s04",
+    "F": "s05",
+    "G": "s05b",
+    "H": "s06",
+    "I": "s06b",
+    "J": "s07",
+    "K": "s07b",
+    "L": "s08",
+    "M": "s09",
+    "N": "s10",
+}
+
 export function getSectorArray(id) {
     if (id === "s01") {
         return [

@@ -1,4 +1,4 @@
-﻿import { getSecOpt, colorWheel, metrics} from './../Defs';
+﻿import { getSecOpt, colorWheel, metrics, sectorFromLetter, sectorToLetter} from './../Defs';
 import {
     makeHexGrid,
     getNeighbourMatrix,
@@ -104,12 +104,12 @@ export class HexMap {
     getMapString() {
         var mapString = "";
         for (const [i, s] of this.sectors.entries()) {
-            mapString += s + "." + this.rotations[i];
-            mapString += i < 11 ? "-" : "";
+            if(i < 11)
+                mapString += sectorToLetter[s] + this.rotations[i];
         }
         var i = this.sectors.length;
-        while (i < 12) {
-            mapString += "s00.0";
+        while (i < 11) {
+            mapString += "A0";
         }
         return mapString;
     }

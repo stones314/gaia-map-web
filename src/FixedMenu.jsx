@@ -26,7 +26,7 @@ class MapString extends React.Component {
         return (
             <div className="map-string-box">
                 <text className="map-string-txt">
-                    {this.props.mapString}
+                    Map String: {this.props.mapString}
                 </text>
             </div>
         );
