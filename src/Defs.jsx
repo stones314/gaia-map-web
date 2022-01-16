@@ -78,21 +78,21 @@ export const metrics = ["Happy", "Exp", "Leech", "EdgSad"];
 
 export const settingOpts = {
     minEqDist: {
-        text: "Min Equal Range",
+        text: "Equal Planet Range",
         optsView: ["2", "3"],
         optsVal: [2, 3],
         defaultId: 0,
     },
     maxClustSize: {
-        text: "Max Cluster Size",
-        optsView: ["4", "5", "6", "N/A"],
-        optsVal: [4, 5, 6, 100],
+        text: "Cluster Size",
+        optsView: ["4", "5", "6", "Any"],
+        optsVal: [4, 5, 6, 99],
         defaultId: 1,
     },
     maxEdgeCount: {
-        text: "Max Edge Planets",
-        optsView: ["1", "2", "N/A"],
-        optsVal: [1, 2, 100],
+        text: "Edge Planets",
+        optsView: ["1", "2", "Any"],
+        optsVal: [1, 2, 99],
         defaultId: 1,
     },
     rngWithSwap: {
@@ -112,7 +112,7 @@ export const settingOpts = {
 export const sectorCenter = [
     [8, 2], [6, 7], [4, 12], [2, 17],
     [11, 4], [9, 9], [7, 14], [5, 19],
-    [14, 6], [12, 11], [10, 16], [8, 21]
+    [14, 6], [12, 11], [10, 16]
 ];
 
 export const getCenterRef = {
@@ -260,38 +260,38 @@ export function getSecOpt(numSec, optNum) {
             return [
                "s00", "s01", "s02", "s00",
                "s03", "s04", "s05b", "s00",
-               "s06b", "s07b", "s00", "s00"
+               "s06b", "s07b", "s00"
             ];
         if (opt === 1)
             return [
                "s00", "s01", "s02", "s00",
                "s03", "s05b", "s06", "s00",
-               "s07", "s08", "s00", "s00"
+               "s07", "s08", "s00"
             ];
         if (opt === 2)
             return [
                "s00", "s02", "s04", "s00",
                "s05", "s06", "s07b", "s00",
-               "s08", "s10", "s00", "s00"
+               "s08", "s10", "s00"
             ];
         if (opt === 3)
             return [
                "s00", "s01", "s03", "s00",
                "s04", "s05", "s06b", "s00",
-               "s07", "s09", "s00", "s00"
+               "s07", "s09", "s00"
             ];
         if (opt === 4)
             return [
                "s00", "s01", "s03", "s00",
                "s04", "s05", "s07b", "s00",
-               "s09", "s10", "s00", "s00"
+               "s09", "s10", "s00"
             ];
     }
     if (numSec === 8) {
         return [
            "s00", "s01", "s02", "s03",
            "s00", "s04", "s05", "s00",
-           "s06", "s07", "s08", "s00"
+           "s06", "s07", "s08"
         ];
     }
     if (numSec === 9) {
@@ -302,18 +302,18 @@ export function getSecOpt(numSec, optNum) {
             return [
                 "s01", "s02", "s03", "s00", 
                 "s04", "s05b", "s06b", "s00", 
-                "s07b", "s09", "s10", "s00", 
+                "s07b", "s09", "s10" 
             ];
         if (opt === 1)
             return [
                 "s01", "s02", "s03", "s00",
                 "s05b", "s06", "s07", "s00",
-                "s08", "s09", "s10", "s00",
+                "s08", "s09", "s10"
             ];
     }
     return [
        "s00", "s01", "s02", "s03",
        "s04", "s05", "s06", "s07",
-       "s08", "s09", "s10", "s00"
+        "s08", "s09", "s10"
     ];
 }

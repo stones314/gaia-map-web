@@ -47,7 +47,6 @@ export class HexMapView extends React.Component {
                     || (row > 9 && col > 21)
                     || (row > 10 && col > 17)
                     || (row > 14 && col > 7)
-                    || (hex["Slot"] === 11)
                     || (hex["Type"] === "Fr" && this.props.selected === -1);
 
                 if (!ignored) {
@@ -197,7 +196,7 @@ export class MapView extends React.Component {
             <SectorView
                 key={slot}
                 sid={slot}
-                numSect={this.props.numSect}
+                numSec={this.props.numSec}
                 sector={this.props.sectors[slot]}
                 rotation={this.props.rotations[slot]}
                 col={col}
@@ -229,8 +228,23 @@ export class MapView extends React.Component {
         return null;
     }
 
+    renderHexInfo(doIt) {
+        if (doIt) {
+            return (<HexInfoView hexInfo={this.props.hexInfo} />);
+        }
+        return null;
+    }
 
-    renderMap(doHexMap) {
+    renderMap(loading) {
+        if (loading) {
+            return (
+                <div className="load-box">
+                    <img src={images["s01"]} className="load-img" alt="loading" />
+                    <p>Loading...</p>
+                </div>
+            );
+        }
+        else {
             return (
                 <div className="map-eval-box">
                     {this.renderRow(0)}
@@ -242,7 +256,7 @@ export class MapView extends React.Component {
                         onClickHex={(hexInfo) => this.props.onClickHex(hexInfo)}
                         hexInfo={this.props.hexInfo}
                         onClick={(i) => this.props.onClick(i)}
-                        numSect={this.props.numSect}
+                        numSec={this.props.numSec}
                         minEqDist={this.props.minEqDist}
                         hexGrid={this.props.hexGrid}
                         maxClusterSize={this.props.maxClusterSize}
@@ -252,14 +266,16 @@ export class MapView extends React.Component {
                         maxEdge={this.props.maxEdge}
                         selected={this.props.selected}
                     />
+                    {this.renderHexInfo(false)}
                 </div>
             );
+        }
     }
 
     render() {
         return (
             <div className="map-box">
-                {this.renderMap(this.props.showDebug)}
+                {this.renderMap(this.props.loading)}
             </div>
         )
     }

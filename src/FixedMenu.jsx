@@ -26,7 +26,7 @@ class MapString extends React.Component {
         return (
             <div className="map-string-box">
                 <text className="map-string-txt">
-                    Map String: {this.props.mapString}
+                    {this.props.mapString}
                 </text>
             </div>
         );
@@ -77,7 +77,7 @@ class FixedMenu extends React.Component {
                     {this.renderDebug(false)}
                     <FixedImgButton
                         onClick={() => this.props.onClickRot()}
-                        isSelected={!this.props.swapMode}
+                        isSelected={this.props.rotMode}
                         imgRef="Rot"
                         imgAlt="Rotate"
                     />
@@ -94,7 +94,7 @@ class FixedMenu extends React.Component {
                         imgAlt="Info"
                     />
                 </div>
-                <MapString mapString={this.props.mapString} />
+                <MapString mapString={this.props.loading ? "Loading Data from DB" : "Map String: " + this.props.mapString} />
             </div>
         )
     }

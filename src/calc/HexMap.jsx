@@ -74,7 +74,7 @@ export class MapHappiness {
 export class HexMap {
     constructor() {
         this.sectors = getSecOpt(10, 0);
-        this.rotations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.rotations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.dynCoordMap = getDynamicCoordMap();
         this.hexGrid = makeHexGrid(this.sectors, this.rotations);
         setStaticNeighbourInfo(this.hexGrid);
@@ -84,7 +84,7 @@ export class HexMap {
             minEqDist: 2,
             maxClusterSize: 5,
             maxEdgeCount: 2,
-            maxFailures: 10000,
+            maxFailures: 100000,
             ignoreNum: 0,
         }
         this.biggestCluster = getClusterData(this.hexGrid);
@@ -124,7 +124,15 @@ export class HexMap {
     }
 
     newSectorSelection(numSec, variant) {
-        this.setMap(getSecOpt(numSec, variant), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        if     (numSec === 10 && variant === 0) this.setFromString("A0N0B0F0M0C0D0H0L0E0J0");
+        else if (numSec === 9 && variant === 0) this.setFromString("C2B4N0A0E5D4M2A0I4G3K0");
+        else if (numSec === 9 && variant === 1) this.setFromString("M3D1H2A0C2G3B0A0J5N1L0");
+        else if (numSec === 8 && variant === 0) this.setFromString("A0A0B0F0A0C0D0H0L0E0J0");
+        else if (numSec === 7 && variant === 0) this.setFromString("A0B0G0A0C0D0I0A0E0K0A0");
+        else if (numSec === 7 && variant === 1) this.setFromString("A0H4B5A0G5C3L2A0J3D2A0");
+        else if (numSec === 7 && variant === 2) this.setFromString("A0C2N1A0F5E5L4A0H1K4A0");
+        else if (numSec === 7 && variant === 3) this.setFromString("A0J5D0A0F5M1B5A0I2E0A0");
+        else if (numSec === 7 && variant === 4) this.setFromString("A0D4M3A0F5E5N0A0K3B1A0");
     }
 
     updateMapData() {
@@ -189,6 +197,13 @@ export class HexMap {
             this.randomizeMany(10);
         }
         return [true, failures];
+    }
+
+    getMinEqDist() {
+        for (var r = 1; r < 4; r++)
+            if (hasEqualNeighbour(this.nbrMat, r))
+                return r-1;
+        return 3;
     }
 
     getMapValidity() {

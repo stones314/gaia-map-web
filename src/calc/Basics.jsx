@@ -1,16 +1,20 @@
 import { colorWheel, getSecOpt, sectorCenter } from './../Defs';
 import { makeHexGrid } from './MapInformation';
 
+export const NUM_ROWS = 17;
+export const NUM_COLS = 22;
+export const MAX_SLOT = 11;
+
 export function isValidCoords(r, c) {
-    if (r >= 0 && c >= 0 && r <= 16 && c <= 23)
+    if (r >= 0 && c >= 0 && r < NUM_ROWS && c < NUM_COLS)
         return true;
     return false;
 }
 
 export function getRandomSlot(sectors, ignore) {
-    var i = Math.floor(Math.random() * 12);
+    var i = Math.floor(Math.random() * MAX_SLOT);
     while (ignore.includes(sectors[i])) {
-        i = Math.floor(Math.random() * 12);
+        i = Math.floor(Math.random() * MAX_SLOT);
     }
     return i;
 }
@@ -130,7 +134,7 @@ export function getRingPlanets(row, col, rad, hexGrid) {
     //console.error("ring coords = " + ringCoords);
     var ringPlanets = [];
     for (const [i, [r, c]] of ringCoords.entries()) {
-        if (r < 0 || c < 0 || r > 16 || c > 23) {
+        if (r < 0 || c < 0 || r >= NUM_ROWS || c >= NUM_COLS) {
             ringPlanets.push("No");
         }
         else {
@@ -157,7 +161,7 @@ export function isTerraformable(hexType) {
 
 export function getDynamicCoordMap() {
     var hexGrid = makeHexGrid(
-        ["s00", "s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08", "s09", "s10", "s00"],
+        ["s05b", "s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08", "s09", "s10"],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     var dynamicCoordMap = [];
     for (const [row, hexes] of hexGrid.entries()) {
@@ -167,7 +171,7 @@ export function getDynamicCoordMap() {
             for (var rad = 1; rad < 4; rad++) {
                 var ringCoords = getRingCoords(row, col, rad);
                 for (const [ringId, [r, c]] of ringCoords.entries()) {
-                    if (r >= 0 && c >= 0 && r <= 16 && c <= 23) {
+                    if (r >= 0 && c >= 0 && r < NUM_ROWS && c < NUM_COLS) {
                         if (hexGrid[r][c]["Sec"] !== hex["Sec"]) {
                             dynamicCoordMap[row][col].push([rad, r, c]);
                         }

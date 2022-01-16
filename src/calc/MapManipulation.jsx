@@ -154,22 +154,22 @@ export function swapSec(hexGrid, slotA, slotB) {
 }
 
 function rotateRandomSec(hexGrid, sectors, rotations) {
-    var i = Math.floor(Math.random() * 12);
+    var i = Math.floor(Math.random() * 11);
     while (sectors[i] === "s00") {
-        i = Math.floor(Math.random() * 12);
+        i = Math.floor(Math.random() * 11);
     }
     rotations[i] = (rotations[i] + 1) % 6;
     rotateSec(hexGrid, i);
 }
 
 function swapRandomSec(hexGrid, sectors, rotations) {
-    var i = Math.floor(Math.random() * 12);
+    var i = Math.floor(Math.random() * 11);
     while (sectors[i] === "s00") {
-        i = Math.floor(Math.random() * 12);
+        i = Math.floor(Math.random() * 11);
     }
-    var j = Math.floor(Math.random() * 12);
+    var j = Math.floor(Math.random() * 11);
     while (sectors[j] === "s00" || j === i) {
-        j = Math.floor(Math.random() * 12);
+        j = Math.floor(Math.random() * 11);
     }
     [sectors[i], sectors[j]] = [sectors[j], sectors[i]];
     [rotations[i], rotations[j]] = [rotations[j], rotations[i]];
@@ -396,6 +396,7 @@ function convertOldMapString(mapString) {
         return out;
     }
     for (const [i, p] of parts.entries()) {
+        if (i === 11) break;
         const s = p.split('.');
         if (s.length != 2) {
             out.errorMsg = "Incorrect [old] map string, " + s + " could not be parsed as sector.rotation.";

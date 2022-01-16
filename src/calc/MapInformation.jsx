@@ -3,17 +3,16 @@
     getRingCoords,
     isTerraformable,
     colorDist,
-    getRingPlanets,
     isOutsideMap,    isValidCoords,
-    getDynamicCoordMap
+    NUM_COLS,
+    NUM_ROWS
 } from './Basics';
 import {
     getSectorArray,
     sectorCenter,
     planets,
     colorWheel,
-    hexTypes,
-    dynamicCoordMap
+    hexTypes
 } from './../Defs';
 import { rotate } from './MapManipulation';
 
@@ -38,9 +37,9 @@ const distWgt = [1.0, 0.75, 0.5];
 
 export function makeHexGrid(sectors, rotations) {
     var hexGrid = [];
-    for (var i = 0; i < 17; i++) {
+    for (var i = 0; i < NUM_ROWS; i++) {
         hexGrid.push([]);
-        for (var j = 0; j < 24; j++) {
+        for (var j = 0; j < NUM_COLS; j++) {
             hexGrid[i].push({
                 "Row": 0,
                 "Col": 0,
@@ -105,12 +104,14 @@ export function makeHexGrid(sectors, rotations) {
             var ringCoords = getRingCoords(row, col, rad);
             var ringPlanets = rotate(hexes[rad], rad, rotations[index]);
             for (const [ringId, [r, c]] of ringCoords.entries()) {
-                hexGrid[r][c]["Type"] = ringPlanets[ringId];
-                hexGrid[r][c]["Sec"] = sector;
-                hexGrid[r][c]["Rot"] = rotations[index];
-                hexGrid[r][c]["Slot"] = index;
-                hexGrid[r][c]["Row"] = r;
-                hexGrid[r][c]["Col"] = c;
+                if (r >= 0 && c >= 0 && r < NUM_ROWS && c < NUM_COLS) {
+                    hexGrid[r][c]["Type"] = ringPlanets[ringId];
+                    hexGrid[r][c]["Sec"] = sector;
+                    hexGrid[r][c]["Rot"] = rotations[index];
+                    hexGrid[r][c]["Slot"] = index;
+                    hexGrid[r][c]["Row"] = r;
+                    hexGrid[r][c]["Col"] = c;
+                }
             }
         }
     }
@@ -160,7 +161,7 @@ export function updateNeighbourInfo(hexGrid, dynCoordMap) {
                     hex["T" + i] = hex["sT" + i].slice();;
                 }
                 hex["Nbr"] = hex["sNbr"].slice();
-                if (row === 0 || row === 16 || col === 0 || col === 23)
+                if (row === 0 || row === (NUM_ROWS - 1) || col === 0 || col === (NUM_COLS - 1))
                     hex["No"][0]++;
                 for (const [di, [rad, r, c]] of dynCoordMap[row][col].entries()) {
                     var nbr = hexGrid[r][c]["Type"];

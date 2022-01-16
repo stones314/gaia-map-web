@@ -1,4 +1,5 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
+import { hexMap, HexMap } from './calc/HexMap';
 
 const doc = new GoogleSpreadsheet(process.env.REACT_APP_SPREADSHEET_ID);
 
@@ -60,4 +61,48 @@ export async function loadMaps() {
         out.error = e;
     }
     return out;
+}
+
+export async function reEvaluateMaps() {
+    var error = "";
+    try {
+
+        //await doc.useApiKey("AIzaSyDDBUDDkWmwrWEcS8kz2dpPVTg6bRZGMIA");
+        await doc.useServiceAccountAuth({
+            client_email: process.env.REACT_APP_CLIENT_EMAIL,
+            private_key: process.env.REACT_APP_API_KEY.replace(/\\n/g, '\n'),
+        });
+
+        // loads document properties and worksheets
+        await doc.loadInfo();
+        const keyCol = 0;
+        const eqCol = 1;
+        const clCol = 2;
+        const edCol = 3;
+        const myMapTypes = ["7B", "7C", "7D"];
+        var hexMap = new HexMap();
+        hexMap.criteria.maxEdgeCount = 1;
+
+        for (const [i, m] of myMapTypes.entries()) {
+            const sheet = doc.sheetsByTitle[m];
+            await sheet.loadCells({ startRowIndex: 1 });
+            const maxRow = sheet.rowCount;
+            for (var r = 1; r < maxRow; r++) {
+                const mapKey = sheet.getCell(r, keyCol).value;
+                hexMap.setFromString(mapKey);
+                const eqCell = sheet.getCell(r, eqCol);
+                eqCell.value = hexMap.getMinEqDist();
+                const clCell = sheet.getCell(r, clCol);
+                clCell.value = hexMap.biggestCluster;
+                const edCell = sheet.getCell(r, edCol);
+                edCell.value = hexMap.highestEdgeCount[1];
+            }
+            await sheet.saveUpdatedCells();
+        }
+
+    } catch (e) {
+        console.error('Error: ', e);
+        error = e;
+    }
+    return error + hexMap.nbrMat["Bl"]["No"][0];
 }

@@ -43,11 +43,11 @@ class Info extends React.Component {
                 />
                 <InfoElement
                     imgRef="pBalance"
-                    text="NOTE: Not yet implemented. For now behaves the same as the Randomize button (bellow). When implemented you can Click the balance symbol to get a random map from a database of pregenerated balanced maps. The map will fit the settings you selected in the settings menu, however it will ignore the Random With Swap option if it is set to No (i.e. for the new map the sectors will be swaped around as well as rotated)."
+                    text="Click the balance symbol to get a random map from a database of pregenerated maps. The pregenerated maps have been generated using an algorithm that tries to balance the map. The map will fit the settings you selected in the settings menu, however it will ignore the Random With Swap option if it is set to No (i.e. for the new map the sectors will be swaped around as well as rotated). NOTE: We are currently filling up the database with maps, and for some settings there are no maps yet."
                 />
                 <InfoElement
                     imgRef="Random"
-                    text="Click the randomize button to get a random map (no balancing algorithm used here). The map will fit the settings you selected in the settings menu."
+                    text="Click the randomize button to get a random map (no balancing algorithm used here). The map will fit the settings you selected in the settings menu. WARNING: if you select the most strict settings it is very hard to find a map that matches those settings. The randomize-button will give up after a while if it does not find a map. The web-page will be unresponsive while looking for a map."
                 />
                 <InfoElement
                     imgRef="Rot"

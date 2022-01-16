@@ -197,13 +197,21 @@ code {
 }
 
 input {
-    width: 100%;
+    width: 97%;
+    margin: 1px;
 }
 
 .string-inn-box {
     text-align: center;
     border: 2px solid var(--img-btn-border);
 }
+
+.num-map-box {
+    text-align: center;
+    border: 2px solid var(--img-btn-border);
+    margin-bottom: 1px;
+}
+
 
 @media screen and (max-aspect-ratio: 210/152) {
     .menu-box-0 {

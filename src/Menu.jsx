@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/Menu.css';
+import MapDbInfo from './MapDbInfo';
 import { Settings, SelectOptionFromList } from './Settings';
 import { settingOpts } from './Defs'
 
@@ -112,9 +113,9 @@ class Menu extends React.Component {
                 <div className="menu-box">
                     <NumSectorSelect
                         onClick={(numSec) => this.props.onClick(numSec)}
-                        numSec={this.props.numSec}
+                        numSec={this.props.menuSelect.numSec}
                         onClickVar={(variant) => this.props.onClickOpt(variant)}
-                        secOpt={this.props.secOpt}
+                        secOpt={this.props.menuSelect.secOpt}
                         menuSelect={this.props.menuSelect}
                         onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
                     />
@@ -126,6 +127,10 @@ class Menu extends React.Component {
                         onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
                     />
                 </div>
+                <MapDbInfo
+                    mapData={this.props.mapData}
+                    menuSelect={this.props.menuSelect}
+                />
                 <MapStringInput
                     onMapStringSubmit={(event) => this.props.onMapStringSubmit(event)}
                     onMapStringChange={(value) => this.props.onMapStringChange(value)}
