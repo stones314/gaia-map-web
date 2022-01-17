@@ -183,8 +183,13 @@ code {
 .info-menu {
     width: 200px;
 }
+.info-menu-planets {
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+}
 .info-txt {
-    width: calc(100vw - 210px);
+    width: auto;
 }
 .info-sec-row {
     display: flex;
@@ -192,7 +197,7 @@ code {
     flex-wrap: wrap;
 }
 .info-sec-img {
-    height: 150px;
+    width: max(100px, calc(95vw / 7));
 }
 
 .info-img {
@@ -202,6 +207,13 @@ code {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.info-hex-mark-img {
+    border: 2px solid var(--img-btn-border);
+    margin: 1px;
+    height: 11vh;
+    display: inline-block;
 }
 
 .error-box {

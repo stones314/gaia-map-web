@@ -333,6 +333,12 @@ class App extends React.Component {
                         menuSelect={this.state.menuSelect}
                         onClick={(numSec) => this.onClick(numSec)}
                         onClickOpt={(variant) => this.onClickOpt(variant)}
+                        hexMap={this.hexMap}
+                        landscape={this.state.landscape}
+                        onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
+                        onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
+                        onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
+                        onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
                     />
                     {this.renderMenu()}
                     {this.renderStats()}

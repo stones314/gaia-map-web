@@ -2,14 +2,18 @@ import React from 'react';
 import './styles/Menu.css';
 import { Settings, SelectOptionFromList } from './Settings';
 import { NumSectorSelect } from './Menu';
-import { settingOpts, images, getSecOpt } from './Defs'
+import { Histogram } from './ColorHappyView';
+import { settingOpts, images, getSecOpt, metrics, colorWheel } from './Defs'
 
 class InfoElement extends React.Component {
 
     renderImg() {
+        var imgClass = "img-btn";
         if (this.props.imgRef === "none") return null;
+        if (this.props.imgClass === "info-hex-mark-img")
+            imgClass = this.props.imgClass;
         return (
-            <div className="img-btn">
+            <div className={imgClass}>
                 <img
                     className="info-img"
                     src={images[this.props.imgRef]}
@@ -61,12 +65,29 @@ class SectorInfo extends React.Component {
 
 class Info extends React.Component {
     render() {
+        var evalRows = {};
+        for (const [i, m] of metrics.entries()) {
+            const data = this.props.hexMap.getHappyValues(m);
+            evalRows[m] = (
+                <Histogram
+                    key={i}
+                    values={data.values}
+                    planets={data.planets}
+                    maxVal={data.max}
+                    header={m}
+                    landscape={this.props.landscape}
+                    info={true}
+                />
+            );
+        }
+
         return (
             <div className="info-box">
                 <h1>
                     Gaia Map Database, Editor and Evaluator
                 </h1>
-                Welcome! Since my UI desing skills are terrible I added this page so that I can explain how the map generator works.
+                <p>Welcome!</p>
+                This page explains the various buttons and information that you can find here.
                 
                 <h2> The Main Menu </h2>
 
@@ -126,8 +147,8 @@ class Info extends React.Component {
                         <SelectOptionFromList
                             optName={settingOpts.rngWithSwap.text}
                             opts={settingOpts.rngWithSwap.optsView}
-                            selectedOptIndex={0}
-                            onClickOpt={(rngOpt) => null}
+                            selectedOptIndex={this.props.menuSelect.rngWithSwap}
+                            onClickOpt={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
                         />
                     </div>
                     <div className="info-txt">
@@ -140,8 +161,8 @@ class Info extends React.Component {
                         <SelectOptionFromList
                             optName={settingOpts.minEqDist.text}
                             opts={settingOpts.minEqDist.optsView}
-                            selectedOptIndex={0}
-                            onClickOpt={(minEqDist) => null}
+                            selectedOptIndex={this.props.menuSelect.minEqDist}
+                            onClickOpt={(minEqDist) => this.props.onClickMinEqualDist(minEqDist)}
                         />
                     </div>
                     <div className="info-txt">
@@ -154,8 +175,8 @@ class Info extends React.Component {
                         <SelectOptionFromList
                             optName={settingOpts.maxClustSize.text}
                             opts={settingOpts.maxClustSize.optsView}
-                            selectedOptIndex={0}
-                            onClickOpt={(minEqDist) => null}
+                            selectedOptIndex={this.props.menuSelect.maxCluster}
+                            onClickOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
                         />
                     </div>
                     <div className="info-txt">
@@ -168,8 +189,8 @@ class Info extends React.Component {
                         <SelectOptionFromList
                             optName={settingOpts.maxEdgeCount.text}
                             opts={settingOpts.maxEdgeCount.optsView}
-                            selectedOptIndex={0}
-                            onClickOpt={(minEqDist) => null}
+                            selectedOptIndex={this.props.menuSelect.maxEdge}
+                            onClickOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                         />
                     </div>
                     <div className="info-txt">
@@ -178,23 +199,58 @@ class Info extends React.Component {
                 </InfoElement>
 
                 <h2> The Map Evaluation </h2>
+                An evaluation is always performed for the current map. Note that the evaluation is just an indicator, and not an absolute fact. We are constantly trying to improve the evaluation algorithm.
 
                 <h3>Invalid Map Indication</h3>
-                If the map is invalid according to the criteria above two things will happen:
+                If the map is invalid according to the criteria given in the settins menu two things will happen:
                 <div>1: The background of the page turns red</div>
                 <div>2: The planets that break a criteria will be marked</div>
+                <InfoElement imgRef="RedGlowyMark" imgClass="info-hex-mark-img">
+                    Planets of the same color that are too close to each other are marked red.
+                </InfoElement >
+                <InfoElement imgRef="YellowMark" imgClass="info-hex-mark-img">
+                    Planets in a cluster that is too large are marked yellow.
+                </InfoElement >
+                <InfoElement imgRef="GrayMark" imgClass="info-hex-mark-img">
+                    If a color has too many planets on the edge of the map they are marked grey.
+                </InfoElement >
+            
+                <h3>Histograms</h3>
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        {evalRows["Exp"]}
+                    </div>
+                    <div className="info-txt">
+                        Each planet type get a score for how easy it is to expand from their home planets.
+                    </div>
+                </InfoElement>
 
-                <h3>Expansion Score</h3>
-                Each planet type get a score for how easy it is to expand from their home planet.
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        {evalRows["Leech"]}
+                    </div>
+                    <div className="info-txt">
+                        Each planet type get a score for planets nearby that can provide leech. The score take into account that it is better to get leech from a planet on the other side of the color wheel.
+                    </div>
+                </InfoElement>
 
-                <h3>Leech Score</h3>
-                Each planet type get a score for how likely they are to get leech at their home planet. It assumes that you are more likely to get leech from planets on the other side of the color-wheel.
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        {evalRows["EdgSad"]}
+                    </div>
+                    <div className="info-txt">
+                        Each planet type get a negative score for each planet they have close to the edge of the map.
+                    </div>
+                </InfoElement>
 
-                <h3>Edge Score</h3>
-                Each planet type get a negative score for each planet they have close to the edge of the map.
-
-                <h3>Total Score</h3>
-                The total score is the sum of the other scores (negative scores are subtracted).
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        {evalRows["Happy"]}
+                    </div>
+                    <div className="info-txt">
+                        The total score is the sum of the other scores (negative scores are subtracted).
+                    </div>
+                </InfoElement>
             </div>
         )
     }

@@ -84,7 +84,7 @@ export class HexMap {
             minEqDist: 2,
             maxClusterSize: 5,
             maxEdgeCount: 2,
-            maxFailures: 100000,
+            maxFailures: 10000,
             ignoreNum: 0,
         }
         this.biggestCluster = getClusterData(this.hexGrid);

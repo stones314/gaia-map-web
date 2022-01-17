@@ -30,7 +30,7 @@ export class HexMapView extends React.Component {
                 <img
                     className="hex-img-over"
                     src={images[imgRef]}
-                    alt="RedRing"
+                    alt={imgRef}
                 />
             )
         }

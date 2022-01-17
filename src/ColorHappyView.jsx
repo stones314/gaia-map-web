@@ -10,7 +10,7 @@ const header = {
     "Central": "Central",
 }
 
-class Histogram extends React.Component {
+export class Histogram extends React.Component {
 
     render() {
         var cols = [];
