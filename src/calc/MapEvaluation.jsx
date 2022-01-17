@@ -47,23 +47,23 @@ export function getHighestEdgeCount(nbrMat, maxEdgeCount) {
 
 const expandHappy = {
     "T0": 1.0,
-    "T1": 1.0,
+    "T1": 0.8,
     "T2": 0.0,
     "T3": 0.0,
-    "Ga": 1.0,
-    "Tr": 0.3,
+    "Ga": 0.8,
+    "Tr": 0.2,
 }
 const leechHappy = {
     "T0": 0.0,
-    "T1": 0.5,
+    "T1": 0.0,
     "T2": 1.0,
     "T3": 1.0,
-    "Ga": 0.5,
+    "Ga": 0.0,
     "Tr": 0.0,
 }
 const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
-const rangeWeight = [1.0, 1.0, 0.5];
-const edgeSadness = [2.0, 1.5, 1.0];
+const rangeWeight = [1.0, 1.0, 1.0];
+const edgeSadness = [2.0, 1.2, 0.2];
 
 export function evaluatePlanetHappiness(hexGrid, mapHappiness) {
     for (const [i, m] of metrics.entries()) {
