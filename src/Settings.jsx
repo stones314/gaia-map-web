@@ -37,6 +37,12 @@ export class Settings extends React.Component {
         return (
             <div className="menu-box-2">
                 <SelectOptionFromList
+                    optName={settingOpts.rngWithSwap.text}
+                    opts={settingOpts.rngWithSwap.optsView}
+                    selectedOptIndex={this.props.menuSelect.rngWithSwap}
+                    onClickOpt={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                />
+                <SelectOptionFromList
                     optName={settingOpts.minEqDist.text}
                     opts={settingOpts.minEqDist.optsView}
                     selectedOptIndex={this.props.menuSelect.minEqDist}

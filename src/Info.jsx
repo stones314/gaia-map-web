@@ -1,93 +1,181 @@
 import React from 'react';
 import './styles/Menu.css';
 import { Settings, SelectOptionFromList } from './Settings';
-import { settingOpts, images } from './Defs'
+import { NumSectorSelect } from './Menu';
+import { settingOpts, images, getSecOpt } from './Defs'
 
 class InfoElement extends React.Component {
+
+    renderImg() {
+        if (this.props.imgRef === "none") return null;
+        return (
+            <div className="img-btn">
+                <img
+                    className="info-img"
+                    src={images[this.props.imgRef]}
+                    alt={this.props.imgRef}
+                />
+            </div>
+        );
+    }
+
     render() {
+        var childClass = "info-child-col";
+        if (this.props.childDir === "row")
+            childClass = "info-child-row";
         return (
             <div className="info-element">
-                <div className="img-btn">
-                    <img
-                        className="info-img"
-                        src={images[this.props.imgRef]}
-                        alt={this.props.imgRef}
-                    />
-                </div>
-                <div>
-                    {this.props.text}
+                {this.renderImg()}
+                <div className={childClass}>
+                    {this.props.children}
                 </div>
             </div>
-            );
+        );
     }
 }
+
+class SectorInfo extends React.Component {
+
+    render() {
+        var row = [];
+        for (const [i, p] of this.props.sectors.entries()) {
+            if (p === "s00") continue;
+            row.push(
+                <div className="rot0">
+                    <img
+                        src={images[p]}
+                        className="info-sec-img"
+                        alt={p}
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="info-sec-row">
+                {row}
+            </div>
+        )
+    }
+}
+
 
 class Info extends React.Component {
     render() {
         return (
             <div className="info-box">
                 <h1>
-                    Gaia Map Generator, Editor and Evaluator
+                    Gaia Map Database, Editor and Evaluator
                 </h1>
                 Welcome! Since my UI desing skills are terrible I added this page so that I can explain how the map generator works.
                 
                 <h2> The Main Menu </h2>
 
-                <InfoElement
-                    imgRef="Cog"
-                    text="Click the cog symbol to open the map settings menu (described later)."
-                />
-                <InfoElement
-                    imgRef="Stats"
-                    text="Click the histogram symbol to show the evaluation of the current map (described later)."
-                />
-                <InfoElement
-                    imgRef="pBalance"
-                    text="Click the balance symbol to get a random map from a database of pregenerated maps. The pregenerated maps have been generated using an algorithm that tries to balance the map. The map will fit the settings you selected in the settings menu, however it will ignore the Random With Swap option if it is set to No (i.e. for the new map the sectors will be swaped around as well as rotated). NOTE: We are currently filling up the database with maps, and for some settings there are no maps yet."
-                />
-                <InfoElement
-                    imgRef="Random"
-                    text="Click the randomize button to get a random map (no balancing algorithm used here). The map will fit the settings you selected in the settings menu. WARNING: if you select the most strict settings it is very hard to find a map that matches those settings. The randomize-button will give up after a while if it does not find a map. The web-page will be unresponsive while looking for a map."
-                />
-                <InfoElement
-                    imgRef="Rot"
-                    text="When this is selected you can click on a sector to rotate it."
-                />
-                <InfoElement
-                    imgRef="Swap"
-                    text="When this is selected you can click on one sector, then on another, to swap those sectors."
-                />
-                <InfoElement
-                    imgRef="Info"
-                    text="You clicked this button to display this page. Click it again to show the map."
-                />
+                <InfoElement imgRef="Cog">
+                    Click the cog symbol to open the map settings menu (described later).
+                </InfoElement>
+
+                <InfoElement imgRef="Stats">
+                    Click the histogram symbol to show the evaluation of the current map (described later).
+                </InfoElement>
+
+                <InfoElement imgRef="pBalance">
+                    Click the balance symbol to get a random map from a database of pregenerated maps. The pregenerated maps have been generated using an algorithm that tries to balance the map. The map will fit the settings you selected in the settings menu, however it will ignore the Random With Swap option if it is set to No (i.e. for the new map the sectors will be swaped around as well as rotated). <b>NOTE:</b> We are currently filling up the database with maps, and for some settings there are no maps yet.
+                </InfoElement>
+
+                <InfoElement imgRef="Random">
+                    Click the randomize button to get a random map (no balancing algorithm used here). The map will fit the settings you selected in the settings menu. <b>WARNING:</b> if you select the most strict settings it is very hard to find a map that matches those settings. The randomize-button will give up after a while if it does not find a map. The web-page will be unresponsive while looking for a map.
+                </InfoElement>
+
+                <InfoElement imgRef="Rot">
+                    When this is selected you can click on a sector to rotate it.
+                </InfoElement>
+
+                <InfoElement imgRef="Swap">
+                    When this is selected you can click on one sector, then on another, to swap those sectors.
+                </InfoElement>
+                <InfoElement imgRef="Info">
+                    You clicked this button to display this page. Click it again to show the map.
+                </InfoElement>
 
                 <h2> The Settings Menu </h2>
 
-                <div>
-                    <img
-                        src={images["SettingsMenu"]}
-                        alt="SettingsMenu"
-                    />
-                </div>
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <NumSectorSelect
+                            onClick={(numSec) => this.props.onClick(numSec)}
+                            onClickVar={(variant) => this.props.onClickOpt(variant)}
+                            menuSelect={this.props.menuSelect}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        <p>
+                            Select number of sectors for your map
+                        </p>
+                        <p>
+                            For 7 and for 9 sectors there are more than one way you can select which sectors you use. Each variant will have the same number of planets for each color, but it might have a different number of Gaia planets or Transdim planets.
+                        </p>
+                        <p>
+                            Click the menu above to see what sectors are used for the various variants below:
+                        </p>
+                    </div>
+                    <SectorInfo sectors={getSecOpt(this.props.menuSelect.numSec, this.props.menuSelect.secOpt)} />
+                </InfoElement>
 
-                <h3>Number of Sectors</h3>
-                Select number of sectors for your map
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <SelectOptionFromList
+                            optName={settingOpts.rngWithSwap.text}
+                            opts={settingOpts.rngWithSwap.optsView}
+                            selectedOptIndex={0}
+                            onClickOpt={(rngOpt) => null}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        If the randomize button should swap the sectors positions, or only rotate the sectors.
+                    </div>
+                </InfoElement>
 
-                <h3>Variant</h3>
-                For 7 and for 9 sectors there are more than one way you can select which sectors you use. Each variant will have the same number of planets for each color, but it might have a different number of Gaia planets or Transdim planets. 
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <SelectOptionFromList
+                            optName={settingOpts.minEqDist.text}
+                            opts={settingOpts.minEqDist.optsView}
+                            selectedOptIndex={0}
+                            onClickOpt={(minEqDist) => null}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        Distance allowed between two planets of the same color.
+                    </div>
+                </InfoElement>
 
-                <h3>Random With Swap</h3>
-                If the randomize button should swap the sectors positions, or only rotate the sectors.
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <SelectOptionFromList
+                            optName={settingOpts.maxClustSize.text}
+                            opts={settingOpts.maxClustSize.optsView}
+                            selectedOptIndex={0}
+                            onClickOpt={(minEqDist) => null}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        Size of the largest cluster in the map.
+                    </div>
+                </InfoElement>
 
-                <h3>Min Equal Range</h3>
-                Minimum distance that is allowed between two planets of the same color.
-
-                <h3>Max Cluster Size</h3>
-                Maximum number of planets that can be next to each other.
-
-                <h3>Max Edge Planets</h3>
-                Maximum number of planets a color can have on the edge of the map.
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <SelectOptionFromList
+                            optName={settingOpts.maxEdgeCount.text}
+                            opts={settingOpts.maxEdgeCount.optsView}
+                            selectedOptIndex={0}
+                            onClickOpt={(minEqDist) => null}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        How many planets a color may have at the very edge of the map.
+                    </div>
+                </InfoElement>
 
                 <h2> The Map Evaluation </h2>
 

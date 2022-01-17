@@ -74,11 +74,13 @@ class App extends React.Component {
 
         this.setState({ loading: false });
 
-        //reevaluate maps:
-        //var error = await reEvaluateMaps();
-        //if (error != "") {
-        //    this.setState({ alertMsg: "Error: " + error, showAlert: true });
-        //}
+        var reevaluateMaps = false;
+        if (reevaluateMaps) {
+            var error = await reEvaluateMaps();
+            if (error != "") {
+                this.setState({ alertMsg: "Error: " + error, showAlert: true });
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -327,7 +329,11 @@ class App extends React.Component {
         if (this.state.showInfo) {
             return (
                 <div>
-                    <Info />
+                    <Info
+                        menuSelect={this.state.menuSelect}
+                        onClick={(numSec) => this.onClick(numSec)}
+                        onClickOpt={(variant) => this.onClickOpt(variant)}
+                    />
                     {this.renderMenu()}
                     {this.renderStats()}
                 </div>

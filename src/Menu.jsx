@@ -4,7 +4,7 @@ import MapDbInfo from './MapDbInfo';
 import { Settings, SelectOptionFromList } from './Settings';
 import { settingOpts } from './Defs'
 
-class NumSectorSelect extends React.Component {
+export class NumSectorSelect extends React.Component {
     renderOpts() {
         const vars = [
             ['A', 'B', 'C', 'D', 'E'],
@@ -13,10 +13,10 @@ class NumSectorSelect extends React.Component {
             ['A']
         ];
         var varClass = new Array(5).fill("menu-mode-btn");
-        varClass[this.props.secOpt] += " menu-mode-sel";
+        varClass[this.props.menuSelect.secOpt] += " menu-mode-sel";
 
         var rows = [];
-        for (const [index, value] of vars[this.props.numSec - 7].entries()) {
+        for (const [index, value] of vars[this.props.menuSelect.numSec - 7].entries()) {
             rows.push(
                 <button key={index} className={varClass[index]} onClick={() => this.props.onClickVar(index)}>
                     {value}
@@ -39,7 +39,7 @@ class NumSectorSelect extends React.Component {
 
     render() {
         var nSecClass = new Array(4).fill("menu-mode-btn");
-        nSecClass[this.props.numSec - 7] += " menu-mode-sel";
+        nSecClass[this.props.menuSelect.numSec - 7] += " menu-mode-sel";
 
         const nSecs = [7, 8, 9, 10];
 
@@ -65,12 +65,6 @@ class NumSectorSelect extends React.Component {
                     </div>
                 </div>
                 {this.renderOpts()}
-                <SelectOptionFromList
-                    optName={settingOpts.rngWithSwap.text}
-                    opts={settingOpts.rngWithSwap.optsView}
-                    selectedOptIndex={this.props.menuSelect.rngWithSwap}
-                    onClickOpt={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
-                />
             </div>
         )
     }
@@ -113,11 +107,8 @@ class Menu extends React.Component {
                 <div className="menu-box">
                     <NumSectorSelect
                         onClick={(numSec) => this.props.onClick(numSec)}
-                        numSec={this.props.menuSelect.numSec}
                         onClickVar={(variant) => this.props.onClickOpt(variant)}
-                        secOpt={this.props.menuSelect.secOpt}
                         menuSelect={this.props.menuSelect}
-                        onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
                     />
                     <Settings
                         menuSelect={this.props.menuSelect}
@@ -125,6 +116,7 @@ class Menu extends React.Component {
                         onClickClustOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
                         onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                         onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
+                        onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
                     />
                 </div>
                 <MapDbInfo

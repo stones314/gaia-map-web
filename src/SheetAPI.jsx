@@ -79,17 +79,20 @@ export async function reEvaluateMaps() {
         const eqCol = 1;
         const clCol = 2;
         const edCol = 3;
-        const myMapTypes = ["7B", "7C", "7D"];
+        const myMapTypes = ["7A", "10"];
         var hexMap = new HexMap();
         hexMap.criteria.maxEdgeCount = 1;
+        var mapKey = "";
 
         for (const [i, m] of myMapTypes.entries()) {
             const sheet = doc.sheetsByTitle[m];
             await sheet.loadCells({ startRowIndex: 1 });
             const maxRow = sheet.rowCount;
             for (var r = 1; r < maxRow; r++) {
-                const mapKey = sheet.getCell(r, keyCol).value;
-                hexMap.setFromString(mapKey);
+                mapKey = sheet.getCell(r, keyCol).value;
+                if (!mapKey) continue;
+                const out = hexMap.setFromString(mapKey);
+                if (!out.valid) continue;
                 const eqCell = sheet.getCell(r, eqCol);
                 eqCell.value = hexMap.getMinEqDist();
                 const clCell = sheet.getCell(r, clCol);
@@ -102,7 +105,7 @@ export async function reEvaluateMaps() {
 
     } catch (e) {
         console.error('Error: ', e);
-        error = e;
+        error = e + " for map " + mapKey;
     }
     return error + hexMap.nbrMat["Bl"]["No"][0];
 }
