@@ -79,7 +79,9 @@ export async function reEvaluateMaps() {
         const eqCol = 1;
         const clCol = 2;
         const edCol = 3;
-        const myMapTypes = ["7A", "10"];
+        const evCol = 4;
+        const e2Col = 5;
+        const myMapTypes = [];//["7A", "7B", "7C", "7D", "7E","8", "10"];
         var hexMap = new HexMap();
         hexMap.criteria.maxEdgeCount = 1;
         var mapKey = "";
@@ -99,6 +101,12 @@ export async function reEvaluateMaps() {
                 clCell.value = hexMap.biggestCluster;
                 const edCell = sheet.getCell(r, edCol);
                 edCell.value = hexMap.highestEdgeCount[1];
+
+                const mapBal = hexMap.happiness.getBalance();
+                const evCell = sheet.getCell(r, evCol);
+                evCell.value = mapBal.maxMin;
+                const e2Cell = sheet.getCell(r, e2Col);
+                e2Cell.value = mapBal.maxAvg;
             }
             await sheet.saveUpdatedCells();
         }

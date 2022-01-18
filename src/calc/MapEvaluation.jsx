@@ -93,7 +93,9 @@ export function evaluatePlanetHappiness(hexGrid, mapHappiness) {
                     hex["EdgSad"] += edgeSadness[1];
 
                 for (const [i, m] of metrics.entries())
-                    mapHappiness.colorHappy[hex["Type"]].score[m]  += hex[m];
+                    mapHappiness.colorHappy[hex["Type"]].score[m] += hex[m];
+
+                hex["Happy"] = hex["Exp"] + hex["Leech"] - hex["EdgSad"];
             }
         }
     }

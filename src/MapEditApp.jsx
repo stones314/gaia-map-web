@@ -72,8 +72,6 @@ class App extends React.Component {
         window.addEventListener('resize', this.checkLandscape);
         this.checkLandscape();
 
-        this.setState({ loading: false });
-
         var reevaluateMaps = false;
         if (reevaluateMaps) {
             var error = await reEvaluateMaps();
@@ -81,6 +79,8 @@ class App extends React.Component {
                 this.setState({ alertMsg: "Error: " + error, showAlert: true });
             }
         }
+
+        this.setState({ loading: false });
     }
 
     componentWillUnmount() {

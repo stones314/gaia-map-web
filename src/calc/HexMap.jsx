@@ -68,6 +68,25 @@ export class MapHappiness {
         }
         return myOut;
     }
+
+    getBalance() {
+        var out = {
+            maxMin: 0.0,
+            maxAvg: 0.0,
+        };
+        var maxH = 0.0;
+        var minH = 1000;
+        var sum = 0.0
+        for (const [j, p] of colorWheel.entries()) {
+            const H = this.colorHappy[p].score["Happy"];
+            sum += H;
+            if (H > maxH) maxH = H;
+            if (H < minH) minH = H;
+        }
+        out.maxMin = maxH - minH;
+        out.maxAvg = maxH - sum / 7.0;
+        return out;
+    }
 }
 
 
