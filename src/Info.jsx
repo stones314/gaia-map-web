@@ -1,9 +1,12 @@
 import React from 'react';
 import './styles/Menu.css';
 import { Settings, SelectOptionFromList } from './Settings';
-import { NumSectorSelect } from './Menu';
+import { NumSectorSelect, MapStringInput } from './Menu';
+import MapDbInfo from './MapDbInfo';
+
 import { Histogram } from './ColorHappyView';
-import { settingOpts, images, getSecOpt, metrics, colorWheel } from './Defs'
+import { settingOpts, images, getSecOpt, metrics, colorWheel, sectorToLetter } from './Defs'
+import { sectorList, sectorName } from './calc/MapManipulation';
 
 class InfoElement extends React.Component {
 
@@ -78,6 +81,20 @@ class Info extends React.Component {
                     landscape={this.props.landscape}
                     info={true}
                 />
+            );
+        }
+
+        var mapStringLetters = [];
+        for (const [i, s] of sectorList.entries()) {
+            mapStringLetters.push(
+                <div key={i} className="info-mapgrid-table-col">
+                    <div className="info-mapgrid-table-element">
+                        {sectorName[i]}
+                    </div>
+                    <div className="info-mapgrid-table-element">
+                        {sectorToLetter[s]}
+                    </div>
+                </div>
             );
         }
 
@@ -249,6 +266,54 @@ class Info extends React.Component {
                     </div>
                     <div className="info-txt">
                         The total score is the sum of the other scores (negative scores are subtracted).
+                    </div>
+                </InfoElement>
+
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <MapDbInfo
+                            mapData={this.props.mapData}
+                            menuSelect={this.props.menuSelect}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        This show how many maps in the database fit the given settings.
+                    </div>
+                </InfoElement>
+
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <MapStringInput
+                            onMapStringSubmit={(event) => this.props.onMapStringSubmit(event)}
+                            onMapStringChange={(value) => this.props.onMapStringChange(value)}
+                            mapString={this.props.mapString}
+                            errorMsg={this.props.errorMsg}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        <p>
+                            Each map can be identified by a unique map string. The string for the current map is always displayd under the menu at the top of the page. If you enter a map string into this text box and click Submit the page will display the map for that map string.
+                        </p>
+                        <p>
+                            The map string is created using 11 pairs of letters and numbers, where the letter represents a sector and the number represents the rotation of that sector. For example B2 is sector 1 rotated two times clockwise. This means that the possible rotations are 0 to 5. The position in the string is used to indicate the position of the sector in the following grid:
+                        </p>
+
+                        <p>
+                            <img
+                                className="info-mapgrid-img"
+                                src={images["MapGrid"]}
+                                alt="MapGrid"
+                            />
+                        </p>
+                        <p>
+                            The letters used for each sector is:
+                            <div className="info-mapgrid-table">
+                                {mapStringLetters}
+                            </div>
+                        </p>
+                        <p>
+                           The Map String for the default map is: A0N0B0F0M0C0D0H0L0E0J0
+                        </p>
                     </div>
                 </InfoElement>
             </div>

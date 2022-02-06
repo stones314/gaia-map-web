@@ -330,7 +330,8 @@ const sectorVal = {
     "s10": 4096,
 };
 
-const sectorList = [ "s00","s01","s02","s03","s04","s05","s05b","s06","s06b","s07","s07b","s08","s09","s10" ];
+export const sectorList = [ "s00","s01","s02","s03","s04","s05","s05b","s06","s06b","s07","s07b","s08","s09","s10" ];
+export const sectorName = ["None", "1", "2", "3", "4", "5", "5b", "6", "6b", "7", "7b", "8", "9", "10"];
 const rotList = ["0", "1", "2", "3", "4", "5", "00", "01", "02", "03", "04", "05"];
 
 const rotListNew = ["0", "1", "2", "3", "4", "5"];

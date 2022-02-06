@@ -145,7 +145,7 @@ export function setStaticNeighbourInfo(hexGrid) {
     }
 }
 
-export function updateNeighbourInfo(hexGrid, dynCoordMap) {
+export function updateNeighbourInfo(hexGrid, dynCoordMap, skipDynUpdate=false) {
 
     for (const [row, hexes] of hexGrid.entries()) {
         for (const [col, hex] of hexes.entries()) {
@@ -155,14 +155,18 @@ export function updateNeighbourInfo(hexGrid, dynCoordMap) {
             }
             if (isPlanet(hex["Type"])) {
                 for (const [hi, ht] of hexTypes.entries()) {
-                    hex[ht] = hex["s" + ht].slice();;//reset values to the static data
+                    hex[ht] = hex["s" + ht].slice();//reset values to the static data
                 }
                 for (var i = 0; i < 4; i++) {
-                    hex["T" + i] = hex["sT" + i].slice();;
+                    hex["T" + i] = hex["sT" + i].slice();
                 }
                 hex["Nbr"] = hex["sNbr"].slice();
+
+                if (skipDynUpdate) continue;
+
                 if (row === 0 || row === (NUM_ROWS - 1) || col === 0 || col === (NUM_COLS - 1))
                     hex["No"][0]++;
+
                 for (const [di, [rad, r, c]] of dynCoordMap[row][col].entries()) {
                     var nbr = hexGrid[r][c]["Type"];
                     if (isOutsideMap(nbr)) {

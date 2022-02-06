@@ -155,7 +155,7 @@ export class HexMap {
     }
 
     updateMapData() {
-        updateNeighbourInfo(this.hexGrid, this.dynCoordMap);
+        updateNeighbourInfo(this.hexGrid, this.dynCoordMap, false);
         updateNeighbourMatrix(this.hexGrid, this.nbrMat);
         this.biggestCluster = getClusterData(this.hexGrid);
         this.highestEdgeCount = getHighestEdgeCount(this.nbrMat, this.criteria.maxEdgeCount);

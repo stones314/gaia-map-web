@@ -335,10 +335,15 @@ class App extends React.Component {
                         onClickOpt={(variant) => this.onClickOpt(variant)}
                         hexMap={this.hexMap}
                         landscape={this.state.landscape}
+                        mapData={this.mapdata}
                         onClickMinEqualDist={(minEqDist) => this.onClickMinEqualDist(minEqDist)}
                         onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
                         onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
                         onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
+                        onMapStringChange={(value) => this.onMapStringChange(value)}
+                        onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
+                        mapString={this.state.editMapString}
+                        errorMsg={this.state.errorMsg}
                     />
                     {this.renderMenu()}
                     {this.renderStats()}

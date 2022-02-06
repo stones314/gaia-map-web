@@ -189,6 +189,7 @@ class SectorView extends React.Component {
 export class MapView extends React.Component {
 
     renderSector(slot, col) {
+        //var dbg = ["s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00",];//this.props.sectors[slot]
         var ignored = (slot === 11)
             || (this.props.sectors[slot] === "s00");// && this.props.selected === -1);
         if (ignored) return null;

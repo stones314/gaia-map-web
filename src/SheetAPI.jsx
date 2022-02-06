@@ -40,10 +40,6 @@ export async function loadMaps() {
     try {
 
         await doc.useApiKey("AIzaSyDDBUDDkWmwrWEcS8kz2dpPVTg6bRZGMIA");
-        //await doc.useServiceAccountAuth({
-        //    client_email: process.env.REACT_APP_CLIENT_EMAIL,
-        //    private_key: process.env.REACT_APP_API_KEY.replace(/\\n/g, '\n'),
-        //});
 
         // loads document properties and worksheets
         await doc.loadInfo();

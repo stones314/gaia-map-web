@@ -199,6 +199,18 @@ code {
 .info-sec-img {
     width: max(100px, calc(95vw / 7));
 }
+.info-mapgrid-img {
+    width: min(200px, 90vw);
+}
+
+.info-mapgrid-table {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: 1px solid var(--img-btn-border);
+    width: min(500px, 90vw);
+    text-align: center;
+}
 
 .info-img {
     height: 100%;
