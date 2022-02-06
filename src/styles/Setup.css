@@ -1,0 +1,56 @@
+
+.tech-box {
+    /*
+    border: 2px solid #ff00ff;
+    */
+    margin-top: 100vh;
+    margin-left: 2px;
+    display: flex;
+    flex-direction: column;
+    width: 96vw;
+}
+
+.tech-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.tech-element {
+    border: 1px solid black;
+    flex-grow: 1;
+    width: 16vw;
+}
+
+.tech-img {
+    width: 12vw;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tech-ter {
+    background-color: orange;
+
+}
+.tech-nav {
+    background-color: blue;
+}
+.tech-qic {
+    background-color: green;
+}
+.tech-gai {
+    background-color: purple;
+}
+.tech-eco {
+    background-color: yellow;
+}
+.tech-sci {
+    background-color: deepskyblue;
+}
+
+@media screen and (max-aspect-ratio: 210/152) {
+
+}

@@ -8,9 +8,14 @@ import { getMapCount, mapMatchesSettings } from './MapDbInfo';
 import FixedMenu from './FixedMenu';
 import ColorHappyView from './ColorHappyView';
 import { HexMap } from './calc/HexMap';
-import { settingOpts } from './Defs';
+import { settingOpts, advTech, baseTech, boosters, feds, roundVps, endVps } from './Defs';
 import { loadMaps, mapType, reEvaluateMaps } from './SheetAPI';
+import TechView from './Setup';
 
+function GetRandomElements(array, number) {
+    const shuffled = array.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, number);
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -40,6 +45,11 @@ class App extends React.Component {
                 maxEdge: settingOpts.maxEdgeCount.defaultId,
                 rngWithSwap: settingOpts.rngWithSwap.defaultId,
                 ignoreOpt: settingOpts.ignoreNum.defaultId,
+            },
+            setup: {
+                fed: GetRandomElements(feds, 1),
+                advTech: GetRandomElements(advTech, 6),
+                baseTech: GetRandomElements(baseTech, 9),
             },
             hexInfo: {
                 "Visited": false,
@@ -245,6 +255,11 @@ class App extends React.Component {
         if (ok) {
             this.evaluateMap();
         }
+        var setup = this.state.setup;
+        setup.feds = GetRandomElements(feds, 1);
+        setup.advTech = GetRandomElements(advTech, 6);
+        setup.baseTech = GetRandomElements(baseTech, 9);
+        this.setState({ setup: setup })
     }
 
     onClickNewBalancedMap() {
@@ -403,6 +418,7 @@ class App extends React.Component {
                 />
                 {this.renderNonFixed()}
                 {this.renderError()}
+                <TechView setup={this.state.setup} />
             </div>
         )
     }

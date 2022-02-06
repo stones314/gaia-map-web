@@ -69,6 +69,61 @@ export const images = {
     "SettingsMenu": "https://rygg-gaard.no/gaia/img/SettingsMenu.png",
     "EvalMenu": "https://rygg-gaard.no/gaia/img/Evaluation.png",
     "MapGrid": "https://rygg-gaard.no/gaia/img/MapGrid.png",
+    "ADVfedP": "https://rygg-gaard.no/gaia/img/ADVfedP.png",
+    "ADVfedV": "https://rygg-gaard.no/gaia/img/ADVfedV.png",
+    "ADVgai": "https://rygg-gaard.no/gaia/img/ADVgai.png",
+    "ADVknw": "https://rygg-gaard.no/gaia/img/ADVknw.png",
+    "ADVlab": "https://rygg-gaard.no/gaia/img/ADVlab.png",
+    "ADVminB": "https://rygg-gaard.no/gaia/img/ADVminB.png",
+    "ADVminV": "https://rygg-gaard.no/gaia/img/ADVminV.png",
+    "ADVore": "https://rygg-gaard.no/gaia/img/ADVore.png",
+    "ADVqic": "https://rygg-gaard.no/gaia/img/ADVqic.png",
+    "ADVsecO": "https://rygg-gaard.no/gaia/img/ADVsecO.png",
+    "ADVsecV": "https://rygg-gaard.no/gaia/img/ADVsecV.png",
+    "ADVstp": "https://rygg-gaard.no/gaia/img/ADVstp.png",
+    "ADVtrsB": "https://rygg-gaard.no/gaia/img/ADVtrsB.png",
+    "ADVtrsV": "https://rygg-gaard.no/gaia/img/ADVtrsV.png",
+    "ADVtyp": "https://rygg-gaard.no/gaia/img/ADVtyp.png",
+    "TECcre": "https://rygg-gaard.no/gaia/img/TECcre.png",
+    "TECgai": "https://rygg-gaard.no/gaia/img/TECgai.png",
+    "TECknw": "https://rygg-gaard.no/gaia/img/TECknw.png",
+    "TECore": "https://rygg-gaard.no/gaia/img/TECore.png",
+    "TECpia": "https://rygg-gaard.no/gaia/img/TECpia.png",
+    "TECpow": "https://rygg-gaard.no/gaia/img/TECpow.png",
+    "TECqic": "https://rygg-gaard.no/gaia/img/TECqic.png",
+    "TECtyp": "https://rygg-gaard.no/gaia/img/TECtyp.png",
+    "TECvps": "https://rygg-gaard.no/gaia/img/TECvps.png",
+    "BOOgai": "https://rygg-gaard.no/gaia/img/BOOgai.png",
+    "BOOknw": "https://rygg-gaard.no/gaia/img/BOOknw.png",
+    "BOOlab": "https://rygg-gaard.no/gaia/img/BOOlab.png",
+    "BOOmin": "https://rygg-gaard.no/gaia/img/BOOmin.png",
+    "BOOnav": "https://rygg-gaard.no/gaia/img/BOOnav.png",
+    "BOOpia": "https://rygg-gaard.no/gaia/img/BOOpia.png",
+    "BOOpwt": "https://rygg-gaard.no/gaia/img/BOOpwt.png",
+    "BOOqic": "https://rygg-gaard.no/gaia/img/BOOqic.png",
+    "BOOter": "https://rygg-gaard.no/gaia/img/BOOter.png",
+    "BOOtrs": "https://rygg-gaard.no/gaia/img/BOOtrs.png",
+    "RNDfed": "https://rygg-gaard.no/gaia/img/RNDfed.png",
+    "RNDgai3": "https://rygg-gaard.no/gaia/img/RNDgai3.png",
+    "RNDgai4": "https://rygg-gaard.no/gaia/img/RNDgai4.png",
+    "RNDmin": "https://rygg-gaard.no/gaia/img/RNDmin.png",
+    "RNDpia": "https://rygg-gaard.no/gaia/img/RNDpia.png",
+    "RNDstp": "https://rygg-gaard.no/gaia/img/RNDstp.png",
+    "RNDter": "https://rygg-gaard.no/gaia/img/RNDter.png",
+    "RNDtrs3": "https://rygg-gaard.no/gaia/img/RNDtrs3.png",
+    "RNDtrs4": "https://rygg-gaard.no/gaia/img/RNDtrs4.png",
+    "FINbld": "https://rygg-gaard.no/gaia/img/FINbld.png",
+    "FINfed": "https://rygg-gaard.no/gaia/img/FINfed.png",
+    "FINgai": "https://rygg-gaard.no/gaia/img/FINgai.png",
+    "FINsat": "https://rygg-gaard.no/gaia/img/FINsat.png",
+    "FINsec": "https://rygg-gaard.no/gaia/img/FINsec.png",
+    "FINtyp": "https://rygg-gaard.no/gaia/img/FINtyp.png",
+    "FEDcre": "https://rygg-gaard.no/gaia/img/FEDcre.png",
+    "FEDknw": "https://rygg-gaard.no/gaia/img/FEDknw.png",
+    "FEDore": "https://rygg-gaard.no/gaia/img/FEDore.png",
+    "FEDpwt": "https://rygg-gaard.no/gaia/img/FEDpwt.png",
+    "FEDqic": "https://rygg-gaard.no/gaia/img/FEDqic.png",
+    "FEDvps": "https://rygg-gaard.no/gaia/img/FEDvps.png",
 };
 
 
@@ -76,6 +131,12 @@ export const hexTypes = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr", "
 export const planets = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or", "Ga", "Tr"];
 export const colorWheel = ["Re", "Bl", "Wh", "Bk", "Br", "Ye", "Or"];
 export const metrics = ["Happy", "Exp", "Leech", "EdgSad"];
+export const advTech = ["ADVfedP", "ADVfedV", "ADVgai", "ADVknw", "ADVlab", "ADVminB", "ADVminV", "ADVore", "ADVqic", "ADVsecO", "ADVsecV", "ADVstp", "ADVtrsB", "ADVtrsV", "ADVtyp"];
+export const baseTech = ["TECcre", "TECgai", "TECknw", "TECore", "TECpia", "TECpow", "TECqic", "TECtyp", "TECvps"];
+export const boosters = ["BOOgai", "BOOknw", "BOOlab", "BOOmin", "BOOnav", "BOOpia", "BOOpwt", "BOOqic", "BOOter", "BOOtrs"];
+export const roundVps = ["RNDfed", "RNDgai3", "RNDgai4", "RNDmin", "RNDpia", "RNDstp", "RNDter", "RNDtrs3", "RNDtrs4"];
+export const endVps = ["FINbld", "FINfed", "FINgai", "FINsat", "FINsec", "FINtyp"];
+export const feds = ["FEDcre", "FEDknw", "FEDore", "FEDpwt", "FEDqic", "FEDvps"];
 
 export const settingOpts = {
     minEqDist: {
