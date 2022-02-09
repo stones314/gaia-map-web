@@ -119,49 +119,4 @@ code {
 
 @media screen and (max-aspect-ratio: 210/152) {
 
-    .App {
-        flex-direction: column;
-    }
-
-    .eval-box {
-        flex-direction: row;
-    }
-
-
-    .happy-big-box {
-        flex-direction: row;
-    }
-
-    .happy-box {
-        flex-direction: column;
-        width: 20vw;
-    }
-
-    .happy-hist {
-        flex-direction: row;
-    }
-
-
-    .happy-row {
-        flex-direction: column;
-        height: 31vh;
-    }
-
-    .happy-planet-row {
-        flex-direction: column;
-    }
-
-    .happy-col {
-        flex-direction: row-reverse;
-    }
-
-    .happy-col-down {
-        flex-direction: row;
-    }
-
-    .happy-img {
-        height: 4vh;
-        margin: 0;
-    }
-
 }

@@ -25,10 +25,6 @@ export class Histogram extends React.Component {
             var width = "100%";
             var height = "" + value * 100 / myMax + "%";
             var ta = "center";
-            if (this.props.landscape) {
-                [width, height] = [height, width];
-                ta = "start";
-            }
             if (i < 7) {
                 const planet = this.props.planets[i];
                 const myStyle = {
@@ -85,12 +81,6 @@ class ColorHappyView extends React.Component {
             );
         }
         var imgs = [];
-        if (this.props.landscape) {
-            imgs.push(<div key="i0" className="happy-row-head">
-                P
-            </div>
-            );
-        }
         for (const [i, planet] of colorWheel.entries()) {
             imgs.push(<div key={i} className="happy-col">
                 <img src={images["p" + planet]} className="happy-img" alt={planet} />

@@ -60,11 +60,85 @@ class TechView extends React.Component {
     }
 }
 
-
-class Setup extends React.Component {
+class RoundView extends React.Component {
     render() {
-        return null;
+        var rounds = [];
+        for (const [i, imgRef] of this.props.images.entries()) {
+            rounds.push(
+                <div key={i} className={"rnd"+i}>
+                    <img
+                        className="rnd-img"
+                        src={images[imgRef]}
+                        alt={imgRef}
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="rnd-box">
+                {rounds}
+            </div>
+        );
     }
 }
 
-export default TechView;
+class BoosterView extends React.Component {
+    render() {
+        var boosts = [];
+        for (const [i, imgRef] of this.props.images.entries()) {
+            boosts.push(
+                <div className="booster" key={i}>
+                    <img
+                        className="booster-img"
+                        src={images[imgRef]}
+                        alt={imgRef}
+
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="booster-box">
+                {boosts}
+            </div>
+        );
+    }
+}
+
+class EndVpView extends React.Component {
+    render() {
+        var endVps = [];
+        for (const [i, imgRef] of this.props.images.entries()) {
+            endVps.push(
+                <div className="end" key={i}>
+                    <img
+                        className="end-img"
+                        src={images[imgRef]}
+                        alt={imgRef}
+
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="end-box">
+                {endVps}
+            </div>
+        );
+    }
+}
+
+class Setup extends React.Component {
+    render() {
+        return (
+            <div className="setup-box">
+                <TechView setup={this.props.setup} />
+                <RoundView images={this.props.setup.rounds} />
+                <BoosterView images={this.props.setup.boosts} />
+                <EndVpView images={this.props.setup.endVps} />
+            </div>
+        );
+    }
+}
+
+export default Setup;

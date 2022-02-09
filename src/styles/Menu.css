@@ -10,21 +10,21 @@ code {
 }
 
 :root {
-    --menu-font-size: 3vmin;
+    --menu-font-size: min(3vmin, 15px);
 }
 
 .menu-box-0 {
     /*
     border: 2px solid #ff00ff;
     */
-    width: 30%;
+    width: min(50%, 300px);
     height: auto;
     display: flex;
     flex-direction: column;
     z-index: 4;
     position: fixed;
     right: 1px;
-    top: calc(13vh + 25px);
+    top: 80px;
     background-color: white;
 }
 
@@ -137,7 +137,7 @@ code {
     background-color: var(--img-btn-back);
     border: 2px solid var(--img-btn-border);
     margin: 1px;
-    height: 11vh;
+    height: 45px;
     display: inline-block;
 }
 
@@ -247,8 +247,8 @@ code {
 }
 
 input {
-    width: 97%;
-    margin: 1px;
+    width: 95%;
+    margin: 0px;
 }
 
 .string-inn-box {
@@ -264,25 +264,5 @@ input {
 
 
 @media screen and (max-aspect-ratio: 210/152) {
-    .menu-box-0 {
-        width: 85%;
-        bottom: 0;
-        top: auto;
-        right: 0;
-    }
 
-    .menu-box {
-        flex-direction: row;
-    }
-
-    .menu-item {
-        flex-direction: column;
-    }
-
-    .menu-fixed-bottom {
-    }
-
-    .img-btn {
-        height: min(11vh, 10vw);
-    }
 }

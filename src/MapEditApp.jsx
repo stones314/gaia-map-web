@@ -10,7 +10,7 @@ import ColorHappyView from './ColorHappyView';
 import { HexMap } from './calc/HexMap';
 import { settingOpts, advTech, baseTech, boosters, feds, roundVps, endVps } from './Defs';
 import { loadMaps, mapType, reEvaluateMaps } from './SheetAPI';
-import TechView from './Setup';
+import Setup from './Setup';
 
 function GetRandomElements(array, number) {
     const shuffled = array.sort(() => 0.5 - Math.random());
@@ -36,6 +36,7 @@ class App extends React.Component {
             alertMsg: "",
             illegal: false,
             menuSelect: {
+                numPlayers: 4,
                 numSec: 10,
                 secOpt: 0,
                 swapMode: false,
@@ -50,6 +51,9 @@ class App extends React.Component {
                 fed: GetRandomElements(feds, 1),
                 advTech: GetRandomElements(advTech, 6),
                 baseTech: GetRandomElements(baseTech, 9),
+                rounds: GetRandomElements(roundVps, 6),
+                boosts: GetRandomElements(boosters, 7),
+                endVps: GetRandomElements(endVps, 2),
             },
             hexInfo: {
                 "Visited": false,
@@ -259,6 +263,9 @@ class App extends React.Component {
         setup.feds = GetRandomElements(feds, 1);
         setup.advTech = GetRandomElements(advTech, 6);
         setup.baseTech = GetRandomElements(baseTech, 9);
+        setup.rounds = GetRandomElements(roundVps, 6);
+        setup.boosts = GetRandomElements(boosters, 7);
+        setup.endVps = GetRandomElements(endVps, 2);
         this.setState({ setup: setup })
     }
 
@@ -418,7 +425,7 @@ class App extends React.Component {
                 />
                 {this.renderNonFixed()}
                 {this.renderError()}
-                <TechView setup={this.state.setup} />
+                <Setup setup={this.state.setup} />
             </div>
         )
     }

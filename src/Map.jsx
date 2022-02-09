@@ -106,6 +106,8 @@ export class HexMapView extends React.Component {
 export class HexInfoView extends React.Component {
     render() {
         var keys = [
+            "Row",
+            "Col",
             "Cs",
             "Ga",
             "Tr",
@@ -172,15 +174,22 @@ class SectorView extends React.Component {
         return s;
     }
 
+    renderImg() {
+        if (this.props.sector === "s00") return null;
+        return (
+            <img
+                src={images[this.props.sector]}
+                className="map-img"
+                onClick={this.props.onClick}
+                alt={this.props.sector}
+            />
+        );
+    }
+
     render() {
         return (
             <div className={this.getClassName(this.props.rotation, this.props.col, this.props.selected, false)}>
-                <img
-                    src={images[this.props.sector]}
-                    className="map-img"
-                    onClick={this.props.onClick}
-                    alt={this.props.sector}
-                />
+                {this.renderImg()}
             </div>
         )
     }
@@ -190,15 +199,16 @@ export class MapView extends React.Component {
 
     renderSector(slot, col) {
         //var dbg = ["s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00", "s00",];//this.props.sectors[slot]
+        var sec = this.props.sectors[slot];
         var ignored = (slot === 11)
             || (this.props.sectors[slot] === "s00");// && this.props.selected === -1);
-        if (ignored) return null;
+        if (ignored) sec = "s00";
         return (
             <SectorView
                 key={slot}
                 sid={slot}
                 numSec={this.props.numSec}
-                sector={this.props.sectors[slot]}
+                sector={sec}
                 rotation={this.props.rotations[slot]}
                 col={col}
                 selected={this.props.selected === slot}
