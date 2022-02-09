@@ -3,6 +3,18 @@ import './styles/Map.css';
 import { images, sectorCenter, getCenterRef, hexTypes, planets, colorWheel } from './Defs';
 import { isTerraformable } from './calc/Basics';
 
+export class MapString extends React.Component {
+    render() {
+        return (
+            <div className="map-string-box">
+                <text className="map-string-txt">
+                    {this.props.mapString}
+                </text>
+            </div>
+        );
+    }
+}
+
 export class HexMapView extends React.Component {
     renderSelHexImg(isSelected) {
         if (isSelected) {

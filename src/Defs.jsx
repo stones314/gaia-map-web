@@ -228,6 +228,77 @@ export const sectorFromLetter = {
     "N": "s10",
 }
 
+export const advTechToLetter = {
+    "ADVfedP": "A",
+    "ADVfedV": "B",
+    "ADVgai" : "C",
+    "ADVknw" : "D",
+    "ADVlab" : "E",
+    "ADVminB": "F",
+    "ADVminV": "G",
+    "ADVore" : "H",
+    "ADVqic" : "I",
+    "ADVsecO": "J",
+    "ADVsecV": "K",
+    "ADVstp" : "L",
+    "ADVtrsB": "M",
+    "ADVtrsV": "N",
+    "ADVtyp" : "O"
+};
+
+export const baseTechToLetter = {
+    "TECcre": "P",
+    "TECgai": "Q",
+    "TECknw": "R",
+    "TECore": "S",
+    "TECpia": "T",
+    "TECpow": "U",
+    "TECqic": "V",
+    "TECtyp": "W",
+    "TECvps": "X"
+};
+
+export const boosterToLetter = {
+    "BOOgai": "a",
+    "BOOknw": "b",
+    "BOOlab": "c",
+    "BOOmin": "d",
+    "BOOnav": "e",
+    "BOOpia": "f",
+    "BOOpwt": "g",
+    "BOOqic": "h",
+    "BOOter": "i",
+    "BOOtrs": "j"
+};
+
+export const roundVpToLetter = {
+    "RNDfed" : "k",
+    "RNDgai3": "l",
+    "RNDgai4": "m",
+    "RNDmin" : "n",
+    "RNDpia" : "o",
+    "RNDstp" : "p",
+    "RNDter" : "q",
+    "RNDtrs3": "r",
+    "RNDtrs4": "s"
+};
+export const endVpToLetter = {
+    "FINbld": "t",
+    "FINfed": "u",
+    "FINgai": "v",
+    "FINsat": "w",
+    "FINsec": "x",
+    "FINtyp": "y"
+};
+export const fedToLetter = {
+    "FEDcre": "1",
+    "FEDknw": "2",
+    "FEDore": "3",
+    "FEDpwt": "4",
+    "FEDqic": "5",
+    "FEDvps": "6"
+};
+
 export function getSectorArray(id) {
     if (id === "s01") {
         return [

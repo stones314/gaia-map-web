@@ -1,13 +1,17 @@
 import React from 'react';
 import './styles/Setup.css';
 import { images, advTech, baseTech, boosters, feds, roundVps, endVps } from "./Defs";
+import { getRemainingBaseTech } from './HelperFunctions';
 
 class TechElement extends React.Component {
     renderImg(imgRef) {
         if (imgRef) {
+            var imgClass = "tech-img";
+            if (imgRef.slice(0, 3) === "FED")
+                imgClass += "-fed";
             return (
                 <img
-                    className="tech-img"
+                    className={imgClass}
                     src={images[this.props.imgRef]}
                     alt={this.props.imgRef}
                 />
@@ -17,7 +21,7 @@ class TechElement extends React.Component {
     }
 
     render() {
-        const cClass = [" tech-ter", " tech-nav", " tech-qic", " tech-gai", " tech-eco", " tech-sci", ""];
+        const cClass = [" tech-ter", " tech-nav", " tech-qic", " tech-gai", " tech-eco", " tech-sci", " tech-low"];
         return (
             <div className={"tech-element" + cClass[this.props.cId]}>
                 {this.renderImg(this.props.imgRef)}
@@ -46,15 +50,15 @@ class TechRow extends React.Component {
 class TechView extends React.Component {
 
     render() {
-        var row1 = this.props.setup.fed.slice(0, 1);
+        var row1 = this.props.setup.feds.slice(0, 1);
         for (var i = 0; i < 5; i++)
             row1.push("");
         return (
             <div className="tech-box">
                 <TechRow images={row1} />
                 <TechRow images={this.props.setup.advTech} />
-                <TechRow images={this.props.setup.baseTech.slice(0, 6)} />
-                <TechRow images={this.props.setup.baseTech.slice(6, 9)} />
+                <TechRow images={this.props.setup.baseTech} />
+                <TechRow images={getRemainingBaseTech(this.props.setup.baseTech)} />
             </div>
         )
     }

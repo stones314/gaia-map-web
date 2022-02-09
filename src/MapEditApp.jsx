@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/App.css';
-import { MapView } from './Map';
+import { MapView, MapString } from './Map';
 import Menu from './Menu';
 import Info from './Info';
 import ErrorMsg from './ErrorMsg';
@@ -11,10 +11,18 @@ import { HexMap } from './calc/HexMap';
 import { settingOpts, advTech, baseTech, boosters, feds, roundVps, endVps } from './Defs';
 import { loadMaps, mapType, reEvaluateMaps } from './SheetAPI';
 import Setup from './Setup';
+import { GetRandomElements, getSetupString, getSetupFromString } from './HelperFunctions';
 
-function GetRandomElements(array, number) {
-    const shuffled = array.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, number);
+class SetupString extends React.Component {
+    render() {
+        return (
+            <div className="map-string-box">
+                <text className="map-string-txt">
+                    {this.props.setupString}
+                </text>
+            </div>
+        );
+    }
 }
 
 class App extends React.Component {
@@ -27,12 +35,15 @@ class App extends React.Component {
             mapId: 0,
             editMapString: "",
             mapString: "",
+            editSetupString: "",
+            setupString: "",
             showMenu: false,
             showStats: false,
             showDebug: false,
             showInfo: false,
             showAlert: false,
-            errorMsg: "",
+            errorMsgMap: "",
+            errorMsgSetup: "",
             alertMsg: "",
             illegal: false,
             menuSelect: {
@@ -48,9 +59,9 @@ class App extends React.Component {
                 ignoreOpt: settingOpts.ignoreNum.defaultId,
             },
             setup: {
-                fed: GetRandomElements(feds, 1),
+                feds: GetRandomElements(feds, 1),
                 advTech: GetRandomElements(advTech, 6),
-                baseTech: GetRandomElements(baseTech, 9),
+                baseTech: GetRandomElements(baseTech, 6),
                 rounds: GetRandomElements(roundVps, 6),
                 boosts: GetRandomElements(boosters, 7),
                 endVps: GetRandomElements(endVps, 2),
@@ -225,7 +236,7 @@ class App extends React.Component {
         var out = this.hexMap.setFromString(this.state.editMapString);
         event.preventDefault();
         if (!out.valid) {
-            this.setState({ errorMsg: out.errorMsg, showError: true });
+            this.setState({ errorMsgMap: out.errorMsg, showError: true });
         }
         else {
             this.evaluateMap();
@@ -235,7 +246,7 @@ class App extends React.Component {
             this.setState({
                 mapString: this.state.editMapString,
                 editMapString: "",
-                errorMsg: "",
+                errorMsgMap: "",
                 menuSelect: ms
             });
         }
@@ -243,6 +254,27 @@ class App extends React.Component {
 
     onMapStringChange(newValue) {
         this.setState({ editMapString: newValue});
+    }
+
+    onSetupStringSubmit(event) {
+        var out = getSetupFromString(this.state.editSetupString);
+        event.preventDefault();
+        if (!out.valid) {
+            this.setState({ errorMsgSetup: out.errorMsg, showError: true });
+        }
+        else {
+            this.evaluateMap();
+            this.setState({
+                setupString: this.state.setupString,
+                editSetupString: "",
+                errorMsgSetup: "",
+                setup: out.setup,
+            });
+        }
+    }
+
+    onSetupStringChange(newValue) {
+        this.setState({ editSetupString: newValue });
     }
 
     onClickErrorOk() {
@@ -255,18 +287,18 @@ class App extends React.Component {
 
     onClickRandom() {
         if (this.state.loading) return;
-        var [ok, failures] = this.hexMap.getRandomValidMap();
-        if (ok) {
-            this.evaluateMap();
-        }
         var setup = this.state.setup;
         setup.feds = GetRandomElements(feds, 1);
         setup.advTech = GetRandomElements(advTech, 6);
-        setup.baseTech = GetRandomElements(baseTech, 9);
+        setup.baseTech = GetRandomElements(baseTech, 6);
         setup.rounds = GetRandomElements(roundVps, 6);
         setup.boosts = GetRandomElements(boosters, 7);
         setup.endVps = GetRandomElements(endVps, 2);
         this.setState({ setup: setup })
+        var [ok, failures] = this.hexMap.getRandomValidMap();
+        if (ok) {
+            this.evaluateMap();
+        }
     }
 
     onClickNewBalancedMap() {
@@ -290,6 +322,7 @@ class App extends React.Component {
         this.setState({
             illegal: i !== 0,
             mapString: this.hexMap.getMapString(),
+            setupString: getSetupString(this.state.setup),
         });
     }
 
@@ -309,8 +342,12 @@ class App extends React.Component {
                     onMapStringChange={(value) => this.onMapStringChange(value)}
                     onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
                     mapString={this.state.editMapString}
-                    errorMsg={this.state.errorMsg}
+                    errorMsgMap={this.state.errorMsgMap}
                     mapData={this.mapdata}
+                    onSetupStringChange={(value) => this.onSetupStringChange(value)}
+                    onSetupStringSubmit={(event) => this.onSetupStringSubmit(event)}
+                    setupString={this.state.editSetupString}
+                    errorMsgSetup={this.state.errorMsgSetup}
                 />
             );
         }
@@ -365,7 +402,11 @@ class App extends React.Component {
                         onMapStringChange={(value) => this.onMapStringChange(value)}
                         onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
                         mapString={this.state.editMapString}
-                        errorMsg={this.state.errorMsg}
+                        errorMsgMap={this.state.errorMsgMap}
+                        onSetupStringChange={(value) => this.onSetupStringChange(value)}
+                        onSetupStringSubmit={(event) => this.onSetupStringSubmit(event)}
+                        setupString={this.state.editSetupString}
+                        errorMsgSetup={this.state.errorMsgSetup}
                     />
                     {this.renderMenu()}
                     {this.renderStats()}
@@ -393,9 +434,11 @@ class App extends React.Component {
                         maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
                         maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
                         loading={this.state.loading}
-
                     />
                     {this.renderStats()}
+                    <MapString mapString={this.state.loading ? "Loading Data from DB" : "Map: " + this.state.mapString} />
+                    <SetupString setupString={this.state.loading ? "" : "Setup: " + this.state.setupString} />
+                    <Setup setup={this.state.setup} />
                 </div>
             );
         }
@@ -425,7 +468,6 @@ class App extends React.Component {
                 />
                 {this.renderNonFixed()}
                 {this.renderError()}
-                <Setup setup={this.state.setup} />
             </div>
         )
     }

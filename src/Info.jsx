@@ -1,11 +1,24 @@
 import React from 'react';
 import './styles/Menu.css';
 import { Settings, SelectOptionFromList } from './Settings';
-import { NumSectorSelect, MapStringInput } from './Menu';
+import { NumSectorSelect, StringInput } from './Menu';
 import MapDbInfo from './MapDbInfo';
 
 import { Histogram } from './ColorHappyView';
-import { settingOpts, images, getSecOpt, metrics, colorWheel, sectorToLetter } from './Defs'
+import {
+    settingOpts,
+    images,
+    getSecOpt,
+    metrics,
+    colorWheel,
+    sectorToLetter,
+    fedToLetter,
+    advTechToLetter,
+    baseTechToLetter,
+    roundVpToLetter,
+    endVpToLetter,
+    boosterToLetter,
+} from './Defs'
 import { sectorList, sectorName } from './calc/MapManipulation';
 
 class InfoElement extends React.Component {
@@ -65,6 +78,33 @@ class SectorInfo extends React.Component {
     }
 }
 
+class CompInfo extends React.Component {
+
+    render() {
+        var comps = [];
+        for (const key in this.props.components) {
+            comps.push(
+                <div key={key} className="info-comp">
+                    <div className="info-comp-img-div">
+                    <img
+                        src={images[key]}
+                        className="info-comp-img"
+                        alt={key}
+                    />
+                    </div>
+                    <div className="info-comp-letter">
+                        {this.props.components[key]}
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div className="info-comp-row">
+                {comps}
+            </div>
+        )
+    }
+}
 
 class Info extends React.Component {
     render() {
@@ -215,6 +255,117 @@ class Info extends React.Component {
                     </div>
                 </InfoElement>
 
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <MapDbInfo
+                            mapData={this.props.mapData}
+                            menuSelect={this.props.menuSelect}
+                        />
+                    </div>
+                    <div className="info-txt">
+                        This show how many maps in the database fit the given settings.
+                    </div>
+                </InfoElement>
+
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <StringInput
+                            onStringSubmit={(event) => this.props.onMapStringSubmit(event)}
+                            onStringChange={(value) => this.props.onMapStringChange(value)}
+                            textString={this.props.mapString}
+                            errorMsg={this.props.errorMsgMap}
+                            description="Import map from string:"
+                        />
+                    </div>
+                    <div className="info-txt">
+                        <p>
+                            Each map can be identified by a unique map string. The string for the current map is always displayd under the menu at the top of the page. If you enter a map string into this text box and click Submit the page will display the map for that map string.
+                        </p>
+                        <p>
+                            The map string is created using 11 pairs of letters and numbers, where the letter represents a sector and the number represents the rotation of that sector. For example B2 is sector 1 rotated two times clockwise. This means that the possible rotations are 0 to 5. The position in the string is used to indicate the position of the sector in the following grid:
+                        </p>
+
+                        <p>
+                            <img
+                                className="info-mapgrid-img"
+                                src={images["MapGrid"]}
+                                alt="MapGrid"
+                            />
+                        </p>
+                        <p>
+                            The letters used for each sector is:
+                            <div className="info-mapgrid-table">
+                                {mapStringLetters}
+                            </div>
+                        </p>
+                        <p>
+                            The Map String for the default map is: A0N0B0F0M0C0D0H0L0E0J0
+                        </p>
+                    </div>
+                </InfoElement>
+
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <StringInput
+                            onStringSubmit={(event) => this.props.onSetupStringSubmit(event)}
+                            onStringChange={(value) => this.props.onSetupStringChange(value)}
+                            textString={this.props.setupString}
+                            errorMsg={this.props.errorMsgSetup}
+                            description="Import setup from string:"
+                        />
+                    </div>
+                    <div className="info-txt">
+                        <p>
+                            As for the map, the setup can be identified by a unique string. The string for the current setup is always displayd under the map. If you enter a setup string into this text box and click Submit the page will display the setup for that setup string.
+                        </p>
+                        <p>
+                            The setup string is created using 29-31 letters, where each letter represents a component, and the position in the string is used to indicate where that component is placed, like this:
+                            <table CELLSPACING="0" >
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Usage</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>The federation that is placed at top of the terraforming track.</td>
+                                </tr>
+                                <tr>
+                                    <td>2-7</td>
+                                    <td>The advanced technologies that are placed at the top of the tracks, from terraforming at position 2 to science at position 7.</td>
+                                </tr>
+                                <tr>
+                                    <td>8-13</td>
+                                    <td>The base technologies that are placed at the bottom of the tracks, from terraforming at position 8 to science at position 13.</td>
+                                </tr>
+                                <tr>
+                                    <td>14-19</td>
+                                    <td>The round scoring tiles, from round 1 at position 14 to round 6 at position 19.</td>
+                                </tr>
+                                <tr>
+                                    <td>20-21</td>
+                                    <td>The end scoring tiles that are used.</td>
+                                </tr>
+                                <tr>
+                                    <td>22-x</td>
+                                    <td>The round boosters that are used. It will depend on player count how many there is in the game. 2 players: x=26. 3 players: x=27. 4 players: x=28.</td>
+                                </tr>
+                            </table>
+                        </p>
+
+                        <p>
+                            The letters used for the various components are:
+                            <div className="info-comp-table">
+                                <CompInfo components={fedToLetter} />
+                                <CompInfo components={advTechToLetter} />
+                                <CompInfo components={baseTechToLetter} />
+                                <CompInfo components={roundVpToLetter} />
+                                <CompInfo components={endVpToLetter} />
+                                <CompInfo components={boosterToLetter} />
+                            </div>
+                        </p>
+                    </div>
+                </InfoElement>
+
                 <h2> The Map Evaluation </h2>
                 An evaluation is always performed for the current map. Note that the evaluation is just an indicator, and not an absolute fact. We are constantly trying to improve the evaluation algorithm.
 
@@ -269,53 +420,6 @@ class Info extends React.Component {
                     </div>
                 </InfoElement>
 
-                <InfoElement imgRef="none">
-                    <div className="info-menu">
-                        <MapDbInfo
-                            mapData={this.props.mapData}
-                            menuSelect={this.props.menuSelect}
-                        />
-                    </div>
-                    <div className="info-txt">
-                        This show how many maps in the database fit the given settings.
-                    </div>
-                </InfoElement>
-
-                <InfoElement imgRef="none">
-                    <div className="info-menu">
-                        <MapStringInput
-                            onMapStringSubmit={(event) => this.props.onMapStringSubmit(event)}
-                            onMapStringChange={(value) => this.props.onMapStringChange(value)}
-                            mapString={this.props.mapString}
-                            errorMsg={this.props.errorMsg}
-                        />
-                    </div>
-                    <div className="info-txt">
-                        <p>
-                            Each map can be identified by a unique map string. The string for the current map is always displayd under the menu at the top of the page. If you enter a map string into this text box and click Submit the page will display the map for that map string.
-                        </p>
-                        <p>
-                            The map string is created using 11 pairs of letters and numbers, where the letter represents a sector and the number represents the rotation of that sector. For example B2 is sector 1 rotated two times clockwise. This means that the possible rotations are 0 to 5. The position in the string is used to indicate the position of the sector in the following grid:
-                        </p>
-
-                        <p>
-                            <img
-                                className="info-mapgrid-img"
-                                src={images["MapGrid"]}
-                                alt="MapGrid"
-                            />
-                        </p>
-                        <p>
-                            The letters used for each sector is:
-                            <div className="info-mapgrid-table">
-                                {mapStringLetters}
-                            </div>
-                        </p>
-                        <p>
-                           The Map String for the default map is: A0N0B0F0M0C0D0H0L0E0J0
-                        </p>
-                    </div>
-                </InfoElement>
             </div>
         )
     }
