@@ -133,7 +133,7 @@ class EndVpView extends React.Component {
     }
 }
 
-class SetupString extends React.Component {
+export class SetupString extends React.Component {
     render() {
         return (
             <div className="map-string-box">
@@ -160,9 +160,6 @@ class Setup extends React.Component {
                 <RoundView images={this.props.setup.rounds} />
                 <BoosterView images={this.props.setup.boosts} />
                 <EndVpView images={this.props.setup.endVps} />
-                <button className="setup-rng-btn" onClick={() => this.props.onClickRandomSetup()}>
-                    Randomize Setup
-                </button>
                 <SetupString setupString={"Setup: " + this.props.setupString} />
                 <StringInput
                     onStringSubmit={(event) => this.props.onSetupStringSubmit(event)}
@@ -171,6 +168,9 @@ class Setup extends React.Component {
                     errorMsg={this.props.errorMsgSetup}
                     description="Import setup from string:"
                 />
+                <button className="setup-rng-btn" onClick={() => this.props.onClickRandomSetup()}>
+                    Randomize Setup
+                </button>
             </div>
         );
     }

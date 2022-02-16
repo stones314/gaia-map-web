@@ -78,7 +78,7 @@ export function getSetupFromString(setupString) {
     if (component) {
         out.setup.feds.push(component);
     } else {
-        out.errorMsg = "Incorrect setup string, " + setupString[0] + " at position " + 0 +" is not a valid federation.";
+        out.errorMsg = "Incorrect setup string, " + setupString[0] + " at position " + 1 +" is not a valid federation.";
         return out;
     }
 
@@ -87,12 +87,12 @@ export function getSetupFromString(setupString) {
         component = getKeyByValue(advTechToLetter, setupString[i]);
         if (component) {
             if (out.setup.advTech.includes(component)) {
-                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + ": can only have one instance of each advanced tech.";
+                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + ": can only have one instance of each advanced tech.";
                 return out;
             }
             out.setup.advTech.push(component);
         } else {
-            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + " is not a valid advanced tech.";
+            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + " is not a valid advanced tech.";
             return out;
         }
     }
@@ -101,12 +101,12 @@ export function getSetupFromString(setupString) {
         component = getKeyByValue(baseTechToLetter, setupString[i]);
         if (component) {
             if (out.setup.baseTech.includes(component)) {
-                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + ": can only have one instance of each base tech.";
+                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + ": can only have one instance of each base tech.";
                 return out;
             }
             out.setup.baseTech.push(component);
         } else {
-            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + " is not a valid base tech.";
+            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + " is not a valid base tech.";
             return out;
         }
     }
@@ -114,12 +114,12 @@ export function getSetupFromString(setupString) {
         component = getKeyByValue(roundVpToLetter, setupString[i]);
         if (component) {
             if (out.setup.rounds.includes(component)) {
-                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + ": can only have one instance of each round scoring.";
+                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + ": can only have one instance of each round scoring.";
                 return out;
             }
             out.setup.rounds.push(component);
         } else {
-            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + " is not a valid round scoring.";
+            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + " is not a valid round scoring.";
             return out;
         }
     }
@@ -127,12 +127,12 @@ export function getSetupFromString(setupString) {
         component = getKeyByValue(endVpToLetter, setupString[i]);
         if (component) {
             if (out.setup.endVps.includes(component)) {
-                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + ": can only have one instance of each end scoring.";
+                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + ": can only have one instance of each end scoring.";
                 return out;
             }
             out.setup.endVps.push(component);
         } else {
-            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + " is not a valid end scoring.";
+            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + " is not a valid end scoring.";
             return out;
         }
     }
@@ -140,12 +140,12 @@ export function getSetupFromString(setupString) {
         component = getKeyByValue(boosterToLetter, setupString[i]);
         if (component) {
             if (out.setup.boosts.includes(component)) {
-                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + ": can only have one instance of each passing booster.";
+                out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i+1) + ": can only have one instance of each passing booster.";
                 return out;
             }
             out.setup.boosts.push(component);
         } else {
-            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + i + " is not a valid booster.";
+            out.errorMsg = "Incorrect setup string, " + setupString[i] + " at position " + (i + 1) + " is not a valid booster.";
             return out;
         }
     }

@@ -146,7 +146,7 @@ export class HexMap {
         if     (numSec === 10 && variant === 0) this.setFromString("A0N0B0F0M0C0D0H0L0E0J0");
         else if (numSec === 9 && variant === 0) this.setFromString("C2B4N0A0E5D4M2A0I4G3K0");
         else if (numSec === 9 && variant === 1) this.setFromString("M3D1H2A0C2G3B0A0J5N1L0");
-        else if (numSec === 8 && variant === 0) this.setFromString("A0A0B0F0A0C0D0H0L0E0J0");
+        else if (numSec === 8 && variant === 0) this.setFromString("A0B3E2D4A0F4L5A0C4H4J2");
         else if (numSec === 7 && variant === 0) this.setFromString("A0B0G0A0C0D0I0A0E0K0A0");
         else if (numSec === 7 && variant === 1) this.setFromString("A0H4B5A0G5C3L2A0J3D2A0");
         else if (numSec === 7 && variant === 2) this.setFromString("A0C2N1A0F5E5L4A0H1K4A0");

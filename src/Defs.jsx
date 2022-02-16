@@ -146,7 +146,7 @@ export const settingOpts = {
         defaultId: 0,
     },
     maxClustSize: {
-        text: "Cluster Size",
+        text: "Largest Cluster Size",
         optsView: ["3-4", "5-6", "7+", "Any"],
         optsVal: [3, 5, 7, 99],
         defaultId: 0,

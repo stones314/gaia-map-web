@@ -422,12 +422,14 @@ class App extends React.Component {
                         onMapStringChange={(value) => this.onMapStringChange(value)}
                         onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
                         onClickRandomSetup={() => this.onClickRandomSetup()}
-                        mapString={this.state.editMapString}
+                        editMapString={this.state.editMapString}
                         errorMsgMap={this.state.errorMsgMap}
                         onSetupStringChange={(value) => this.onSetupStringChange(value)}
                         onSetupStringSubmit={(event) => this.onSetupStringSubmit(event)}
-                        setupString={this.state.editSetupString}
+                        editSetupString={this.state.editSetupString}
                         errorMsgSetup={this.state.errorMsgSetup}
+                        setupString={this.state.setupString}
+                        mapString={this.state.mapString}
                     />
                     {this.renderMenu()}
                     {this.renderStats()}

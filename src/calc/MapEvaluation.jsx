@@ -63,7 +63,7 @@ const leechHappy = {
 }
 const nbrQual = ["T0", "T1", "T2", "T3", "Ga", "Tr",]
 const rangeWeight = [1.0, 1.0, 1.0];
-const edgeSadness = [2.0, 1.2, 0.2];
+const edgeSadness = [1.7, 1.0, 0.2];
 
 export function evaluatePlanetHappiness(hexGrid, mapHappiness) {
     for (const [i, m] of metrics.entries()) {

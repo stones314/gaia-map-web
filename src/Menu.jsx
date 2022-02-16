@@ -88,7 +88,7 @@ export class StringInput extends React.Component {
                 <text>
                     {this.props.description}
                 </text>
-                <text style={{ color: "red" }}>
+                <text style={{ color: "purple" }}>
                     {this.props.errorMsg}
                 </text>
                 <form onSubmit={this.handleSubmit}>
