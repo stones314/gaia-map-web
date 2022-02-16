@@ -1,14 +1,26 @@
 :root {
     --rnd-vp-delta-rot: 30deg;
     --rnd-vp-start-rot: -75deg;
-    --rnd-scale: 1.5;
+    --rnd-scale: 1.0;
 }
 
 .setup-box {
-    margin-left: 2px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    width: min(96vw, 720px);
+    width: min(96vw, 600px);
+    left: 50%;
+    transform: translate(-50%, 0%);
+    border: 2px solid var(--img-btn-border);
+    background-color: white;
+}
+
+.setup-rng-btn {
+    position: relative;
+    width: 200px;
+    margin: 2px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .tech-box {
@@ -29,7 +41,7 @@
 }
 
 .tech-img {
-    width: min(12vw, 100px);
+    width: min(12vw, 80px);
     margin: 0;
     position: relative;
     top: 50%;
@@ -68,10 +80,13 @@
 }
 
 .rnd-box {
+    position: relative;
     display: flex;
     flex-direction: row;
     margin-top: calc(min(15vw, 120px)*var(--rnd-scale));
-    margin-left: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(min(44.4vw, 370px)*var(--rnd-scale));
 }
 
 .rnd-img {
@@ -133,7 +148,7 @@
 }
 
 .booster-img {
-    width: min(12vw, 70px);
+    width: min(14vw, 45px);
     margin: 0;
     position: relative;
     top: 50%;
@@ -154,7 +169,7 @@
 }
 
 .end-img {
-    width: min(30vw, 120px);
+    width: min(30vw, 100px);
     margin: 0;
     position: relative;
     top: 50%;

@@ -319,7 +319,7 @@ class Info extends React.Component {
                             As for the map, the setup can be identified by a unique string. The string for the current setup is always displayd under the map. If you enter a setup string into this text box and click Submit the page will display the setup for that setup string.
                         </p>
                         <p>
-                            The setup string is created using 29-31 letters, where each letter represents a component, and the position in the string is used to indicate where that component is placed, like this:
+                            The setup string is created using 26-28 letters, where each letter represents a component, and the position in the string is used to indicate where that component is placed, like this:
                             <table CELLSPACING="0" >
                                 <tr>
                                     <th>Position</th>
@@ -366,6 +366,17 @@ class Info extends React.Component {
                     </div>
                 </InfoElement>
 
+                <InfoElement imgRef="none">
+                    <div className="info-menu">
+                        <button className="setup-rng-btn" onClick={() => this.props.onClickRandomSetup()}>
+                            Randomize Setup
+                        </button>
+                    </div>
+                    <div className="info-txt">
+                        Click this button to randomize the setup. It randomizes technologies, scoring tiles, etc, but not the map.
+                    </div>
+                </InfoElement>
+
                 <h2> The Map Evaluation </h2>
                 An evaluation is always performed for the current map. Note that the evaluation is just an indicator, and not an absolute fact. We are constantly trying to improve the evaluation algorithm.
 
@@ -377,10 +388,7 @@ class Info extends React.Component {
                     Planets of the same color that are too close to each other are marked red.
                 </InfoElement >
                 <InfoElement imgRef="YellowMark" imgClass="info-hex-mark-img">
-                    Planets in a cluster that is too large are marked yellow.
-                </InfoElement >
-                <InfoElement imgRef="GrayMark" imgClass="info-hex-mark-img">
-                    If a color has too many planets on the edge of the map they are marked grey.
+                    Planets in a cluster that is too large are marked yellow, or the planets in the largest cluster is marked yellow when the largest cluster is too small for the wanted cluster size.
                 </InfoElement >
             
                 <h3>Histograms</h3>

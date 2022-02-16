@@ -13,18 +13,6 @@ import { loadMaps, mapType, reEvaluateMaps } from './SheetAPI';
 import Setup from './Setup';
 import { GetRandomElements, getSetupString, getSetupFromString } from './HelperFunctions';
 
-class SetupString extends React.Component {
-    render() {
-        return (
-            <div className="map-string-box">
-                <text className="map-string-txt">
-                    {this.props.setupString}
-                </text>
-            </div>
-        );
-    }
-}
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -47,16 +35,15 @@ class App extends React.Component {
             alertMsg: "",
             illegal: false,
             menuSelect: {
-                numPlayers: 4,
                 numSec: 10,
                 secOpt: 0,
                 swapMode: false,
                 rotMode: false,
+                playerCount: settingOpts.playerCount.defaultId,
                 minEqDist: settingOpts.minEqDist.defaultId,
                 maxCluster: settingOpts.maxClustSize.defaultId,
                 maxEdge: settingOpts.maxEdgeCount.defaultId,
                 rngWithSwap: settingOpts.rngWithSwap.defaultId,
-                ignoreOpt: settingOpts.ignoreNum.defaultId,
             },
             setup: {
                 feds: GetRandomElements(feds, 1),
@@ -106,6 +93,7 @@ class App extends React.Component {
         }
 
         this.setState({ loading: false });
+        this.evaluateMap();
     }
 
     componentWillUnmount() {
@@ -156,6 +144,14 @@ class App extends React.Component {
         ms.swapMode = false;
         ms.rotMode = !ms.rotMode;
         this.setState({ menuSelect: ms });
+    }
+
+    onClickPlayerCount(numPlayers) {
+        var ms = this.state.menuSelect;
+        ms.playerCount = numPlayers;
+        var s = this.state.setup;
+        s.boosts = GetRandomElements(boosters, settingOpts.playerCount.optsVal[numPlayers] + 3);
+        this.setState({ menuSelect: ms, setup: s });
     }
 
     onClick(numSec) {
@@ -265,7 +261,7 @@ class App extends React.Component {
         else {
             this.evaluateMap();
             this.setState({
-                setupString: this.state.setupString,
+                setupString: this.state.editSetupString,
                 editSetupString: "",
                 errorMsgSetup: "",
                 setup: out.setup,
@@ -287,18 +283,25 @@ class App extends React.Component {
 
     onClickRandom() {
         if (this.state.loading) return;
+        var [ok, failures] = this.hexMap.getRandomValidMap();
+        if (ok) {
+            this.evaluateMap();
+        }
+    }
+
+    onClickRandomSetup() {
+        if (this.state.loading) return;
         var setup = this.state.setup;
         setup.feds = GetRandomElements(feds, 1);
         setup.advTech = GetRandomElements(advTech, 6);
         setup.baseTech = GetRandomElements(baseTech, 6);
         setup.rounds = GetRandomElements(roundVps, 6);
-        setup.boosts = GetRandomElements(boosters, 7);
+        setup.boosts = GetRandomElements(boosters, settingOpts.playerCount.optsVal[this.state.menuSelect.playerCount] + 3);
         setup.endVps = GetRandomElements(endVps, 2);
-        this.setState({ setup: setup })
-        var [ok, failures] = this.hexMap.getRandomValidMap();
-        if (ok) {
-            this.evaluateMap();
-        }
+        this.setState({
+            setup: setup,
+            setupString: getSetupString(setup)
+        })
     }
 
     onClickNewBalancedMap() {
@@ -339,15 +342,8 @@ class App extends React.Component {
                     onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
                     onClickIgnoreOpt={(ignoreOpt) => this.onClickIgnoreOpt(ignoreOpt)}
                     onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
-                    onMapStringChange={(value) => this.onMapStringChange(value)}
-                    onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
-                    mapString={this.state.editMapString}
-                    errorMsgMap={this.state.errorMsgMap}
+                    onClickPlayerCount={(numPlayers) => this.onClickPlayerCount(numPlayers)}
                     mapData={this.mapdata}
-                    onSetupStringChange={(value) => this.onSetupStringChange(value)}
-                    onSetupStringSubmit={(event) => this.onSetupStringSubmit(event)}
-                    setupString={this.state.editSetupString}
-                    errorMsgSetup={this.state.errorMsgSetup}
                 />
             );
         }
@@ -384,6 +380,29 @@ class App extends React.Component {
         }
     }
 
+    renderSetup() {
+        if (!this.state.loading) {
+            return (
+                <Setup
+                    setup={this.state.setup}
+                    setupString={this.state.setupString}
+                    onSetupStringChange={(value) => this.onSetupStringChange(value)}
+                    onSetupStringSubmit={(event) => this.onSetupStringSubmit(event)}
+                    editSetupString={this.state.editSetupString}
+                    errorMsgSetup={this.state.errorMsgSetup}
+                    onMapStringChange={(value) => this.onMapStringChange(value)}
+                    onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
+                    mapString={this.state.editMapString}
+                    errorMsgMap={this.state.errorMsgMap}
+                    onClickRandomSetup={() => this.onClickRandomSetup()}
+                />
+            );
+        }
+        else {
+            return;
+        }
+    }
+
     renderNonFixed() {
         if (this.state.showInfo) {
             return (
@@ -399,8 +418,10 @@ class App extends React.Component {
                         onClickClustOpt={(clustOpt) => this.onClickMaxClustSize(clustOpt)}
                         onClickEdgeOpt={(edgeOpt) => this.onClickMaxEdgeCount(edgeOpt)}
                         onClickRngSwap={(rngOpt) => this.onClickRngSwap(rngOpt)}
+                        onClickPlayerCount={(numPlayers) => this.onClickPlayerCount(numPlayers)}
                         onMapStringChange={(value) => this.onMapStringChange(value)}
                         onMapStringSubmit={(event) => this.onMapStringSubmit(event)}
+                        onClickRandomSetup={() => this.onClickRandomSetup()}
                         mapString={this.state.editMapString}
                         errorMsgMap={this.state.errorMsgMap}
                         onSetupStringChange={(value) => this.onSetupStringChange(value)}
@@ -434,11 +455,11 @@ class App extends React.Component {
                         maxClusterSize={settingOpts.maxClustSize.optsVal[this.state.menuSelect.maxCluster]}
                         maxEdge={settingOpts.maxEdgeCount.optsVal[this.state.menuSelect.maxEdge]}
                         loading={this.state.loading}
+                        biggestCluster={this.hexMap.biggestCluster}
                     />
                     {this.renderStats()}
                     <MapString mapString={this.state.loading ? "Loading Data from DB" : "Map: " + this.state.mapString} />
-                    <SetupString setupString={this.state.loading ? "" : "Setup: " + this.state.setupString} />
-                    <Setup setup={this.state.setup} />
+                    {this.renderSetup()}
                 </div>
             );
         }

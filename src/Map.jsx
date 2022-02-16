@@ -84,8 +84,12 @@ export class HexMapView extends React.Component {
                                 imgRef = getCenterRef[hex["Sec"]];
                             }
                         }
-                        if (hex["Cs"] > this.props.maxClusterSize)
-                            cluster = true;
+                        if (this.props.illegal && this.props.maxClusterSize !== 99) {
+                            if (hex["Cs"] > this.props.maxClusterSize + 1)
+                                cluster = true;
+                            else if (hex["Cs"] === this.props.biggestCluster && hex["Cs"] < this.props.maxClusterSize)
+                                cluster = true;
+                        }
                         if (showRing) {
                             eqNbr = false;
                             cluster = false;
@@ -288,6 +292,7 @@ export class MapView extends React.Component {
                         highEdge={this.props.highEdge}
                         maxEdge={this.props.maxEdge}
                         selected={this.props.selected}
+                        biggestCluster={this.props.biggestCluster}
                     />
                     {this.renderHexInfo(false)}
                 </div>

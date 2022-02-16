@@ -37,6 +37,12 @@ export class Settings extends React.Component {
         return (
             <div className="menu-box-2">
                 <SelectOptionFromList
+                    optName={settingOpts.playerCount.text}
+                    opts={settingOpts.playerCount.optsView}
+                    selectedOptIndex={this.props.menuSelect.playerCount}
+                    onClickOpt={(numPlayers) => this.props.onClickPlayerCount(numPlayers)}
+                />
+                <SelectOptionFromList
                     optName={settingOpts.rngWithSwap.text}
                     opts={settingOpts.rngWithSwap.optsView}
                     selectedOptIndex={this.props.menuSelect.rngWithSwap}
@@ -53,12 +59,6 @@ export class Settings extends React.Component {
                     opts={settingOpts.maxClustSize.optsView}
                     selectedOptIndex={this.props.menuSelect.maxCluster}
                     onClickOpt={(clustOpt) => this.props.onClickClustOpt(clustOpt)}
-                />
-                <SelectOptionFromList
-                    optName={settingOpts.maxEdgeCount.text}
-                    opts={settingOpts.maxEdgeCount.optsView}
-                    selectedOptIndex={this.props.menuSelect.maxEdge}
-                    onClickOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                 />
             </div>
         )

@@ -141,21 +141,21 @@ export const feds = ["FEDcre", "FEDknw", "FEDore", "FEDpwt", "FEDqic", "FEDvps"]
 export const settingOpts = {
     minEqDist: {
         text: "Equal Planet Range",
-        optsView: ["2", "3"],
-        optsVal: [2, 3],
+        optsView: ["2", "3", "Any"],
+        optsVal: [2, 3, 0],
         defaultId: 0,
     },
     maxClustSize: {
         text: "Cluster Size",
-        optsView: ["4", "5", "6", "Any"],
-        optsVal: [4, 5, 6, 99],
-        defaultId: 1,
+        optsView: ["3-4", "5-6", "7+", "Any"],
+        optsVal: [3, 5, 7, 99],
+        defaultId: 0,
     },
     maxEdgeCount: {
         text: "Edge Planets",
         optsView: ["1", "2", "Any"],
         optsVal: [1, 2, 99],
-        defaultId: 1,
+        defaultId: 2,
     },
     rngWithSwap: {
         text: "Random With Swap",
@@ -163,11 +163,11 @@ export const settingOpts = {
         optsVal: [true, false],
         defaultId: 0,
     },
-    ignoreNum: {
-        text: "Ignore Worst Color",
-        optsView: ["0", "1", "2", "3"],
-        optsVal: [0, 1, 2, 3],
-        defaultId: 0,
+    playerCount: {
+        text: "Player Count",
+        optsView: ["1","2", "3", "4"],
+        optsVal: [2, 2, 3, 4],
+        defaultId: 3,
     },
 };
 
@@ -247,56 +247,56 @@ export const advTechToLetter = {
 };
 
 export const baseTechToLetter = {
-    "TECcre": "P",
-    "TECgai": "Q",
-    "TECknw": "R",
-    "TECore": "S",
-    "TECpia": "T",
-    "TECpow": "U",
-    "TECqic": "V",
-    "TECtyp": "W",
-    "TECvps": "X"
+    "TECcre": "A",
+    "TECgai": "B",
+    "TECknw": "C",
+    "TECore": "D",
+    "TECpia": "E",
+    "TECpow": "F",
+    "TECqic": "G",
+    "TECtyp": "H",
+    "TECvps": "I"
 };
 
 export const boosterToLetter = {
-    "BOOgai": "a",
-    "BOOknw": "b",
-    "BOOlab": "c",
-    "BOOmin": "d",
-    "BOOnav": "e",
-    "BOOpia": "f",
-    "BOOpwt": "g",
-    "BOOqic": "h",
-    "BOOter": "i",
-    "BOOtrs": "j"
+    "BOOgai": "A",
+    "BOOknw": "B",
+    "BOOlab": "C",
+    "BOOmin": "D",
+    "BOOnav": "E",
+    "BOOpia": "F",
+    "BOOpwt": "G",
+    "BOOqic": "H",
+    "BOOter": "I",
+    "BOOtrs": "J"
 };
 
 export const roundVpToLetter = {
-    "RNDfed" : "k",
-    "RNDgai3": "l",
-    "RNDgai4": "m",
-    "RNDmin" : "n",
-    "RNDpia" : "o",
-    "RNDstp" : "p",
-    "RNDter" : "q",
-    "RNDtrs3": "r",
-    "RNDtrs4": "s"
+    "RNDfed" : "A",
+    "RNDgai3": "B",
+    "RNDgai4": "C",
+    "RNDmin" : "D",
+    "RNDpia" : "E",
+    "RNDstp" : "F",
+    "RNDter" : "G",
+    "RNDtrs3": "H",
+    "RNDtrs4": "I"
 };
 export const endVpToLetter = {
-    "FINbld": "t",
-    "FINfed": "u",
-    "FINgai": "v",
-    "FINsat": "w",
-    "FINsec": "x",
-    "FINtyp": "y"
+    "FINbld": "A",
+    "FINfed": "B",
+    "FINgai": "C",
+    "FINsat": "D",
+    "FINsec": "E",
+    "FINtyp": "F"
 };
 export const fedToLetter = {
-    "FEDcre": "1",
-    "FEDknw": "2",
-    "FEDore": "3",
-    "FEDpwt": "4",
-    "FEDqic": "5",
-    "FEDvps": "6"
+    "FEDcre": "A",
+    "FEDknw": "B",
+    "FEDore": "C",
+    "FEDpwt": "D",
+    "FEDqic": "E",
+    "FEDvps": "F"
 };
 
 export function getSectorArray(id) {

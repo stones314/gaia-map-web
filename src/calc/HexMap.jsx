@@ -101,7 +101,7 @@ export class HexMap {
         this.nbrMat = getNeighbourMatrix(this.hexGrid);
         this.criteria = {
             minEqDist: 2,
-            maxClusterSize: 5,
+            maxClusterSize: 3,
             maxEdgeCount: 2,
             maxFailures: 10000,
             ignoreNum: 0,
@@ -225,6 +225,21 @@ export class HexMap {
         return 3;
     }
 
+    isLegalCluster() {
+        if (this.criteria.maxClusterSize === 99)
+            return true;
+        if (this.criteria.maxClusterSize === 7)
+            return (this.biggestCluster >= 7)
+        return (this.biggestCluster >= this.criteria.maxClusterSize
+            && this.biggestCluster <= (this.criteria.maxClusterSize + 1));
+    }
+
+    isLegalEdges() {
+        if (this.criteria.maxEdgeCount === 99)
+            return true;
+        return (this.criteria.maxEdgeCount === this.highestEdgeCount[1]);
+    }
+
     getMapValidity() {
         /*
          * Return values:
@@ -237,10 +252,8 @@ export class HexMap {
         this.updateMapData();
         if (hasEqualNeighbour(this.nbrMat, this.criteria.minEqDist))
             return 1;
-        else if (this.biggestCluster > this.criteria.maxClusterSize)
+        else if (!this.isLegalCluster())
             return 2;
-        else if (this.criteria.maxEdgeCount < this.highestEdgeCount[1])
-            return 3;
         return 0;
     }
 

@@ -85,16 +85,16 @@ export class StringInput extends React.Component {
     render() {
         return (
             <div className="string-inn-box">
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        {this.props.description}
-                    </label>
-                    <input type="text" value={this.props.textString} onChange={this.handleChange} />
-                    <input type="submit" value="Submit" />
-                </form>
                 <text>
+                    {this.props.description}
+                </text>
+                <text style={{ color: "red" }}>
                     {this.props.errorMsg}
                 </text>
+                <form onSubmit={this.handleSubmit}>
+                    <input type="text" value={this.props.textString} onChange={this.handleChange} />
+                    <input type="submit" value="Import" />
+                </form>
             </div>
         );
     }
@@ -117,25 +117,12 @@ class Menu extends React.Component {
                         onClickEdgeOpt={(edgeOpt) => this.props.onClickEdgeOpt(edgeOpt)}
                         onClickIgnoreOpt={(ignoreOpt) => this.props.onClickIgnoreOpt(ignoreOpt)}
                         onClickRngSwap={(rngOpt) => this.props.onClickRngSwap(rngOpt)}
+                        onClickPlayerCount={(numPlayers) => this.props.onClickPlayerCount(numPlayers)}
                     />
                 </div>
                 <MapDbInfo
                     mapData={this.props.mapData}
                     menuSelect={this.props.menuSelect}
-                />
-                <StringInput
-                    onStringSubmit={(event) => this.props.onMapStringSubmit(event)}
-                    onStringChange={(value) => this.props.onMapStringChange(value)}
-                    textString={this.props.mapString}
-                    errorMsg={this.props.errorMsgMap}
-                    description="Import map from string:"
-                />
-                <StringInput
-                    onStringSubmit={(event) => this.props.onSetupStringSubmit(event)}
-                    onStringChange={(value) => this.props.onSetupStringChange(value)}
-                    textString={this.props.setupString}
-                    errorMsg={this.props.errorMsgSetup}
-                    description="Import setup from string:"
                 />
             </div>
         )

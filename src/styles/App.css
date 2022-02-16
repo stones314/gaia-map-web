@@ -77,7 +77,7 @@ code {
     flex-direction: row;
     justify-content: flex-start;
     align-content: space-evenly;
-    height: 15vh;
+    height: 13vh;
     width: 100%;
 }
 .happy-planet-row {
@@ -112,7 +112,7 @@ code {
 }
 
 .happy-img {
-    height: 5vh;
+    height: 4vh;
     margin: 0;
 }
 
