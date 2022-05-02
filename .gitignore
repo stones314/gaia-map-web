@@ -24,3 +24,4 @@ yarn-error.log*
 .env
 src/unused/
 notater.txt
+*.png~
