@@ -1,4 +1,6 @@
 # Web Page for evaluation and generation of Gaia Maps
+Check it out [here](https://rygg-gaard.no/gaia).
+
 [Gaia Project](https://boardgamegeek.com/boardgame/220308/gaia-project) is a very fun boardgame using a modular map.
 
 This web application is a tool to evaluate the balance of a map, and to automatically generate balanced maps.
